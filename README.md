@@ -28,7 +28,7 @@ Contributions to this repository are welcome! If you have suggestions for improv
 
 ## Resources
 
-- [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/JavaScript): Official documentation for <span style="color:#f0db4f">JavaScript</span> by Mozilla.
-- [JavaScript.info](https://javascript.info/): Comprehensive <span style="color:#f0db4f">JavaScript</span> tutorials and articles.
-- [Eloquent JavaScript](https://eloquentjavascript.net/): A book about <span style="color:#f0db4f">JavaScript</span>, programming, and the wonders of the digital.
-- [W3schools](https://www.w3schools.com/js/)
+- [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/JavaScript){:target="_blank"}: Official documentation for <span style="color:#f0db4f">JavaScript</span> by Mozilla.
+- [JavaScript.info](https://javascript.info/){:target="_blank"}: Comprehensive <span style="color:#f0db4f">JavaScript</span> tutorials and articles.
+- [Eloquent JavaScript](https://eloquentjavascript.net/){:target="_blank"}: A book about <span style="color:#f0db4f">JavaScript</span>, programming, and the wonders of the digital.
+- [W3schools](https://www.w3schools.com/js/){:target="_blank"}
