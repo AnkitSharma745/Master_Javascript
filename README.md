@@ -1,6 +1,6 @@
 <h1 align="center" >Let's master the concept of JavaScript <h2>
 
-Welcome to the JavaScript Mastery repository! This repository is designed to help you master the concepts of JavaScript by providing comprehensive explanations, examples, and exercises for various JavaScript methods and concepts.
+Welcome to the <span color="yellow">JavaScript</span> Mastery repository! This repository is designed to help you master the concepts of JavaScript by providing comprehensive explanations, examples, and exercises for various JavaScript methods and concepts.
 
 ## About
 
