@@ -1,12 +1,11 @@
-# Variables 
-#### Variable is a container which holds some value in it.
-##### For example : We store rice in a container as simple as variable is.
+# Variables
 
-#### In Javascript variable can be defined 4 type ----------
-### 1 Using let -----
-#####   let y = 20; // Declaration and initialization
+Variable is a container which holds some value in it. For example, we store rice in a container as simple as a variable is.
 
-### 2 Using var
-### 3 Using const
-### 4 Using nothing
+In JavaScript, variables can be defined using four types:
 
+## 1. Using `let`
+
+```javascript
+let y = 20; // Declaration and initialization
+```
