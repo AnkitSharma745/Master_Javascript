@@ -117,3 +117,52 @@ const person = { name: 'John', age: 30 };
 person.age = 31;
 console.log(person.age); // Output: 31
 ```
+## Some other concepts
+## Scope of Variables
+
+JavaScript variables have different scopes, depending on where they are declared.
+
+### 1. Global Scope:
+Variables declared outside of any function have global scope. They can be accessed from any part of the program.
+
+#### Example:
+```javascript
+var globalVar = "I am global!";
+```
+
+## Scope of Variables
+
+JavaScript variables have different scopes, depending on where they are declared.
+
+### 2. Local Scope:
+Variables declared inside a function have local scope. They can only be accessed within that function.
+
+#### Example:
+```javascript
+function myFunction() {
+    var localVar = "I am local!";
+}
+
+```
+
+
+### 3.  Block Scope (using let and const):
+Variables declared with `let` or `const` have block scope. They are only accessible within the block they are declared in (e.g., within curly braces {}).
+#### Example:
+```javascript
+if (true) {
+    let blockVar = "I am block-scoped!";
+}
+
+```
+
+
+### 4. Hoisting:
+Hoisting is a JavaScript mechanism where variables and function declarations are moved to the top of their containing scope during the compile phase. However, only the declarations are hoisted, not the initializations.
+#### Example:
+```javascript
+console.log(x); // Output: undefined
+var x = 5;
+
+```
+
