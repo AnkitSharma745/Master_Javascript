@@ -117,7 +117,7 @@ const person = { name: 'John', age: 30 };
 person.age = 31;
 console.log(person.age); // Output: 31
 ```
-## Some other concepts
+
 ## Scope of Variables
 
 JavaScript variables have different scopes, depending on where they are declared.
@@ -129,11 +129,6 @@ Variables declared outside of any function have global scope. They can be access
 ```javascript
 var globalVar = "I am global!";
 ```
-
-## Scope of Variables
-
-JavaScript variables have different scopes, depending on where they are declared.
-
 ### 2. Local Scope:
 Variables declared inside a function have local scope. They can only be accessed within that function.
 
