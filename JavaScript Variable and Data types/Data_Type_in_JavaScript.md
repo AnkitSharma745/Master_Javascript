@@ -4,12 +4,13 @@
 In most programming languages, including JavaScript, data types can be broadly categorized into two main types:
 - Primitive Data type.
 - Non Primitive data type (complex data type)
+
+
 ## 1. Primitive Data type
 
 Primitive data types are immutable and hold simple values. They are directly stored in memory, and accessing them retrieves their actual value.
 
-#### List of Primitive Data Types:
-### 1. Number --
+### 1. ```Number``` Data Type
 The Number data type in JavaScript represents numeric values, including integers and floating-point numbers. It is used for arithmetic operations, mathematical calculations, and data validation.
 - Represents both integer and floating-point numbers.
 - Supports basic arithmetic operations like addition, subtraction, multiplication, and division.
@@ -41,7 +42,7 @@ console.log(randomNumber);
 
 
 ```
-### 2. String 
+### 2. ```String``` Data Type
 In JavaScript, the `String` data type represents a sequence of characters enclosed within single ('') or double ("") quotes. Strings are widely used for storing and manipulating text-based data in JavaScript applications.
 - Represents sequences of characters, including letters, digits, symbols, and whitespace.
 - Supports various string manipulation methods for concatenation, extraction, and modification.
@@ -81,7 +82,7 @@ In JavaScript, the `String` data type represents a sequence of characters enclos
     const words = text.split(' '); // Splits the string into an array of words
     console.log(words); // Output: ['JavaScript', 'is', 'awesome!']
 ```
-### 3. Boolean 
+### 3. ```Boolean``` Data Type
 In JavaScript, the Boolean data type represents a logical value that can be either `true` or `false`. Booleans are primarily used for logical operations, conditional statements, and boolean algebra in JavaScript applications.
 - Represents two possible values: `true` or `false`.
 - Used for logical comparisons, conditional statements, and controlling program flow.
@@ -148,7 +149,7 @@ const person = {
 console.log(person.address); // Output: undefined
 
 ```
-### 5. ```null`` Data Type
+### 5. ```null``` Data Type
 In JavaScript, the ```null``` data type represents the intentional absence of any value. It is often used to indicate that a variable or object property does not currently have a value assigned to it.
 - Represents a deliberate absence of value or a ```null``` value.
 - Used to explicitly indicate that a variable or object property has no value.
