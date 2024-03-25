@@ -1,0 +1,2 @@
+# Type Conversion in Javascript 
+**In JavaScript, type conversion refers to the process of converting values from one data type to another. JavaScript automatically performs type conversion when operators or functions expect operands of a different type. Understanding type conversion is crucial for writing robust and predictable code in JavaScript.**
