@@ -39,13 +39,34 @@ console.log(bool); // Output: true (non-empty strings are truthy)
 #                                 Type Conversion Table 
 
 ### Number Conversion ---------
+<style>
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  th, td {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+  }
+
+  th {
+    background-color: #f2f2f2;
+  }
+
+  tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+</style>
+
 <table style="font-size: 16px;">
   <tr>
-    <th>Variable (x)</th>
-    <th>typeOf(x)</th>
-    <th>Conversion</th>
-    <th>typeOf(y)</th>
-    <th>console.log(y)</th>
+    <th style="font-family: Arial, sans-serif; font-size: 18px;">Variable (x)</th>
+    <th style="font-family: Arial, sans-serif; font-size: 18px;">typeOf(x)</th>
+    <th style="font-family: Arial, sans-serif; font-size: 18px;">Conversion</th>
+    <th style="font-family: Arial, sans-serif; font-size: 18px;">typeOf(y)</th>
+    <th style="font-family: Arial, sans-serif; font-size: 18px;">console.log(y)</th>
   </tr>
   <tr>
     <td>x = 20</td>
