@@ -40,7 +40,7 @@ console.log(bool); // Output: true (non-empty strings are truthy)
 
 ### Number Conversion ---------
 
-<table style="font-size: 16px;">
+<table style="font-size: 19px;">
   <tr>
     <th style="font-family: Arial, sans-serif; font-size: 18px;">Variable (x)</th>
     <th style="font-family: Arial, sans-serif; font-size: 18px;">typeOf(x)</th>
@@ -133,3 +133,112 @@ console.log(bool); // Output: true (non-empty strings are truthy)
      <td>NaN</td>
   </tr>
 </table>
+
+### Number Conversion Summary
+
+#### Expected Conversions:
+- Numerical strings and booleans convert to numbers as expected.
+- Null converts to `0`, and undefined converts to `NaN`.
+
+#### Unexpected Results:
+- Strings with non-numeric characters return `NaN`.
+- Empty objects or arrays convert to `NaN`.
+- Single-element arrays return the element's value (`2` for `[2]`).
+- Arrays with non-numeric elements or mixed data types return `NaN`.
+
+
+### String Conversion ------------
+
+
+<table style="font-size: 19px;">
+  <tr>
+    <th style="font-family: Arial, sans-serif; font-size: 18px;">Variable (x)</th>
+    <th style="font-family: Arial, sans-serif; font-size: 18px;">typeOf(x)</th>
+    <th style="font-family: Arial, sans-serif; font-size: 18px;">Conversion</th>
+    <th style="font-family: Arial, sans-serif; font-size: 18px;">typeOf(y)</th>
+    <th style="font-family: Arial, sans-serif; font-size: 18px;">console.log(y)</th>
+  </tr>
+  <tr>
+     <td>x = "a"</td>
+     <td>string</td>
+     <td>y= String(x)</td>
+     <td>string</td>
+     <td>a</td>
+   </tr>
+   <tr>
+     <td>x = 35</td>
+     <td>number</td>
+     <td>y= String(x)</td>
+     <td>string</td>
+     <td>35(in string)</td>
+   </tr>
+   <tr>
+     <td>x = true</td>
+     <td>Boolean</td>
+     <td>y= String(x)</td>
+     <td>string</td>
+     <td>true</td>
+   </tr>
+   <tr>
+     <td>x = false</td>
+     <td>Boolean</td>
+     <td>y= String(x)</td>
+     <td>string</td>
+     <td>false</td>
+   </tr>
+   <tr>
+     <td>x = undefined</td>
+     <td>undefined</td>
+     <td>y= String(x)</td>
+     <td>string</td>
+     <td>undefined</td>
+   </tr>
+   <tr>
+     <td>x= null</td>
+     <td>object</td>
+     <td>y= String(x)</td>
+     <td>string</td>
+     <td>null</td>
+   </tr>
+   <tr>
+     <td>x = {}</td>
+     <td>object</td>
+     <td>y= String(x)</td>
+     <td>string</td>
+     <td>[object object]</td>
+   </tr>
+   <tr>
+     <td>x = []</td>
+     <td>object</td>
+     <td>y= String(x)</td>
+     <td>string</td>
+     <td>_____</td>
+   </tr>
+   <tr>
+     <td>x = [3]</td>
+     <td>object</td>
+     <td>y= String(x)</td>
+     <td>string</td>
+     <td>3</td>
+   </tr>
+   <tr>
+     <td>x = [3,6,5,1]</td>
+     <td>object</td>
+     <td>y= String(x)</td>
+     <td>string</td>
+     <td>3,6,5,1</td>
+   </tr>
+</table>
+
+#### String Conversion Summary
+
+- Converting `"a"` to a string results in `"a"`.
+- Converting `35` to a string results in `"35"`.
+- Converting `true` to a string results in `"true"`.
+- Converting `false` to a string results in `"false"`.
+- Converting `undefined` to a string results in `"undefined"`.
+- Converting `null` to a string results in `"null"`.
+- Converting an empty object `{}` to a string results in `"[object Object]"`.
+- Converting an empty array `[]` to a string results in an empty string `""`.
+- Converting an array with a single element `[3]` to a string results in `"3"`.
+- Converting an array with multiple elements `[3,6,5,1]` to a string results in `"3,6,5,1"`.
