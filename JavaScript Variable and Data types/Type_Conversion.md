@@ -38,58 +38,97 @@ console.log(bool); // Output: true (non-empty strings are truthy)
 
 #                                 Type Conversion Table 
 
-| Variable (x) |```typeOf(x)```| y= Number(x)| typeOf(y)    |console.log(y)|
-|--------------|--------------|--------------|--------------|--------------|
-| Row 1, Cell 1| Row 1, Cell 2| Row 1, Cell 3| Row 1, Cell 4| Row 1, Cell 5|
-
-
+### Number Conversion ---------
 <table style="font-size: 16px;">
   <tr>
-    <th>Column 1</th>
-    <th>Column 2</th>
-    <th>Column 3</th>
-    <th>Column 4</th>
-    <th>Column 5</th>
-    <th>Column 6</th>
+    <th>Variable (x)</th>
+    <th>typeOf(x)</th>
+    <th>Conversion</th>
+    <th>typeOf(y)</th>
+    <th>console.log(y)</th>
   </tr>
   <tr>
-    <td>Row 1, Cell 1</td>
-    <td>Row 1, Cell 2</td>
-    <td>Row 1, Cell 3</td>
-    <td>Row 1, Cell 4</td>
-    <td>Row 1, Cell 5</td>
-    <td>Row 1, Cell 6</td>
+    <td>x = 20</td>
+    <td>number</td>
+    <td>y = Number(x)</td>
+    <td>number</td>
+    <td>20</td>
+  </tr> 
+  <tr>
+     <td>x="20"</td>
+     <td>string</td>
+     <td>y = Number(x)</td>
+     <td>number</td>
+     <td>20</td>
   </tr>
   <tr>
-    <td>Row 2, Cell 1</td>
-    <td>Row 2, Cell 2</td>
-    <td>Row 2, Cell 3</td>
-    <td>Row 2, Cell 4</td>
-    <td>Row 2, Cell 5</td>
-    <td>Row 2, Cell 6</td>
+     <td>x = "20a"</td>
+     <td>string</td>
+     <td>y = Number(x)</td>
+     <td>Number</td>
+     <td>NaN</td>
   </tr>
   <tr>
-    <td>Row 3, Cell 1</td>
-    <td>Row 3, Cell 2</td>
-    <td>Row 3, Cell 3</td>
-    <td>Row 3, Cell 4</td>
-    <td>Row 3, Cell 5</td>
-    <td>Row 3, Cell 6</td>
+     <td>x = 20a</td>
+     <td>Syntax Error</td>
+     <td>Syntax Error</td>
+     <td>Syntax Error</td>
+     <td>Syntax Error</td>
   </tr>
   <tr>
-    <td>Row 4, Cell 1</td>
-    <td>Row 4, Cell 2</td>
-    <td>Row 4, Cell 3</td>
-    <td>Row 4, Cell 4</td>
-    <td>Row 4, Cell 5</td>
-    <td>Row 4, Cell 6</td>
+     <td>x = true</td>
+     <td>Boolean</td>
+     <td>y = Number(x)</td>
+     <td>Number</td>
+     <td>1</td>
   </tr>
   <tr>
-    <td>Row 5, Cell 1</td>
-    <td>Row 5, Cell 2</td>
-    <td>Row 5, Cell 3</td>
-    <td>Row 5, Cell 4</td>
-    <td>Row 5, Cell 5</td>
-    <td>Row 5, Cell 6</td>
+     <td>x = false</td>
+     <td>Boolean</td>
+     <td>y = Number(x)</td>
+     <td>Number</td>
+     <td>0</td>
+  </tr>
+  <tr>
+     <td>x = {}</td>
+     <td>object</td>
+     <td>y = Number(x)</td>
+     <td>Number</td>
+     <td>NaN</td>
+  </tr>
+  <tr>
+     <td>x = []</td>
+     <td>object</td>
+     <td>y = Number(x)</td>
+     <td>Number</td>
+     <td>0</td>
+  </tr>
+  <tr>
+     <td>x= [2]</td>
+     <td>object</td>
+     <td>y = Number(x)</td>
+     <td>Number</td>
+     <td>2</td>
+  </tr>
+  <tr>
+     <td>x = [2,5]</td>
+     <td>object</td>
+     <td>y = Number(x)</td>
+     <td>Number</td>
+     <td>NaN</td>
+  </tr>
+  <tr>
+     <td>x = null</td>
+     <td>object</td>
+     <td>y = Number(x)</td>
+     <td>Number</td>
+     <td>0</td>
+  </tr>
+  <tr>
+     <td>x= undefined</td>
+     <td>undefined</td>
+     <td>y = Number(x)</td>
+     <td>Number</td>
+     <td>NaN</td>
   </tr>
 </table>
