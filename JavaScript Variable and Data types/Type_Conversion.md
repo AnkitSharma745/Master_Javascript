@@ -242,3 +242,102 @@ console.log(bool); // Output: true (non-empty strings are truthy)
 - Converting an empty array `[]` to a string results in an empty string `""`.
 - Converting an array with a single element `[3]` to a string results in `"3"`.
 - Converting an array with multiple elements `[3,6,5,1]` to a string results in `"3,6,5,1"`.
+
+### Boolean Conversion--------
+
+<table style="font-size: 19px;">
+  <tr>
+    <th style="font-family: Arial, sans-serif; font-size: 18px;">Variable (x)</th>
+    <th style="font-family: Arial, sans-serif; font-size: 18px;">typeOf(x)</th>
+    <th style="font-family: Arial, sans-serif; font-size: 18px;">Conversion</th>
+    <th style="font-family: Arial, sans-serif; font-size: 18px;">typeOf(y)</th>
+    <th style="font-family: Arial, sans-serif; font-size: 18px;">console.log(y)</th>
+  </tr>
+  <tr>
+     <td>x = 13</td>
+     <td>number</td>
+     <td>y= Boolean(x)</td>
+     <td>Boolean</td>
+     <td>true</td>
+   </tr>
+   <tr>
+     <td>x= 0</td>
+     <td>number</td>
+     <td>y= Boolean(x)</td>
+     <td>boolean</td>
+     <td>false</td>
+   </tr>
+   <tr>
+     <td>x= "a"</td>
+     <td>string</td>
+     <td>y= Boolean(x)</td>
+     <td>boolean</td>
+     <td>true</td>
+   </tr>
+   <tr>
+     <td>x= "" </td>
+     <td>string</td>
+     <td>y= Boolean(x)</td>
+     <td>boolean</td>
+     <td>false</td>
+   </tr>
+   <tr>
+     <td>x=[] </td>
+     <td>object</td>
+     <td>y= Boolean(x)</td>
+     <td>boolean</td>
+     <td>true</td>
+   </tr>
+   <tr>
+     <td>x=[2] </td>
+     <td>object</td>
+     <td>y= Boolean(x)</td>
+     <td>boolean</td>
+     <td>true</td>
+   </tr>
+   <tr>
+     <td>x= {}</td>
+     <td>object</td>
+     <td>y= Boolean(x)</td>
+     <td>boolean</td>
+     <td>true</td>
+   </tr>
+   <tr>
+     <td>x={} </td>
+     <td>object</td>
+     <td>y= Boolean(x)</td>
+     <td>boolean</td>
+     <td>true</td>
+   </tr>
+   <tr>
+     <td>x= null</td>
+     <td>object</td>
+     <td>y= Boolean(x)</td>
+     <td>boolean</td>
+     <td>false</td>
+   </tr>
+   <tr>
+     <td>x= undefined</td>
+     <td>undefined</td>
+     <td>y= Boolean(x)</td>
+     <td>boolean</td>
+     <td>false</td>
+   </tr>
+
+</table>   
+
+### Boolean Conversion Summary
+
+- Converting `13` to boolean results in `true`.
+- Converting `0` to boolean results in `false`.
+- Converting `"a"` to boolean results in `true`.
+- Converting `""` to boolean results in `false`.
+- Converting `[]` to boolean results in `true`.
+- Converting `[2]` to boolean results in `true`.
+- Converting `{}` to boolean results in `true`.
+- Converting `null` to boolean results in `false`.
+- Converting `undefined` to boolean results in `false`.
+
+#### Unexpected Conversions:
+- Empty arrays, arrays with elements, empty objects, and any other object all convert to `true`.
+- `null` and `undefined` both convert to `false`.
