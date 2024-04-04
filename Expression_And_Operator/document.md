@@ -19,7 +19,7 @@
 
 1. ### Arithmetic Operator ----
 
-<table style="font-size: 19px;">
+<table style="font-size: 40px;">
   <tr>
     <th style="font-family: Arial, sans-serif; font-size: 18px;">Operator</th>
     <th style="font-family: Arial, sans-serif; font-size: 18px;">Description</th>
