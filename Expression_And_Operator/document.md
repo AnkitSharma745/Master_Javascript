@@ -45,8 +45,8 @@
      <td> multiplication of x and y </td>
   </tr>
   <tr>
-     <td>/</td>
-     <td>Division<td>
+     <td> / </td>
+     <td>Division</td>
      <td>x/y</td>
      <td>Division of x and y</td>
   </tr>
