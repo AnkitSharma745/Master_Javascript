@@ -1,5 +1,3 @@
-# JavaScript Concepts - Complete Guide
-
 ## Table of Contents
 
 1. [Basic Concepts](#basic-concepts)
