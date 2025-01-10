@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dynamic Elements Example</title>
+  </head>
+  <body>
+    <div id="container">Click the button to add a new element.</div>
+    <button id="addButton">Add Element</button>
+    <script>
+      const container = document.getElementById("container");
+      document.getElementById("addButton").addEventListener("click", () => {
+        const newElement = document.createElement("div");
+        newElement.className = "dynamic-element";
+        newElement.textContent = "Click me!";
+        container.appendChild(newElement);
+      });
+
+      container.addEventListener("click", (event) => {
+        if (event.target.classList.contains("dynamic-element")) {
+          alert("Dynamic element clicked!");
+        }
+      });
+    </script>
+  </body>
+</html>

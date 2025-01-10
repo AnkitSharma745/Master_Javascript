@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DOM Manipulation Examples</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+      }
+      .box {
+        width: 100px;
+        height: 100px;
+        background-color: lightblue;
+        margin: 10px;
+        display: inline-block;
+        text-align: center;
+        line-height: 100px;
+        cursor: pointer;
+      }
+      .hidden {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>DOM Manipulation Examples</h1>
+
+    <!-- Example 1: Adding Elements -->
+    <section>
+      <h2>Example 1: Adding Elements</h2>
+      <button id="addElement">Add Box</button>
+      <div id="container"></div>
+    </section>
+
+    <!-- Example 2: Event Handling -->
+    <section>
+      <h2>Example 2: Event Handling</h2>
+      <button id="toggleText">Toggle Text</button>
+      <p id="text">This text will be toggled on button click.</p>
+    </section>
+
+    <!-- Example 3: Attribute Manipulation -->
+    <section>
+      <h2>Example 3: Attribute Manipulation</h2>
+      <img
+        id="image"
+        src="https://cdn.pixabay.com/photo/2024/12/13/14/45/real-estate-9265386_640.jpg"
+        alt="Placeholder Image"
+      />
+      <button id="changeImage">Change Image</button>
+    </section>
+
+    <!-- Example 4: Traversing the DOM -->
+    <section>
+      <h2>Example 4: Traversing the DOM</h2>
+      <ul id="list">
+        <li>Item 1</li>
+        <li>Item 2</li>
+        <li>Item 3</li>
+      </ul>
+      <button id="highlightLast">Highlight Last Item</button>
+    </section>
+
+    <script>
+      // Example 1: Adding Elements
+      const addElementButton = document.getElementById("addElement");
+      const container = document.getElementById("container");
+
+      addElementButton.addEventListener("click", () => {
+        const newBox = document.createElement("div");
+        newBox.className = "box";
+        newBox.textContent = "Box";
+        container.appendChild(newBox);
+      });
+
+      // Example 2: Event Handling
+      const toggleTextButton = document.getElementById("toggleText");
+      const textParagraph = document.getElementById("text");
+
+      toggleTextButton.addEventListener("click", () => {
+        textParagraph.classList.toggle("hidden");
+      });
+
+      // Example 3: Attribute Manipulation
+      const changeImageButton = document.getElementById("changeImage");
+      const image = document.getElementById("image");
+
+      changeImageButton.addEventListener("click", () => {
+        image.src =
+          "https://cdn.pixabay.com/photo/2024/12/09/16/22/boat-9255590_640.jpg";
+        image.alt = "New Placeholder Image";
+      });
+
+      // Example 4: Traversing the DOM
+      const highlightLastButton = document.getElementById("highlightLast");
+      const list = document.getElementById("list");
+
+      highlightLastButton.addEventListener("click", () => {
+        const lastItem = list.lastElementChild;
+        lastItem.style.backgroundColor = "yellow";
+      });
+    </script>
+  </body>
+</html>

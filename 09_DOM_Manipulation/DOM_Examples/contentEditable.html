@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ContentEditable Example</title>
+  </head>
+  <body>
+    <div id="editable">Edit this content.</div>
+    <button id="saveButton">Save</button>
+    <script>
+      const editableElement = document.getElementById("editable");
+      editableElement.contentEditable = "true";
+
+      document.getElementById("saveButton").addEventListener("click", () => {
+        const content = editableElement.innerHTML;
+        localStorage.setItem("editableContent", content);
+        alert("Content saved!");
+      });
+
+      window.addEventListener("load", () => {
+        const savedContent = localStorage.getItem("editableContent");
+        if (savedContent) {
+          editableElement.innerHTML = savedContent;
+        }
+      });
+    </script>
+  </body>
+</html>
