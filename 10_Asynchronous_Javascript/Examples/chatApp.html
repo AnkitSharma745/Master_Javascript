@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Real-Time Chat Application</title>
+    <style>
+      #chat {
+        border: 1px solid #ccc;
+        padding: 10px;
+        height: 300px;
+        overflow-y: scroll;
+      }
+      #message {
+        width: 80%;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>
+      Create a real-time chat application where users can send and receive
+      messages instantly. Handle connection errors and ensure messages are
+      displayed in real-time.
+    </h2>
+    <div id="chat"></div>
+    <input type="text" id="message" placeholder="Type a message..." />
+    <button id="sendButton">Send</button>
+    <script>
+      const chat = document.getElementById("chat");
+      const messageInput = document.getElementById("message");
+      const sendButton = document.getElementById("sendButton");
+
+      let socket;
+
+      async function connectWebSocket() {
+        try {
+          socket = new WebSocket("wss://example.com/chat");
+          socket.addEventListener("open", () => {
+            console.log("Connected to WebSocket");
+          });
+
+          socket.addEventListener("message", (event) => {
+            const message = JSON.parse(event.data);
+            displayMessage(message);
+          });
+
+          socket.addEventListener("close", () => {
+            console.log("WebSocket connection closed, reconnecting...");
+            setTimeout(connectWebSocket, 1000);
+          });
+
+          socket.addEventListener("error", (error) => {
+            console.error("WebSocket error:", error);
+          });
+        } catch (error) {
+          console.error("Failed to connect to WebSocket:", error);
+          setTimeout(connectWebSocket, 1000);
+        }
+      }
+
+      function displayMessage(message) {
+        const messageElement = document.createElement("div");
+        messageElement.textContent = `${message.user}: ${message.text}`;
+        chat.appendChild(messageElement);
+        chat.scrollTop = chat.scrollHeight;
+      }
+
+      sendButton.addEventListener("click", () => {
+        const message = messageInput.value;
+        if (message && socket.readyState === WebSocket.OPEN) {
+          socket.send(JSON.stringify({ user: "User", text: message }));
+          messageInput.value = "";
+        }
+      });
+
+      connectWebSocket();
+    </script>
+  </body>
+</html>
