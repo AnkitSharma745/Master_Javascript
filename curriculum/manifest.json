@@ -1,0 +1,995 @@
+{
+  "schemaVersion": 1,
+  "verifiedDate": "2026-10-13",
+  "modules": [
+    {
+      "id": "01-foundations",
+      "title": "Programming and web foundations"
+    },
+    {
+      "id": "02-javascript",
+      "title": "JavaScript language"
+    },
+    {
+      "id": "03-async",
+      "title": "Asynchronous JavaScript"
+    },
+    {
+      "id": "04-functional",
+      "title": "Functional programming"
+    },
+    {
+      "id": "05-typescript",
+      "title": "TypeScript"
+    },
+    {
+      "id": "06-design",
+      "title": "Object-oriented software design"
+    },
+    {
+      "id": "07-patterns",
+      "title": "Design patterns"
+    },
+    {
+      "id": "08-angular",
+      "title": "Angular 16"
+    },
+    {
+      "id": "09-frontend",
+      "title": "Frontend architecture and system design"
+    },
+    {
+      "id": "10-node",
+      "title": "Node.js backend engineering"
+    },
+    {
+      "id": "11-production",
+      "title": "Production engineering"
+    },
+    {
+      "id": "12-algorithms",
+      "title": "Algorithms and coding interviews"
+    },
+    {
+      "id": "13-communication",
+      "title": "Interview communication and AI verification"
+    }
+  ],
+  "lessons": [
+    {
+      "id": "F01",
+      "module": "01-foundations",
+      "title": "Programs, control flow, and problem solving",
+      "path": "lessons/01-foundations/F01-programs.md",
+      "prerequisites": [],
+      "outcomes": [
+        "Decompose a problem, write functions, and test boundary inputs"
+      ],
+      "status": "ready",
+      "sources": [
+        "ECMA"
+      ],
+      "questions": [
+        "Q01"
+      ]
+    },
+    {
+      "id": "F02",
+      "module": "01-foundations",
+      "title": "Browser rendering, DOM, and accessible events",
+      "path": "lessons/01-foundations/F02-browser.md",
+      "prerequisites": [
+        "F01"
+      ],
+      "outcomes": [
+        "Trace rendering and implement safe accessible DOM updates"
+      ],
+      "status": "ready",
+      "sources": [
+        "WAI"
+      ],
+      "questions": [
+        "Q02"
+      ]
+    },
+    {
+      "id": "F03",
+      "module": "01-foundations",
+      "title": "HTTP, DNS, TLS, APIs, and browser storage",
+      "path": "lessons/01-foundations/F03-http.md",
+      "prerequisites": [
+        "F02"
+      ],
+      "outcomes": [
+        "Trace a request and distinguish transport, storage, and trust boundaries"
+      ],
+      "status": "ready",
+      "sources": [
+        "HTTP"
+      ],
+      "questions": [
+        "Q03"
+      ]
+    },
+    {
+      "id": "JS01",
+      "module": "02-javascript",
+      "title": "Values, identity, coercion, and equality",
+      "path": "lessons/02-javascript/JS01-values.md",
+      "prerequisites": [
+        "F01"
+      ],
+      "outcomes": [
+        "Predict conversions and distinguish mutation from rebinding"
+      ],
+      "status": "ready",
+      "sources": [
+        "ECMA"
+      ],
+      "questions": [
+        "Q04"
+      ]
+    },
+    {
+      "id": "JS02",
+      "module": "02-javascript",
+      "title": "Scope, hoisting, TDZ, and closures",
+      "path": "lessons/02-javascript/JS02-scope.md",
+      "prerequisites": [
+        "JS01"
+      ],
+      "outcomes": [
+        "Trace lexical bindings and implement a closure without leaks"
+      ],
+      "status": "ready",
+      "sources": [
+        "CLOSURES"
+      ],
+      "questions": [
+        "Q05"
+      ]
+    },
+    {
+      "id": "JS03",
+      "module": "02-javascript",
+      "title": "this, call, apply, bind, and classes",
+      "path": "lessons/02-javascript/JS03-this.md",
+      "prerequisites": [
+        "JS02"
+      ],
+      "outcomes": [
+        "Derive this from a call site and repair detached methods"
+      ],
+      "status": "ready",
+      "sources": [
+        "ECMA"
+      ],
+      "questions": [
+        "Q06"
+      ]
+    },
+    {
+      "id": "JS04",
+      "module": "02-javascript",
+      "title": "Objects, descriptors, prototypes, and memory",
+      "path": "lessons/02-javascript/JS04-objects.md",
+      "prerequisites": [
+        "JS03"
+      ],
+      "outcomes": [
+        "Trace prototype lookup and explain shallow copying and reachability"
+      ],
+      "status": "ready",
+      "sources": [
+        "ECMA"
+      ],
+      "questions": [
+        "Q07"
+      ]
+    },
+    {
+      "id": "JS05",
+      "module": "02-javascript",
+      "title": "Arrays, strings, numbers, and keyed collections",
+      "path": "lessons/02-javascript/JS05-collections.md",
+      "prerequisites": [
+        "JS01",
+        "JS04"
+      ],
+      "outcomes": [
+        "Select collections and handle holes, mutation, and numeric limits"
+      ],
+      "status": "ready",
+      "sources": [
+        "ARRAY"
+      ],
+      "questions": [
+        "Q08"
+      ]
+    },
+    {
+      "id": "JS06",
+      "module": "02-javascript",
+      "title": "Iteration, generators, modules, and errors",
+      "path": "lessons/02-javascript/JS06-modules.md",
+      "prerequisites": [
+        "JS02",
+        "JS05"
+      ],
+      "outcomes": [
+        "Design module contracts and consume iterables with cleanup"
+      ],
+      "status": "ready",
+      "sources": [
+        "ECMA"
+      ],
+      "questions": [
+        "Q09"
+      ]
+    },
+    {
+      "id": "AS01",
+      "module": "03-async",
+      "title": "Execution contexts, tasks, and microtasks",
+      "path": "lessons/03-async/AS01-event-loop.md",
+      "prerequisites": [
+        "JS02"
+      ],
+      "outcomes": [
+        "Predict scheduling while separating host behavior from language rules"
+      ],
+      "status": "ready",
+      "sources": [
+        "NODELOOP"
+      ],
+      "questions": [
+        "Q10"
+      ]
+    },
+    {
+      "id": "AS02",
+      "module": "03-async",
+      "title": "Promises, async/await, and error propagation",
+      "path": "lessons/03-async/AS02-promises.md",
+      "prerequisites": [
+        "AS01",
+        "JS06"
+      ],
+      "outcomes": [
+        "Compose asynchronous work and explain rejection and combinator behavior"
+      ],
+      "status": "ready",
+      "sources": [
+        "PROMISE"
+      ],
+      "questions": [
+        "Q11"
+      ]
+    },
+    {
+      "id": "AS03",
+      "module": "03-async",
+      "title": "Cancellation, races, and bounded concurrency",
+      "path": "lessons/03-async/AS03-concurrency.md",
+      "prerequisites": [
+        "AS02",
+        "F03"
+      ],
+      "outcomes": [
+        "Prevent stale commits and bound active operations"
+      ],
+      "status": "ready",
+      "sources": [
+        "PROMISE"
+      ],
+      "questions": [
+        "Q12"
+      ]
+    },
+    {
+      "id": "FP01",
+      "module": "04-functional",
+      "title": "Pure functions, composition, and memoization",
+      "path": "lessons/04-functional/FP01-functions.md",
+      "prerequisites": [
+        "JS02",
+        "JS05"
+      ],
+      "outcomes": [
+        "Isolate effects and justify functional abstractions and cache contracts"
+      ],
+      "status": "ready",
+      "sources": [
+        "ECMA"
+      ],
+      "questions": [
+        "Q13"
+      ]
+    },
+    {
+      "id": "TS01",
+      "module": "05-typescript",
+      "title": "Types, narrowing, and runtime contracts",
+      "path": "lessons/05-typescript/TS01-contracts.md",
+      "prerequisites": [
+        "JS06"
+      ],
+      "outcomes": [
+        "Parse unknown data and model valid states with discriminated unions"
+      ],
+      "status": "ready",
+      "sources": [
+        "TSNARROW"
+      ],
+      "questions": [
+        "Q14"
+      ]
+    },
+    {
+      "id": "TS02",
+      "module": "05-typescript",
+      "title": "Generics and useful type transformations",
+      "path": "lessons/05-typescript/TS02-generics.md",
+      "prerequisites": [
+        "TS01"
+      ],
+      "outcomes": [
+        "Preserve input/output relationships with constrained types"
+      ],
+      "status": "ready",
+      "sources": [
+        "TSGENERICS"
+      ],
+      "questions": [
+        "Q15"
+      ]
+    },
+    {
+      "id": "TS03",
+      "module": "05-typescript",
+      "title": "Compiler, modules, declarations, and debugging",
+      "path": "lessons/05-typescript/TS03-configuration.md",
+      "prerequisites": [
+        "TS02"
+      ],
+      "outcomes": [
+        "Choose strict compiler and runtime module settings without mixing toolchains"
+      ],
+      "status": "ready",
+      "sources": [
+        "TSMODULES"
+      ],
+      "questions": [
+        "Q16"
+      ]
+    },
+    {
+      "id": "SD01",
+      "module": "06-design",
+      "title": "Contracts, composition, SOLID, and refactoring",
+      "path": "lessons/06-design/SD01-solid.md",
+      "prerequisites": [
+        "JS04",
+        "TS01"
+      ],
+      "outcomes": [
+        "Refactor actual contract violations and justify abstraction costs"
+      ],
+      "status": "ready",
+      "sources": [
+        "TSGENERICS"
+      ],
+      "questions": [
+        "Q17"
+      ]
+    },
+    {
+      "id": "DP01",
+      "module": "07-patterns",
+      "title": "Choose patterns from concrete problems",
+      "path": "lessons/07-patterns/DP01-selection.md",
+      "prerequisites": [
+        "SD01",
+        "FP01"
+      ],
+      "outcomes": [
+        "Implement strategies, observers, and adapters without forcing classes"
+      ],
+      "status": "ready",
+      "sources": [
+        "ECMA"
+      ],
+      "questions": [
+        "Q18"
+      ]
+    },
+    {
+      "id": "AG01",
+      "module": "08-angular",
+      "title": "Angular 16 components, DI, routing, and boundaries",
+      "path": "lessons/08-angular/AG01-architecture.md",
+      "prerequisites": [
+        "F02",
+        "TS03",
+        "SD01"
+      ],
+      "outcomes": [
+        "Design component/provider scopes and trace OnPush rendering"
+      ],
+      "status": "ready",
+      "sources": [
+        "ANGULAR16"
+      ],
+      "questions": [
+        "Q19"
+      ]
+    },
+    {
+      "id": "AG02",
+      "module": "08-angular",
+      "title": "RxJS streams, operator choice, and cleanup",
+      "path": "lessons/08-angular/AG02-rxjs.md",
+      "prerequisites": [
+        "AG01",
+        "AS03"
+      ],
+      "outcomes": [
+        "Choose flattening behavior and make failure and teardown explicit"
+      ],
+      "status": "ready",
+      "sources": [
+        "RXJS"
+      ],
+      "questions": [
+        "Q20"
+      ]
+    },
+    {
+      "id": "AG03",
+      "module": "08-angular",
+      "title": "Angular forms, HTTP, state, and feature testing",
+      "path": "lessons/08-angular/AG03-forms-http.md",
+      "prerequisites": [
+        "AG02",
+        "F03",
+        "TS01"
+      ],
+      "outcomes": [
+        "Build a feature with typed forms, validated API data, and testable state"
+      ],
+      "status": "ready",
+      "sources": [
+        "ANGULAR16"
+      ],
+      "questions": [
+        "Q21"
+      ]
+    },
+    {
+      "id": "FE01",
+      "module": "09-frontend",
+      "title": "Design an enterprise frontend under constraints",
+      "path": "lessons/09-frontend/FE01-system-design.md",
+      "prerequisites": [
+        "AG03",
+        "F03",
+        "DP01"
+      ],
+      "outcomes": [
+        "Gather requirements and design state, caching, failures, and accessibility"
+      ],
+      "status": "ready",
+      "sources": [
+        "WAI"
+      ],
+      "questions": [
+        "Q22"
+      ]
+    },
+    {
+      "id": "ND01",
+      "module": "10-node",
+      "title": "Node runtime, streams, workers, and shutdown",
+      "path": "lessons/10-node/ND01-runtime.md",
+      "prerequisites": [
+        "AS03",
+        "JS06",
+        "TS03"
+      ],
+      "outcomes": [
+        "Explain nonblocking I/O, backpressure, and service lifecycle"
+      ],
+      "status": "ready",
+      "sources": [
+        "STREAM"
+      ],
+      "questions": [
+        "Q23"
+      ]
+    },
+    {
+      "id": "ND02",
+      "module": "10-node",
+      "title": "REST APIs, validation, persistence, and consistency",
+      "path": "lessons/10-node/ND02-api-data.md",
+      "prerequisites": [
+        "ND01",
+        "F03",
+        "TS01"
+      ],
+      "outcomes": [
+        "Build a validated API and reason about transactional boundaries"
+      ],
+      "status": "ready",
+      "sources": [
+        "NODEHTTP"
+      ],
+      "questions": [
+        "Q24"
+      ]
+    },
+    {
+      "id": "PE01",
+      "module": "11-production",
+      "title": "Authentication, authorization, and web security",
+      "path": "lessons/11-production/PE01-security.md",
+      "prerequisites": [
+        "F03",
+        "TS01"
+      ],
+      "outcomes": [
+        "Locate XSS, CSRF, CORS, and tenant authorization controls"
+      ],
+      "status": "ready",
+      "sources": [
+        "OWASP"
+      ],
+      "questions": [
+        "Q25"
+      ]
+    },
+    {
+      "id": "PE02",
+      "module": "11-production",
+      "title": "Caching, retries, testing, and observability",
+      "path": "lessons/11-production/PE02-reliability.md",
+      "prerequisites": [
+        "PE01",
+        "FP01",
+        "AS03"
+      ],
+      "outcomes": [
+        "Test failure behavior and design bounded caches and safe retries"
+      ],
+      "status": "ready",
+      "sources": [
+        "HTTP"
+      ],
+      "questions": [
+        "Q26"
+      ]
+    },
+    {
+      "id": "AL01",
+      "module": "12-algorithms",
+      "title": "Complexity, invariants, and JavaScript pitfalls",
+      "path": "lessons/12-algorithms/AL01-complexity.md",
+      "prerequisites": [
+        "JS05"
+      ],
+      "outcomes": [
+        "Explain time/space with explicit input assumptions"
+      ],
+      "status": "ready",
+      "sources": [
+        "AMAZON"
+      ],
+      "questions": [
+        "Q27"
+      ]
+    },
+    {
+      "id": "AL02",
+      "module": "12-algorithms",
+      "title": "Hashing, windows, search, and traversal",
+      "path": "lessons/12-algorithms/AL02-patterns.md",
+      "prerequisites": [
+        "AL01",
+        "JS06"
+      ],
+      "outcomes": [
+        "Derive core algorithms from invariants and test counterexamples"
+      ],
+      "status": "ready",
+      "sources": [
+        "MICROSOFT"
+      ],
+      "questions": [
+        "Q28"
+      ]
+    },
+    {
+      "id": "IV01",
+      "module": "13-communication",
+      "title": "Explain, investigate, and verify independently",
+      "path": "lessons/13-communication/IV01-communication.md",
+      "prerequisites": [
+        "F01",
+        "JS02"
+      ],
+      "outcomes": [
+        "Give structured technical and behavioral answers and audit AI output"
+      ],
+      "status": "ready",
+      "sources": [
+        "MICROSOFT"
+      ],
+      "questions": [
+        "Q29"
+      ]
+    },
+    {
+      "id": "F04",
+      "module": "01-foundations",
+      "title": "HTML/CSS layout and responsive design depth",
+      "path": null,
+      "prerequisites": [
+        "F02"
+      ],
+      "outcomes": [
+        "Independently implement and assess html/css layout and responsive design depth"
+      ],
+      "status": "planned",
+      "sources": [],
+      "questions": []
+    },
+    {
+      "id": "JS07",
+      "module": "02-javascript",
+      "title": "Modern ECMAScript release-by-release compatibility",
+      "path": null,
+      "prerequisites": [
+        "JS06"
+      ],
+      "outcomes": [
+        "Independently implement and assess modern ecmascript release-by-release compatibility"
+      ],
+      "status": "planned",
+      "sources": [],
+      "questions": []
+    },
+    {
+      "id": "AS04",
+      "module": "03-async",
+      "title": "Rate limiting, scheduling, and memory profiling",
+      "path": null,
+      "prerequisites": [
+        "AS03"
+      ],
+      "outcomes": [
+        "Independently implement and assess rate limiting, scheduling, and memory profiling"
+      ],
+      "status": "planned",
+      "sources": [],
+      "questions": []
+    },
+    {
+      "id": "FP02",
+      "module": "04-functional",
+      "title": "Recursion, persistent structures, and API design",
+      "path": null,
+      "prerequisites": [
+        "FP01"
+      ],
+      "outcomes": [
+        "Independently implement and assess recursion, persistent structures, and api design"
+      ],
+      "status": "planned",
+      "sources": [],
+      "questions": []
+    },
+    {
+      "id": "TS04",
+      "module": "05-typescript",
+      "title": "Variance, overload design, and declaration authoring",
+      "path": null,
+      "prerequisites": [
+        "TS03"
+      ],
+      "outcomes": [
+        "Independently implement and assess variance, overload design, and declaration authoring"
+      ],
+      "status": "planned",
+      "sources": [],
+      "questions": []
+    },
+    {
+      "id": "TS05",
+      "module": "05-typescript",
+      "title": "Recursive types, template literals, and advanced inference",
+      "path": null,
+      "prerequisites": [
+        "TS02"
+      ],
+      "outcomes": [
+        "Independently implement and assess recursive types, template literals, and advanced inference"
+      ],
+      "status": "planned",
+      "sources": [],
+      "questions": []
+    },
+    {
+      "id": "SD02",
+      "module": "06-design",
+      "title": "Domain models, lifecycle, and incremental refactoring",
+      "path": null,
+      "prerequisites": [
+        "SD01"
+      ],
+      "outcomes": [
+        "Independently implement and assess domain models, lifecycle, and incremental refactoring"
+      ],
+      "status": "planned",
+      "sources": [],
+      "questions": []
+    },
+    {
+      "id": "DP02",
+      "module": "07-patterns",
+      "title": "Creational patterns in JavaScript and TypeScript",
+      "path": null,
+      "prerequisites": [
+        "DP01"
+      ],
+      "outcomes": [
+        "Independently implement and assess creational patterns in javascript and typescript"
+      ],
+      "status": "planned",
+      "sources": [],
+      "questions": []
+    },
+    {
+      "id": "DP03",
+      "module": "07-patterns",
+      "title": "Structural patterns in JavaScript and TypeScript",
+      "path": null,
+      "prerequisites": [
+        "DP02"
+      ],
+      "outcomes": [
+        "Independently implement and assess structural patterns in javascript and typescript"
+      ],
+      "status": "planned",
+      "sources": [],
+      "questions": []
+    },
+    {
+      "id": "DP04",
+      "module": "07-patterns",
+      "title": "Behavioral patterns, middleware, and repositories",
+      "path": null,
+      "prerequisites": [
+        "DP03"
+      ],
+      "outcomes": [
+        "Independently implement and assess behavioral patterns, middleware, and repositories"
+      ],
+      "status": "planned",
+      "sources": [],
+      "questions": []
+    },
+    {
+      "id": "AG04",
+      "module": "08-angular",
+      "title": "NgRx actions, reducers, selectors, effects, and entities",
+      "path": null,
+      "prerequisites": [
+        "AG03"
+      ],
+      "outcomes": [
+        "Independently implement and assess ngrx actions, reducers, selectors, effects, and entities"
+      ],
+      "status": "planned",
+      "sources": [],
+      "questions": []
+    },
+    {
+      "id": "AG05",
+      "module": "08-angular",
+      "title": "Design systems, i18n, SSR, and hydration lab",
+      "path": null,
+      "prerequisites": [
+        "AG03"
+      ],
+      "outcomes": [
+        "Independently implement and assess design systems, i18n, ssr, and hydration lab"
+      ],
+      "status": "planned",
+      "sources": [],
+      "questions": []
+    },
+    {
+      "id": "AG06",
+      "module": "08-angular",
+      "title": "Angular 16 build, deployment, profiling, and migration",
+      "path": null,
+      "prerequisites": [
+        "AG05"
+      ],
+      "outcomes": [
+        "Independently implement and assess angular 16 build, deployment, profiling, and migration"
+      ],
+      "status": "planned",
+      "sources": [],
+      "questions": []
+    },
+    {
+      "id": "FE02",
+      "module": "09-frontend",
+      "title": "Large tables, analytics, pagination, and virtualization",
+      "path": null,
+      "prerequisites": [
+        "FE01"
+      ],
+      "outcomes": [
+        "Independently implement and assess large tables, analytics, pagination, and virtualization"
+      ],
+      "status": "planned",
+      "sources": [],
+      "questions": []
+    },
+    {
+      "id": "FE03",
+      "module": "09-frontend",
+      "title": "Realtime notifications, offline state, and uploads",
+      "path": null,
+      "prerequisites": [
+        "FE02"
+      ],
+      "outcomes": [
+        "Independently implement and assess realtime notifications, offline state, and uploads"
+      ],
+      "status": "planned",
+      "sources": [],
+      "questions": []
+    },
+    {
+      "id": "FE04",
+      "module": "09-frontend",
+      "title": "Multi-tenant SaaS, monorepos, and micro-frontends",
+      "path": null,
+      "prerequisites": [
+        "FE03",
+        "PE01"
+      ],
+      "outcomes": [
+        "Independently implement and assess multi-tenant saas, monorepos, and micro-frontends"
+      ],
+      "status": "planned",
+      "sources": [],
+      "questions": []
+    },
+    {
+      "id": "FE05",
+      "module": "09-frontend",
+      "title": "E-commerce, UI library, and telemetry design cases",
+      "path": null,
+      "prerequisites": [
+        "FE04"
+      ],
+      "outcomes": [
+        "Independently implement and assess e-commerce, ui library, and telemetry design cases"
+      ],
+      "status": "planned",
+      "sources": [],
+      "questions": []
+    },
+    {
+      "id": "ND03",
+      "module": "10-node",
+      "title": "SQL integration, transactions, and connection pools",
+      "path": null,
+      "prerequisites": [
+        "ND02"
+      ],
+      "outcomes": [
+        "Independently implement and assess sql integration, transactions, and connection pools"
+      ],
+      "status": "planned",
+      "sources": [],
+      "questions": []
+    },
+    {
+      "id": "ND04",
+      "module": "10-node",
+      "title": "Queues, jobs, caching, and rate limiting",
+      "path": null,
+      "prerequisites": [
+        "ND03",
+        "PE02"
+      ],
+      "outcomes": [
+        "Independently implement and assess queues, jobs, caching, and rate limiting"
+      ],
+      "status": "planned",
+      "sources": [],
+      "questions": []
+    },
+    {
+      "id": "ND05",
+      "module": "10-node",
+      "title": "Framework API, deployment, CI/CD, and profiling",
+      "path": null,
+      "prerequisites": [
+        "ND04"
+      ],
+      "outcomes": [
+        "Independently implement and assess framework api, deployment, ci/cd, and profiling"
+      ],
+      "status": "planned",
+      "sources": [],
+      "questions": []
+    },
+    {
+      "id": "PE03",
+      "module": "11-production",
+      "title": "Load testing, tracing, resilience, and supply chain",
+      "path": null,
+      "prerequisites": [
+        "PE02"
+      ],
+      "outcomes": [
+        "Independently implement and assess load testing, tracing, resilience, and supply chain"
+      ],
+      "status": "planned",
+      "sources": [],
+      "questions": []
+    },
+    {
+      "id": "AL03",
+      "module": "12-algorithms",
+      "title": "Linked lists, heaps, and sorting implementations",
+      "path": null,
+      "prerequisites": [
+        "AL02"
+      ],
+      "outcomes": [
+        "Independently implement and assess linked lists, heaps, and sorting implementations"
+      ],
+      "status": "planned",
+      "sources": [],
+      "questions": []
+    },
+    {
+      "id": "AL04",
+      "module": "12-algorithms",
+      "title": "Backtracking, greedy algorithms, and dynamic programming",
+      "path": null,
+      "prerequisites": [
+        "AL03"
+      ],
+      "outcomes": [
+        "Independently implement and assess backtracking, greedy algorithms, and dynamic programming"
+      ],
+      "status": "planned",
+      "sources": [],
+      "questions": []
+    },
+    {
+      "id": "IV02",
+      "module": "13-communication",
+      "title": "Senior cross-topic panel and portfolio defense",
+      "path": null,
+      "prerequisites": [
+        "IV01",
+        "ND05"
+      ],
+      "outcomes": [
+        "Independently implement and assess senior cross-topic panel and portfolio defense"
+      ],
+      "status": "planned",
+      "sources": [],
+      "questions": []
+    }
+  ]
+}
