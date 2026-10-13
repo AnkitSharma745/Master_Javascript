@@ -1,0 +1,24 @@
+{
+  "name": "master-javascript-learning",
+  "version": "1.0.0",
+  "private": true,
+  "engines": { "node": "^22.20.0 || ^24.0.0" },
+  "scripts": {
+    "indexes": "node scripts/generate-indexes.mjs",
+    "check:docs": "node scripts/check-docs.mjs",
+    "check:diagrams": "node scripts/check-diagrams.mjs",
+    "typecheck": "tsc --noEmit",
+    "build": "tsc",
+    "test": "npm run build && node --test tests/*.test.mjs",
+    "check": "npm run check:docs && npm run check:diagrams && npm run typecheck && npm test",
+    "lab": "node labs/execution.mjs",
+    "review": "node scripts/revision.mjs",
+    "start:api": "node build/projects/issue-board/server.js"
+  },
+  "devDependencies": {
+    "@types/node": "22.15.30",
+    "jsdom": "26.1.0",
+    "mermaid": "11.12.0",
+    "typescript": "5.9.3"
+  }
+}

@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Issue board learning project</title>
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/client.js" defer></script>
+</head>
+<body>
+  <main>
+    <h1>Issue board</h1>
+    <p>A local learning project. Data is kept in memory and resets when the server restarts.</p>
+    <form id="create">
+      <label for="title">New issue title</label>
+      <input id="title" name="title" required maxlength="120" autocomplete="off">
+      <button id="submit" type="submit">Add issue</button>
+    </form>
+    <form id="search-form">
+      <label for="search">Search titles</label>
+      <input id="search" name="q" maxlength="120" type="search">
+      <button type="submit">Search</button>
+    </form>
+    <p id="notice" role="status" aria-live="polite"></p>
+    <section aria-labelledby="results-title" id="results" aria-busy="false">
+      <h2 id="results-title">Issues <span id="count"></span></h2>
+      <p id="load-status" role="status" aria-live="polite"></p>
+      <ul id="issues"></ul>
+    </section>
+    <button id="retry" type="button" hidden>Retry loading</button>
+  </main>
+</body>
+</html>
