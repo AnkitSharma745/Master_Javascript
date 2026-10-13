@@ -1,0 +1,258 @@
+[
+  {
+    "id": "ECMA",
+    "title": "ECMAScript specification",
+    "url": "https://tc39.es/ecma262/multipage/",
+    "scope": "Language types, bindings, objects, iteration, and promise semantics; living draft, not proof every feature is shipped",
+    "kind": "specification",
+    "verified": "2026-10-13"
+  },
+  {
+    "id": "CLOSURES",
+    "title": "MDN closures",
+    "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Closures",
+    "scope": "Lexical environments and retained bindings",
+    "kind": "platform documentation",
+    "verified": "2026-10-13"
+  },
+  {
+    "id": "ARRAY",
+    "title": "MDN Array",
+    "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array",
+    "scope": "Index semantics, holes, and methods; no contiguous-storage guarantee",
+    "kind": "platform documentation",
+    "verified": "2026-10-13"
+  },
+  {
+    "id": "MAP",
+    "title": "MDN Map",
+    "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map",
+    "scope": "Key identity, SameValueZero, average sublinear access",
+    "kind": "platform documentation",
+    "verified": "2026-10-13"
+  },
+  {
+    "id": "MEMORY",
+    "title": "MDN memory management",
+    "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Memory_management",
+    "scope": "Reachability and weak-key lifetime",
+    "kind": "platform documentation",
+    "verified": "2026-10-13"
+  },
+  {
+    "id": "FREEZE",
+    "title": "MDN Object.freeze",
+    "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/freeze",
+    "scope": "Shallow runtime freezing and strict-mode behavior",
+    "kind": "platform documentation",
+    "verified": "2026-10-13"
+  },
+  {
+    "id": "LET",
+    "title": "MDN let",
+    "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let",
+    "scope": "Lexical binding initialization and TDZ",
+    "kind": "platform documentation",
+    "verified": "2026-10-13"
+  },
+  {
+    "id": "PROMISE",
+    "title": "MDN Promise.all",
+    "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/all",
+    "scope": "Aggregate result order and rejection; no cancellation of remaining work",
+    "kind": "platform documentation",
+    "verified": "2026-10-13"
+  },
+  {
+    "id": "ABORT",
+    "title": "MDN AbortController",
+    "url": "https://developer.mozilla.org/en-US/docs/Web/API/AbortController",
+    "scope": "Cooperative cancellation signal",
+    "kind": "platform documentation",
+    "verified": "2026-10-13"
+  },
+  {
+    "id": "NODELOOP",
+    "title": "Node event loop guide",
+    "url": "https://nodejs.org/en/learn/asynchronous-work/event-loop-timers-and-nexttick",
+    "scope": "Host phases and the libuv timer change included in Node 20",
+    "kind": "runtime documentation",
+    "verified": "2026-10-13"
+  },
+  {
+    "id": "NODERELEASE",
+    "title": "Node release schedule",
+    "url": "https://github.com/nodejs/Release",
+    "scope": "Current/LTS/EOL status; recheck before choosing a production runtime",
+    "kind": "runtime policy",
+    "verified": "2026-10-13"
+  },
+  {
+    "id": "NODEHTTP",
+    "title": "Node HTTP API",
+    "url": "https://nodejs.org/api/http.html",
+    "scope": "HTTP server/timeouts/shutdown; living API docs may show a newer runtime than the lab",
+    "kind": "runtime documentation",
+    "verified": "2026-10-13"
+  },
+  {
+    "id": "STREAM",
+    "title": "Node stream API",
+    "url": "https://nodejs.org/api/stream.html",
+    "scope": "Writable backpressure and pipeline; only baseline APIs used here",
+    "kind": "runtime documentation",
+    "verified": "2026-10-13"
+  },
+  {
+    "id": "TSNARROW",
+    "title": "TypeScript narrowing",
+    "url": "https://www.typescriptlang.org/docs/handbook/2/narrowing.html",
+    "scope": "Control-flow narrowing and discriminated unions",
+    "kind": "compiler documentation",
+    "verified": "2026-10-13"
+  },
+  {
+    "id": "TSGENERICS",
+    "title": "TypeScript generics",
+    "url": "https://www.typescriptlang.org/docs/handbook/2/generics.html",
+    "scope": "Type relationships, constraints, and generic defaults",
+    "kind": "compiler documentation",
+    "verified": "2026-10-13"
+  },
+  {
+    "id": "TSMODULES",
+    "title": "TypeScript modules reference",
+    "url": "https://www.typescriptlang.org/docs/handbook/modules/reference.html",
+    "scope": "Host-aligned module resolution and emitted import behavior",
+    "kind": "compiler documentation",
+    "verified": "2026-10-13"
+  },
+  {
+    "id": "TSSATISFIES",
+    "title": "TypeScript 4.9 release notes",
+    "url": "https://www.typescriptlang.org/docs/handbook/release-notes/typescript-4-9.html",
+    "scope": "satisfies introduction and preservation of inferred information",
+    "kind": "versioned compiler documentation",
+    "verified": "2026-10-13"
+  },
+  {
+    "id": "TSDECORATORS",
+    "title": "TypeScript 5.0 release notes",
+    "url": "https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-0.html",
+    "scope": "Standard versus legacy decorator models",
+    "kind": "versioned compiler documentation",
+    "verified": "2026-10-13"
+  },
+  {
+    "id": "ANGULAR16",
+    "title": "Angular 16 announcement",
+    "url": "https://blog.angular.dev/angular-v16-is-here-4d7a28ec680d",
+    "scope": "Version-specific introduction of preview capabilities",
+    "kind": "versioned framework announcement",
+    "verified": "2026-10-13"
+  },
+  {
+    "id": "ANGULARMATRIX",
+    "title": "Angular compatibility table",
+    "url": "https://angular.dev/reference/versions",
+    "scope": "Angular 16.2 TypeScript/Node/RxJS historical matrix and unsupported status",
+    "kind": "framework policy",
+    "verified": "2026-10-13"
+  },
+  {
+    "id": "ANGULARLIFECYCLE",
+    "title": "Angular 16.2.12 lifecycle source",
+    "url": "https://raw.githubusercontent.com/angular/angular/16.2.12/aio/content/guide/lifecycle-hooks.md",
+    "scope": "Versioned component lifecycle explanation",
+    "kind": "versioned framework source",
+    "verified": "2026-10-13"
+  },
+  {
+    "id": "ANGULARONPUSH",
+    "title": "Angular 16.2.12 OnPush source",
+    "url": "https://raw.githubusercontent.com/angular/angular/16.2.12/aio/content/guide/change-detection-skipping-subtrees.md",
+    "scope": "Inputs, events, and subtree eligibility; avoid claiming only inputs cause checks",
+    "kind": "versioned framework source",
+    "verified": "2026-10-13"
+  },
+  {
+    "id": "ANGULARHYDRATION",
+    "title": "Angular 16.2.12 hydration source",
+    "url": "https://raw.githubusercontent.com/angular/angular/16.2.12/aio/content/guide/hydration.md",
+    "scope": "Developer-preview status, DOM matching, Zone.js and i18n limitations",
+    "kind": "versioned framework source",
+    "verified": "2026-10-13"
+  },
+  {
+    "id": "ANGULARCLEANUP",
+    "title": "Angular 16.2.12 takeUntilDestroyed source",
+    "url": "https://raw.githubusercontent.com/angular/angular/16.2.12/packages/core/rxjs-interop/src/take_until_destroyed.ts",
+    "scope": "Injection-context and DestroyRef contract; developer preview in this version",
+    "kind": "versioned framework source",
+    "verified": "2026-10-13"
+  },
+  {
+    "id": "RXJS",
+    "title": "RxJS 7.8.2 switchMap implementation",
+    "url": "https://raw.githubusercontent.com/ReactiveX/rxjs/7.8.2/src/internal/operators/switchMap.ts",
+    "scope": "Inner unsubscription and latest-observation behavior; checked alongside virtual-time tests",
+    "kind": "versioned library source",
+    "verified": "2026-10-13"
+  },
+  {
+    "id": "HTTP",
+    "title": "MDN HTTP caching",
+    "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Caching",
+    "scope": "Freshness/revalidation, private/shared caches, no-cache/no-store",
+    "kind": "platform documentation",
+    "verified": "2026-10-13"
+  },
+  {
+    "id": "OWASP",
+    "title": "OWASP CSRF",
+    "url": "https://community.owasp.org/attacks/csrf",
+    "scope": "Browser credential use and CSRF boundary; not a complete security checklist",
+    "kind": "security documentation",
+    "verified": "2026-10-13"
+  },
+  {
+    "id": "WAI",
+    "title": "W3C WAI tutorials",
+    "url": "https://www.w3.org/WAI/tutorials/",
+    "scope": "Semantics, accessible controls, forms, tables, and keyboard interaction",
+    "kind": "platform documentation",
+    "verified": "2026-10-13"
+  },
+  {
+    "id": "AMAZON",
+    "title": "Amazon software-development interview topics",
+    "url": "https://amazon.jobs/content/en/how-we-hire/interview-prep/software-development-topics",
+    "scope": "Coding, data structures, design, and applied understanding; employer-specific evidence",
+    "kind": "employer guide",
+    "verified": "2026-10-13"
+  },
+  {
+    "id": "MICROSOFT",
+    "title": "Microsoft technical interviewing",
+    "url": "https://careers.microsoft.com/v2/global/en/hiring-tips/technical-interviewing",
+    "scope": "Problem solving, coding, testing, design, and communication; employer-specific evidence",
+    "kind": "employer guide",
+    "verified": "2026-10-13"
+  },
+  {
+    "id": "RETRIEVAL",
+    "title": "Karpicke and Blunt (2011)",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/21252317/",
+    "scope": "Retrieval-practice experiment; application to coding study is a curriculum inference",
+    "kind": "primary research",
+    "verified": "2026-10-13"
+  },
+  {
+    "id": "SPACING",
+    "title": "Dunlosky et al. (2013)",
+    "url": "https://www.psychologicalscience.org/journals/pspi/1529100612453266/",
+    "scope": "Review supporting practice testing/distributed practice; does not prescribe our exact intervals",
+    "kind": "research review",
+    "verified": "2026-10-13"
+  }
+]

@@ -1,0 +1,252 @@
+Master_Javascript/ (authored files; dependencies, build outputs, Git data, cache, and personal progress excluded)
+├── .gitattributes
+├── .github/
+│   └── workflows/
+│       └── check.yml
+├── .gitignore
+├── archive/
+│   ├── 01_Introduction_to_Programming/
+│   │   └── 01_Introduction_to_programming_fundamental.md
+│   ├── 02_JavaScript Variable and Data types/
+│   │   ├── 01_Variable.md
+│   │   ├── 02_Data_Type_in_JavaScript.md
+│   │   ├── 03_Type_Conversion.md
+│   │   └── Question&Answer.md
+│   ├── 03_Expression_And_Operator/
+│   │   ├── 01_JavaScript_Expressions.md
+│   │   ├── 02_JavaScript_Operators.md
+│   │   ├── complex_exmples/
+│   │   │   ├── arithmatic_bitwise.js
+│   │   │   ├── logical_operator.js
+│   │   │   ├── problem1.js
+│   │   │   └── ternary_operator.js
+│   │   └── Question_Answer/
+│   │       ├── 01_JS_Expression_Operator.md
+│   │       ├── arithmetic_operators.js
+│   │       ├── assignment_operator.js
+│   │       ├── bitwise_operator.js
+│   │       ├── comparison_operator.js
+│   │       ├── logical_operator.js
+│   │       ├── ternary_operator.js
+│   │       ├── type_coercion.js
+│   │       └── unary_operator.js
+│   ├── 04_Control_Flow/
+│   │   ├── 01_Conditional_Statement.md
+│   │   ├── 02_Loops.md
+│   │   └── Examples/
+│   │       ├── condition_based_example/
+│   │       │   ├── divisibleBy4.js
+│   │       │   ├── enoughtFuel_Consumption.js
+│   │       │   ├── print1.js
+│   │       │   └── profile.js
+│   │       └── Loops/
+│   │           └── first.js
+│   ├── 05_Functions/
+│   │   ├── 01_JavaScript_Functions.md
+│   │   └── 02_JavaScript_Functions_Examples.md
+│   ├── 06_Javascript_Arrays/
+│   │   ├── 01_JavascriptArray.md
+│   │   ├── 02_JavaScript_Array_Methods.md
+│   │   ├── 03_Examples.md
+│   │   └── 04_Complex_Examples.md
+│   ├── 07_Javascript_Objects/
+│   │   ├── 01_Javascript_Objects.md
+│   │   ├── 02_Object_Methods.md
+│   │   └── 03_Object_Method_Examples.md
+│   ├── 08_ES6_Features/
+│   │   └── ES6.md
+│   ├── 09_DOM_Manipulation/
+│   │   ├── documentation.md
+│   │   └── DOM_Examples/
+│   │       ├── advancedForms.html
+│   │       ├── contentEditable.html
+│   │       ├── dynamicElements.html
+│   │       ├── Example.html
+│   │       ├── fullscreen.html
+│   │       └── lazyLoading.html
+│   ├── 10_Asynchronous_Javascript/
+│   │   ├── documentation.md
+│   │   └── Examples/
+│   │       ├── chatApp.html
+│   │       ├── examples.md
+│   │       └── multiApiFetch.html
+│   ├── 11_Advanced_Concepts/
+│   │   └── Documentation.md
+│   ├── 12_OOPs_Javascript_Classes/
+│   │   ├── 01_Basic_Classes_and_OOP_Concepts.md
+│   │   ├── 02_Class_Features_and_Advanced_methods.md
+│   │   ├── 03_Inhertance_and_Static_methods.md
+│   │   ├── 04_Advanced_OOP_Patterns_and_Polymorphism.md
+│   │   ├── 05_Mixins_and_Memory_Management.md
+│   │   ├── 06_Design_Pattern_and_Class_Management.md
+│   │   └── Examples/
+│   │       ├── 04_MultiUserBankingSystem.js
+│   │       ├── 05_BankingSystem2.js
+│   │       ├── BasicOOPS.js
+│   │       ├── E-Commerce.js
+│   │       └── GameEntityManagment.js
+│   ├── 13_Design_Pattern/
+│   │   ├── 01_Intro_to_Design_Patterns.md
+│   │   ├── 02_Creational_Design_Patterns.md
+│   │   ├── 03_Structural_Design_Patterns.md
+│   │   ├── 04_Behavioral_Design_Pattern.md
+│   │   ├── 05Real_World_Examples.md
+│   │   ├── 06_Design_Pattern_Modern_JS.md
+│   │   └── 07_Best_Practices.md
+│   ├── 14_Typescript/
+│   │   ├── 01_Introduction_To_Typescript.md
+│   │   ├── 02_Typescript_Basic_Types.md
+│   │   ├── 03_Advanced_Types.md
+│   │   ├── 04_Typescript_Functions.md
+│   │   ├── 05_Interface.md
+│   │   ├── 06_Classes_in_Typescript.md
+│   │   ├── 07_Generics_in_Typescript.md
+│   │   ├── 08_Module_NameSpace.md
+│   │   ├── 09_TypeGaurd.md
+│   │   ├── 10_Typescript_Decorators.md
+│   │   ├── 11_Asynchronous_Programming.md
+│   │   ├── 12_Typescript_in_React.md
+│   │   ├── 13_Typescript_in_Node_JS.md
+│   │   ├── 14_Typescript_Config.md
+│   │   └── 15_Advanced_Typescript_Pattern.md
+│   ├── README.md
+│   └── README.original.md
+├── CONTRIBUTING.md
+├── curriculum/
+│   ├── manifest.json
+│   └── README.md
+├── docs/
+│   ├── audit/
+│   │   ├── corrections.md
+│   │   ├── final-tree.txt
+│   │   ├── migration.md
+│   │   ├── original-audit.md
+│   │   └── original-inventory.json
+│   ├── implementation-report.md
+│   ├── lesson-template.md
+│   └── study-guide.md
+├── interviews/
+│   ├── answers.md
+│   ├── diagnostic.md
+│   ├── mock-interviews.md
+│   ├── questions.json
+│   ├── README.md
+│   └── tracks.md
+├── labs/
+│   ├── algorithms.mjs
+│   ├── async-tools.mjs
+│   ├── contracts.ts
+│   ├── design.ts
+│   ├── execution.mjs
+│   ├── README.md
+│   └── streams.mjs
+├── lessons/
+│   ├── 01-foundations/
+│   │   ├── F01-programs.md
+│   │   ├── F02-browser.md
+│   │   ├── F03-http.md
+│   │   └── README.md
+│   ├── 02-javascript/
+│   │   ├── JS01-values.md
+│   │   ├── JS02-scope.md
+│   │   ├── JS03-this.md
+│   │   ├── JS04-objects.md
+│   │   ├── JS05-collections.md
+│   │   ├── JS06-modules.md
+│   │   └── README.md
+│   ├── 03-async/
+│   │   ├── AS01-event-loop.md
+│   │   ├── AS02-promises.md
+│   │   ├── AS03-concurrency.md
+│   │   └── README.md
+│   ├── 04-functional/
+│   │   ├── FP01-functions.md
+│   │   └── README.md
+│   ├── 05-typescript/
+│   │   ├── README.md
+│   │   ├── TS01-contracts.md
+│   │   ├── TS02-generics.md
+│   │   └── TS03-configuration.md
+│   ├── 06-design/
+│   │   ├── README.md
+│   │   └── SD01-solid.md
+│   ├── 07-patterns/
+│   │   ├── DP01-selection.md
+│   │   └── README.md
+│   ├── 08-angular/
+│   │   ├── AG01-architecture.md
+│   │   ├── AG02-rxjs.md
+│   │   ├── AG03-forms-http.md
+│   │   └── README.md
+│   ├── 09-frontend/
+│   │   ├── FE01-system-design.md
+│   │   └── README.md
+│   ├── 10-node/
+│   │   ├── ND01-runtime.md
+│   │   ├── ND02-api-data.md
+│   │   └── README.md
+│   ├── 11-production/
+│   │   ├── PE01-security.md
+│   │   ├── PE02-reliability.md
+│   │   └── README.md
+│   ├── 12-algorithms/
+│   │   ├── AL01-complexity.md
+│   │   ├── AL02-patterns.md
+│   │   └── README.md
+│   └── 13-communication/
+│       ├── IV01-communication.md
+│       └── README.md
+├── package-lock.json
+├── package.json
+├── practice/
+│   ├── README.md
+│   ├── solutions.md
+│   └── system-design.md
+├── projects/
+│   ├── adr-template.md
+│   ├── angular16-feature/
+│   │   ├── package-lock.json
+│   │   ├── package.json
+│   │   ├── README.md
+│   │   ├── src/
+│   │   │   ├── issue-api.ts
+│   │   │   ├── issue-search.component.ts
+│   │   │   ├── issue.module.ts
+│   │   │   └── search.ts
+│   │   ├── tests/
+│   │   │   └── search.test.mjs
+│   │   └── tsconfig.json
+│   ├── issue-board/
+│   │   ├── public/
+│   │   │   ├── client.js
+│   │   │   ├── index.html
+│   │   │   └── styles.css
+│   │   ├── README.md
+│   │   └── server.ts
+│   └── README.md
+├── README.md
+├── references/
+│   ├── README.md
+│   ├── sources.json
+│   └── versions.md
+├── revision/
+│   ├── assessments.md
+│   ├── cards.json
+│   ├── comparisons.md
+│   ├── mixed-quiz.md
+│   ├── progress.template.json
+│   ├── README.md
+│   └── weak-topics.md
+├── scripts/
+│   ├── check-diagrams.mjs
+│   ├── check-docs.mjs
+│   ├── generate-indexes.mjs
+│   ├── lib.mjs
+│   └── revision.mjs
+├── tests/
+│   ├── api.test.mjs
+│   ├── archive.test.mjs
+│   ├── client.test.mjs
+│   ├── learning.test.mjs
+│   └── revision.test.mjs
+└── tsconfig.json

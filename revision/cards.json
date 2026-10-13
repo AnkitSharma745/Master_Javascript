@@ -1,0 +1,456 @@
+[
+  {
+    "id": "Q01",
+    "lessonIds": [
+      "F01"
+    ],
+    "tags": [
+      "01-foundations",
+      "fundamental",
+      "coding"
+    ],
+    "question": "How would you define and test an integer price sum?",
+    "answer": "Validate finite safe integer cents, maintain the processed-prefix sum, and define empty input as zero.",
+    "source": "interviews/answers.md#q01"
+  },
+  {
+    "id": "Q02",
+    "lessonIds": [
+      "F02"
+    ],
+    "tags": [
+      "01-foundations",
+      "intermediate",
+      "debugging"
+    ],
+    "question": "A clickable div works with a mouse; is the feature complete?",
+    "answer": "Use a semantic button and test keyboard, focus, labels, and status feedback.",
+    "source": "interviews/answers.md#q02"
+  },
+  {
+    "id": "Q03",
+    "lessonIds": [
+      "F03"
+    ],
+    "tags": [
+      "01-foundations",
+      "intermediate",
+      "scenario"
+    ],
+    "question": "fetch fulfilled with a 404. What went wrong?",
+    "answer": "fetch fulfillment can contain an HTTP failure; check response.ok, parse the expected representation, and validate it.",
+    "source": "interviews/answers.md#q03"
+  },
+  {
+    "id": "Q04",
+    "lessonIds": [
+      "JS01"
+    ],
+    "tags": [
+      "02-javascript",
+      "fundamental",
+      "output"
+    ],
+    "question": "Does reassigning an object parameter change the caller's binding?",
+    "answer": "No. The copied reference can mutate the same object, but reassigning the local parameter changes only that binding.",
+    "source": "interviews/answers.md#q04"
+  },
+  {
+    "id": "Q05",
+    "lessonIds": [
+      "JS02"
+    ],
+    "tags": [
+      "02-javascript",
+      "intermediate",
+      "output"
+    ],
+    "question": "Why do callbacks in a var loop all read the final index?",
+    "answer": "They share one binding, read when invoked after the loop. let creates per-iteration bindings for this loop.",
+    "source": "interviews/answers.md#q05"
+  },
+  {
+    "id": "Q06",
+    "lessonIds": [
+      "JS03"
+    ],
+    "tags": [
+      "02-javascript",
+      "intermediate",
+      "debugging"
+    ],
+    "question": "A detached class method fails. How do you derive this?",
+    "answer": "Ordinary methods derive this from the call. Bind once or use a suitable arrow callback.",
+    "source": "interviews/answers.md#q06"
+  },
+  {
+    "id": "Q07",
+    "lessonIds": [
+      "JS04"
+    ],
+    "tags": [
+      "02-javascript",
+      "advanced",
+      "trade-off"
+    ],
+    "question": "Does spreading a frozen object preserve its full behavior?",
+    "answer": "No. Spread reads enumerable own values; it does not copy all descriptors/prototype behavior, and freezing is shallow.",
+    "source": "interviews/answers.md#q07"
+  },
+  {
+    "id": "Q08",
+    "lessonIds": [
+      "JS05"
+    ],
+    "tags": [
+      "02-javascript",
+      "intermediate",
+      "output"
+    ],
+    "question": "How do a hole and explicit undefined differ in an array?",
+    "answer": "A hole is an absent index; some methods skip it, while normal indexed reads still yield undefined.",
+    "source": "interviews/answers.md#q08"
+  },
+  {
+    "id": "Q09",
+    "lessonIds": [
+      "JS06"
+    ],
+    "tags": [
+      "02-javascript",
+      "advanced",
+      "explanation"
+    ],
+    "question": "When does a generator execute, and what happens on early exit?",
+    "answer": "The call creates an iterator; next advances execution. Early for-of exit can call return and run generator finally.",
+    "source": "interviews/answers.md#q09"
+  },
+  {
+    "id": "Q10",
+    "lessonIds": [
+      "AS01"
+    ],
+    "tags": [
+      "03-async",
+      "intermediate",
+      "output"
+    ],
+    "question": "Explain sync, executor, end, then, microtask, timer in the lab.",
+    "answer": "The executor runs synchronously; registered reactions and microtasks run after current work; this timer runs after them.",
+    "source": "interviews/answers.md#q10"
+  },
+  {
+    "id": "Q11",
+    "lessonIds": [
+      "AS02"
+    ],
+    "tags": [
+      "03-async",
+      "intermediate",
+      "debugging"
+    ],
+    "question": "Why did success display before save completed?",
+    "answer": "The callback did not return save's promise, so the next link did not adopt its outcome.",
+    "source": "interviews/answers.md#q11"
+  },
+  {
+    "id": "Q12",
+    "lessonIds": [
+      "AS03"
+    ],
+    "tags": [
+      "03-async",
+      "advanced",
+      "scenario"
+    ],
+    "question": "How do you keep late search results from overwriting new intent?",
+    "answer": "Use latest-intent ownership, cancel cooperating transport, and guard state commitment with a generation token.",
+    "source": "interviews/answers.md#q12"
+  },
+  {
+    "id": "Q13",
+    "lessonIds": [
+      "FP01"
+    ],
+    "tags": [
+      "04-functional",
+      "intermediate",
+      "trade-off"
+    ],
+    "question": "When is memoization incorrect even if results seem reusable?",
+    "answer": "When the key omits relevant inputs, state changes, or retention/freshness is uncontrolled.",
+    "source": "interviews/answers.md#q13"
+  },
+  {
+    "id": "Q14",
+    "lessonIds": [
+      "TS01"
+    ],
+    "tags": [
+      "05-typescript",
+      "fundamental",
+      "debugging"
+    ],
+    "question": "Will Promise<Issue> validate a JSON response?",
+    "answer": "No. Parse unknown runtime data before returning a domain Issue.",
+    "source": "interviews/answers.md#q14"
+  },
+  {
+    "id": "Q15",
+    "lessonIds": [
+      "TS02"
+    ],
+    "tags": [
+      "05-typescript",
+      "advanced",
+      "coding"
+    ],
+    "question": "Write get(object,key) without discarding the result type.",
+    "answer": "Constrain K to keyof T and return T[K], so the chosen key determines the result type.",
+    "source": "interviews/answers.md#q15"
+  },
+  {
+    "id": "Q16",
+    "lessonIds": [
+      "TS03"
+    ],
+    "tags": [
+      "05-typescript",
+      "advanced",
+      "scenario"
+    ],
+    "question": "A paths import typechecks but Node cannot load it. Why?",
+    "answer": "paths describes compiler resolution; it does not generally rewrite emitted imports or configure Node's loader.",
+    "source": "interviews/answers.md#q16"
+  },
+  {
+    "id": "Q17",
+    "lessonIds": [
+      "SD01"
+    ],
+    "tags": [
+      "06-design",
+      "advanced",
+      "design"
+    ],
+    "question": "What makes a subtype violate Liskov substitution?",
+    "answer": "It breaks a guarantee expected by valid callers, even if method names and types look compatible.",
+    "source": "interviews/answers.md#q17"
+  },
+  {
+    "id": "Q18",
+    "lessonIds": [
+      "DP01"
+    ],
+    "tags": [
+      "07-patterns",
+      "intermediate",
+      "trade-off"
+    ],
+    "question": "Distinguish adapter, facade, decorator, and proxy for an API client.",
+    "answer": "Adapter translates a contract; facade simplifies orchestration; decorator adds behavior; proxy mediates access.",
+    "source": "interviews/answers.md#q18"
+  },
+  {
+    "id": "Q19",
+    "lessonIds": [
+      "AG01"
+    ],
+    "tags": [
+      "08-angular",
+      "advanced",
+      "debugging"
+    ],
+    "question": "Why is an OnPush view sometimes stale but updates after a click?",
+    "answer": "Identity-preserving mutation may not provide an input change; a relevant event can still make the subtree eligible.",
+    "source": "interviews/answers.md#q19"
+  },
+  {
+    "id": "Q20",
+    "lessonIds": [
+      "AG02"
+    ],
+    "tags": [
+      "08-angular",
+      "advanced",
+      "scenario"
+    ],
+    "question": "Which flattening operator fits search, uploads, saves, and repeated submits?",
+    "answer": "Use replace, overlap, queue, or ignore semantics respectively, with explicit failure and teardown policy.",
+    "source": "interviews/answers.md#q20"
+  },
+  {
+    "id": "Q21",
+    "lessonIds": [
+      "AG03"
+    ],
+    "tags": [
+      "08-angular",
+      "intermediate",
+      "design"
+    ],
+    "question": "How would you build a typed Angular edit form against an untrusted API?",
+    "answer": "Use typed reactive controls, domain validation, runtime response parsing, explicit view states, and server checks.",
+    "source": "interviews/answers.md#q21"
+  },
+  {
+    "id": "Q22",
+    "lessonIds": [
+      "FE01"
+    ],
+    "tags": [
+      "09-frontend",
+      "advanced",
+      "architecture"
+    ],
+    "question": "Design a tenant-aware searchable million-row admin table.",
+    "answer": "Clarify roles/latency/consistency, use server pagination/filtering, scoped caches, explicit state ownership, and failure UX.",
+    "source": "interviews/answers.md#q22"
+  },
+  {
+    "id": "Q23",
+    "lessonIds": [
+      "ND01"
+    ],
+    "tags": [
+      "10-node",
+      "intermediate",
+      "explanation"
+    ],
+    "question": "How can Node handle I/O while one CPU loop blocks requests?",
+    "answer": "The host overlaps I/O; the CPU loop still occupies the executing JavaScript thread.",
+    "source": "interviews/answers.md#q23"
+  },
+  {
+    "id": "Q24",
+    "lessonIds": [
+      "ND02"
+    ],
+    "tags": [
+      "10-node",
+      "advanced",
+      "architecture"
+    ],
+    "question": "How do you prevent duplicate creation and lost updates?",
+    "answer": "Define scoped idempotency records for repeated intent and conditional version checks for updates.",
+    "source": "interviews/answers.md#q24"
+  },
+  {
+    "id": "Q25",
+    "lessonIds": [
+      "PE01"
+    ],
+    "tags": [
+      "11-production",
+      "advanced",
+      "scenario"
+    ],
+    "question": "Why aren't route guards, CORS, and HttpOnly enough to secure a tenant API?",
+    "answer": "They address different concerns; the server must validate identity and authorize the resource operation and tenant.",
+    "source": "interviews/answers.md#q25"
+  },
+  {
+    "id": "Q26",
+    "lessonIds": [
+      "PE02"
+    ],
+    "tags": [
+      "11-production",
+      "advanced",
+      "debugging"
+    ],
+    "question": "An invalidated request finishes and restores stale cached data. How do you fix it?",
+    "answer": "Make completion conditional on the current in-flight identity or generation, not just key equality.",
+    "source": "interviews/answers.md#q26"
+  },
+  {
+    "id": "Q27",
+    "lessonIds": [
+      "AL01"
+    ],
+    "tags": [
+      "12-algorithms",
+      "fundamental",
+      "explanation"
+    ],
+    "question": "How do you justify time and space rather than guess Big O?",
+    "answer": "Define input dimensions, count repeated work and retained data, and state data-structure assumptions.",
+    "source": "interviews/answers.md#q27"
+  },
+  {
+    "id": "Q28",
+    "lessonIds": [
+      "AL02"
+    ],
+    "tags": [
+      "12-algorithms",
+      "intermediate",
+      "coding"
+    ],
+    "question": "Derive lowerBound and a nonrepeating window from invariants.",
+    "answer": "Maintain a shrinking sorted candidate interval and a unique contiguous window whose left boundary never moves backward.",
+    "source": "interviews/answers.md#q28"
+  },
+  {
+    "id": "Q29",
+    "lessonIds": [
+      "IV01"
+    ],
+    "tags": [
+      "13-communication",
+      "intermediate",
+      "communication"
+    ],
+    "question": "How do you answer accurately when you don't know an API or runtime detail?",
+    "answer": "State what you know, isolate the uncertainty, propose an assumption or experiment, and verify against the correct version.",
+    "source": "interviews/answers.md#q29"
+  },
+  {
+    "id": "Q30",
+    "lessonIds": [
+      "AS03",
+      "AG02",
+      "PE01",
+      "PE02"
+    ],
+    "tags": [
+      "cross-topic",
+      "advanced",
+      "cross-topic"
+    ],
+    "question": "A tenant switch occurs during a shared Angular search. Design the boundary.",
+    "answer": "Cancel or detach old feature intent, change cache scope, and prevent stale completion from repopulating or rendering prior-tenant data.",
+    "source": "interviews/answers.md#q30"
+  },
+  {
+    "id": "Q31",
+    "lessonIds": [
+      "ND02",
+      "PE02"
+    ],
+    "tags": [
+      "cross-topic",
+      "advanced",
+      "cross-topic"
+    ],
+    "question": "A validated API write times out; a queue consumer later receives it twice.",
+    "answer": "Treat timeout as uncertain and make the repeated write/consumer effect idempotent using durable, scoped operation identity.",
+    "source": "interviews/answers.md#q31"
+  },
+  {
+    "id": "Q32",
+    "lessonIds": [
+      "TS01",
+      "PE02",
+      "IV01"
+    ],
+    "tags": [
+      "cross-topic",
+      "advanced",
+      "cross-topic"
+    ],
+    "question": "A generated utility compiles but asserts network types and leaks cache memory.",
+    "answer": "Replace unchecked boundary assertions with parsing and define full cache keys, capacity, freshness, and invalidation.",
+    "source": "interviews/answers.md#q32"
+  }
+]

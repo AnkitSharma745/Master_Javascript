@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "lib": ["ES2022", "DOM"],
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "noImplicitOverride": true,
+    "noEmitOnError": true,
+    "forceConsistentCasingInFileNames": true,
+    "rootDir": ".",
+    "outDir": "build",
+    "sourceMap": true,
+    "declaration": true
+  },
+  "include": ["labs/**/*.ts", "projects/issue-board/**/*.ts"],
+  "exclude": ["node_modules", "build", "archive", "projects/angular16-feature"]
+}
