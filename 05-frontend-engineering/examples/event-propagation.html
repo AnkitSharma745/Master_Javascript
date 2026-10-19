@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Event propagation</title>
+    <style>
+      body { font-family: system-ui, sans-serif; max-width: 48rem; margin: 2rem auto; padding: 0 1rem; line-height: 1.5; }
+      #outer, #inner { padding: 1.5rem; border: 2px solid; border-radius: 8px; }
+      #outer { border-color: #7c3aed; background: #f5f3ff; }
+      #inner { border-color: #059669; background: #ecfdf5; }
+      fieldset { margin: 1rem 0; }
+      ol { background: #f3f4f6; padding: 1rem 2.5rem; min-height: 4rem; }
+      :focus-visible { outline: 3px solid #1d4ed8; outline-offset: 2px; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Event propagation: capture, target, bubble</h1>
+      <p>Click the button (or the link). The log shows the order in which listeners run. Change the options to see <code>stopPropagation</code>, <code>stopImmediatePropagation</code> and <code>preventDefault</code>.</p>
+
+      <fieldset>
+        <legend>Options for the button's first bubble listener</legend>
+        <label><input type="radio" name="mode" value="none" checked /> Do nothing special</label><br />
+        <label><input type="radio" name="mode" value="stop" /> Call stopPropagation()</label><br />
+        <label><input type="radio" name="mode" value="stopImmediate" /> Call stopImmediatePropagation()</label>
+      </fieldset>
+      <label><input type="checkbox" id="prevent-link" checked /> Call preventDefault() on the link click</label>
+
+      <div id="outer">
+        outer div
+        <div id="inner">
+          inner div
+          <p>
+            <button type="button" id="target-button"><span>Click me</span></button>
+            <a href="https://developer.mozilla.org/" id="target-link">A link to MDN</a>
+          </p>
+        </div>
+      </div>
+
+      <h2>Log</h2>
+      <button type="button" id="clear-log">Clear log</button>
+      <ol id="log" aria-live="polite"></ol>
+    </main>
+
+    <script>
+      const log = document.getElementById("log");
+      const outer = document.getElementById("outer");
+      const inner = document.getElementById("inner");
+      const button = document.getElementById("target-button");
+      const link = document.getElementById("target-link");
+
+      function write(message, event) {
+        const phases = { 1: "capture", 2: "target", 3: "bubble" };
+        const li = document.createElement("li");
+        li.textContent = `${message} (eventPhase: ${phases[event.eventPhase]}, target: ${event.target.tagName.toLowerCase()}, currentTarget: ${event.currentTarget.id || event.currentTarget.nodeName})`;
+        log.append(li);
+      }
+
+      document.getElementById("clear-log").addEventListener("click", () => log.replaceChildren());
+
+      // Capture listeners run on the way down
+      document.addEventListener("click", (e) => { if (e.target.closest("#outer")) write("document capture", e); }, true);
+      outer.addEventListener("click", (e) => write("outer capture", e), true);
+
+      // Bubble listeners run on the way up
+      outer.addEventListener("click", (e) => write("outer bubble", e));
+      inner.addEventListener("click", (e) => write("inner bubble", e));
+      document.addEventListener("click", (e) => { if (e.target.closest("#outer")) write("document bubble", e); });
+
+      // Two listeners on the button itself
+      button.addEventListener("click", (e) => {
+        write("button bubble listener 1", e);
+        const mode = document.querySelector('input[name="mode"]:checked').value;
+        if (mode === "stop") e.stopPropagation();
+        if (mode === "stopImmediate") e.stopImmediatePropagation();
+      });
+      button.addEventListener("click", (e) => write("button bubble listener 2", e));
+      // Registered last, but capture listeners run first at the target
+      button.addEventListener("click", (e) => write("button capture", e), true);
+
+      link.addEventListener("click", (e) => {
+        if (document.getElementById("prevent-link").checked) {
+          e.preventDefault(); // stops navigation, but the event still bubbles
+          write("link: preventDefault() called, no navigation", e);
+        }
+      });
+    </script>
+  </body>
+</html>

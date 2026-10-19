@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Fetch and render data safely</title>
+    <style>
+      body { font-family: system-ui, sans-serif; max-width: 48rem; margin: 2rem auto; padding: 0 1rem; line-height: 1.5; }
+      section.user { border: 1px solid #d1d5db; border-radius: 8px; padding: 0.75rem 1rem; margin-bottom: 1rem; }
+      .error { color: #b91c1c; }
+      :focus-visible { outline: 3px solid #1d4ed8; outline-offset: 2px; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Users and their posts</h1>
+      <p>Loads users and posts from the public test API <a href="https://jsonplaceholder.typicode.com/">JSONPlaceholder</a> (needs an internet connection). It shows loading, error and success states, cancels the request with <code>AbortController</code>, checks <code>response.ok</code>, loads posts in parallel with <code>Promise.all</code>, and renders text only with <code>textContent</code>.</p>
+
+      <button type="button" id="load-button">Load users</button>
+      <button type="button" id="cancel-button" disabled>Cancel</button>
+
+      <p id="status" role="status"></p>
+      <div id="output" aria-busy="false"></div>
+    </main>
+
+    <script>
+      const API = "https://jsonplaceholder.typicode.com";
+      const output = document.getElementById("output");
+      const status = document.getElementById("status");
+      const loadButton = document.getElementById("load-button");
+      const cancelButton = document.getElementById("cancel-button");
+      let controller = null;
+
+      async function getJson(url, signal) {
+        const response = await fetch(url, { signal });
+        // fetch only rejects on network errors; HTTP errors (404, 500) must be checked
+        if (!response.ok) throw new Error(`Request failed: HTTP ${response.status} for ${url}`);
+        return response.json();
+      }
+
+      async function loadUsersWithPosts() {
+        controller?.abort(); // a new click cancels the previous request
+        controller = new AbortController();
+        const { signal } = controller;
+        const requestController = controller;
+        // 10 second timeout. Aborting with a "TimeoutError" reason lets us show a different message than a user cancel.
+        const timeoutId = setTimeout(() => requestController.abort(new DOMException("Request timed out", "TimeoutError")), 10000);
+
+        loadButton.disabled = true;
+        cancelButton.disabled = false;
+        output.setAttribute("aria-busy", "true");
+        status.textContent = "Loading users...";
+
+        try {
+          const users = (await getJson(`${API}/users`, signal)).slice(0, 5);
+          // One request per user, in parallel. (A real API should offer one endpoint for this.)
+          const usersWithPosts = await Promise.all(
+            users.map(async (user) => ({
+              ...user,
+              posts: (await getJson(`${API}/posts?userId=${encodeURIComponent(user.id)}`, signal)).slice(0, 3),
+            }))
+          );
+          render(usersWithPosts);
+          status.textContent = usersWithPosts.length === 0 ? "No users found." : `Loaded ${usersWithPosts.length} users.`;
+        } catch (error) {
+          if (error.name === "AbortError") {
+            status.textContent = "Loading was cancelled.";
+          } else if (error.name === "TimeoutError") {
+            status.textContent = "The server took too long to answer. Please try again.";
+          } else {
+            console.error(error);
+            output.replaceChildren();
+            const message = document.createElement("p");
+            message.className = "error";
+            message.textContent = "Could not load the data. Check your connection and try again.";
+            output.append(message);
+            status.textContent = "Loading failed.";
+          }
+        } finally {
+          clearTimeout(timeoutId);
+          loadButton.disabled = false;
+          cancelButton.disabled = true;
+          output.setAttribute("aria-busy", "false");
+        }
+      }
+
+      function render(usersWithPosts) {
+        const sections = usersWithPosts.map((user) => {
+          const section = document.createElement("section");
+          section.className = "user";
+          const heading = document.createElement("h2");
+          heading.textContent = user.name; // API data is treated as text, never as HTML
+          const email = document.createElement("p");
+          email.textContent = user.email;
+          const list = document.createElement("ul");
+          for (const post of user.posts) {
+            const item = document.createElement("li");
+            item.textContent = post.title;
+            list.append(item);
+          }
+          section.append(heading, email, list);
+          return section;
+        });
+        output.replaceChildren(...sections);
+      }
+
+      loadButton.addEventListener("click", loadUsersWithPosts);
+      cancelButton.addEventListener("click", () => controller?.abort());
+    </script>
+  </body>
+</html>

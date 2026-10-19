@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Accessible dialogs</title>
+    <style>
+      body { font-family: system-ui, sans-serif; max-width: 44rem; margin: 2rem auto; padding: 0 1rem; line-height: 1.5; }
+      dialog, .custom-modal { border: none; border-radius: 10px; padding: 1.5rem; max-width: 28rem; box-shadow: 0 10px 30px rgb(0 0 0 / 0.3); }
+      dialog::backdrop { background: rgb(0 0 0 / 0.5); }
+      .modal-layer { position: fixed; inset: 0; display: grid; place-items: center; background: rgb(0 0 0 / 0.5); }
+      .modal-layer[hidden] { display: none; }
+      .custom-modal { background: white; }
+      .actions { display: flex; gap: 0.5rem; justify-content: flex-end; margin-top: 1rem; }
+      label { display: block; }
+      input { width: 100%; padding: 0.4rem; box-sizing: border-box; }
+      :focus-visible { outline: 3px solid #1d4ed8; outline-offset: 2px; }
+    </style>
+  </head>
+  <body>
+    <div id="app-root">
+      <main>
+        <h1>Accessible dialogs</h1>
+        <p>Use only the keyboard: Tab to a button, press Enter, Tab around inside the dialog, then press Escape. Focus should stay inside the dialog and return to the button afterwards.</p>
+
+        <h2>1. Native dialog with showModal()</h2>
+        <p>Shipping address: <strong id="address-output">12 Market Street</strong></p>
+        <button type="button" id="open-native">Edit address (native dialog)</button>
+
+        <h2>2. Custom modal with a manual focus trap</h2>
+        <p>For when you cannot use <code>&lt;dialog&gt;</code>. It uses <code>inert</code> on the page behind it.</p>
+        <button type="button" id="open-custom">Cancel order (custom modal)</button>
+
+        <p id="page-status" role="status"></p>
+      </main>
+    </div>
+
+    <dialog id="address-dialog" aria-labelledby="address-title">
+      <h2 id="address-title">Edit shipping address</h2>
+      <form method="dialog">
+        <label for="street">Street</label>
+        <input id="street" name="street" autocomplete="street-address" value="12 Market Street" />
+        <div class="actions">
+          <button value="cancel" formnovalidate>Cancel</button>
+          <button value="save">Save</button>
+        </div>
+      </form>
+    </dialog>
+
+    <!-- The custom modal is OUTSIDE #app-root, so making #app-root inert does not affect it -->
+    <div class="modal-layer" id="cancel-layer" hidden>
+      <div class="custom-modal" id="cancel-modal" role="dialog" aria-modal="true" aria-labelledby="cancel-title" aria-describedby="cancel-text">
+        <h2 id="cancel-title">Cancel order A-1001?</h2>
+        <p id="cancel-text">The items will go back to your cart.</p>
+        <div class="actions">
+          <button type="button" data-close="keep">Keep order</button>
+          <button type="button" data-close="cancel">Cancel order</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const pageStatus = document.getElementById("page-status");
+
+      // 1. Native dialog
+      const openNative = document.getElementById("open-native");
+      const addressDialog = document.getElementById("address-dialog");
+      openNative.addEventListener("click", () => {
+        // Reset before opening: Escape closes the dialog WITHOUT changing returnValue,
+        // so an old "save" would otherwise be reused and save an edit the user cancelled.
+        addressDialog.returnValue = "";
+        document.getElementById("street").value = document.getElementById("address-output").textContent;
+        addressDialog.showModal();
+      });
+      addressDialog.addEventListener("close", () => {
+        openNative.focus(); // explicit focus return, in case the browser did not do it
+        if (addressDialog.returnValue === "save") {
+          const street = document.getElementById("street").value.trim();
+          document.getElementById("address-output").textContent = street; // safe text
+          pageStatus.textContent = "Address saved.";
+        }
+      });
+
+      // 2. Custom modal with focus trap
+      const FOCUSABLE = 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+      const appRoot = document.getElementById("app-root");
+      const layer = document.getElementById("cancel-layer");
+      const modal = document.getElementById("cancel-modal");
+      const openCustom = document.getElementById("open-custom");
+
+      openCustom.addEventListener("click", () => {
+        const previouslyFocused = document.activeElement;
+        const controller = new AbortController();
+        const { signal } = controller;
+
+        layer.hidden = false;
+        appRoot.inert = true;
+        const focusables = () => [...modal.querySelectorAll(FOCUSABLE)];
+        focusables()[0].focus(); // the safe choice: "Keep order"
+
+        function close(result) {
+          layer.hidden = true;
+          appRoot.inert = false;
+          controller.abort();
+          previouslyFocused?.focus();
+          pageStatus.textContent = result === "cancel" ? "Order A-1001 was cancelled." : "Order kept.";
+        }
+
+        modal.addEventListener("keydown", (event) => {
+          if (event.key === "Escape") {
+            close("keep");
+            return;
+          }
+          if (event.key !== "Tab") return;
+          const items = focusables();
+          const first = items[0];
+          const last = items[items.length - 1];
+          if (event.shiftKey && document.activeElement === first) {
+            event.preventDefault();
+            last.focus();
+          } else if (!event.shiftKey && document.activeElement === last) {
+            event.preventDefault();
+            first.focus();
+          }
+        }, { signal });
+
+        modal.addEventListener("click", (event) => {
+          const button = event.target.closest("[data-close]");
+          if (button) close(button.dataset.close);
+        }, { signal });
+
+        layer.addEventListener("click", (event) => {
+          if (event.target === layer) close("keep"); // click on the dark backdrop
+        }, { signal });
+      });
+    </script>
+  </body>
+</html>

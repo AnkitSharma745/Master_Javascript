@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Lazy loading and infinite scroll</title>
+    <style>
+      body { font-family: system-ui, sans-serif; max-width: 48rem; margin: 2rem auto; padding: 0 1rem; line-height: 1.5; }
+      .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1rem; list-style: none; padding: 0; }
+      .card { border: 1px solid #d1d5db; border-radius: 8px; padding: 0.5rem; }
+      .card img { display: block; width: 100%; height: auto; background: #e5e7eb; border-radius: 4px; }
+      .spacer { height: 70vh; display: grid; place-items: center; background: #f9fafb; border: 1px dashed #9ca3af; margin: 1rem 0; }
+      #sentinel { height: 1px; }
+      #event-log { position: sticky; bottom: 0; background: #111827; color: #f9fafb; padding: 0.5rem 1rem; margin: 0; font-size: 0.9rem; }
+      :focus-visible { outline: 3px solid #1d4ed8; outline-offset: 2px; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Lazy loading and infinite scroll</h1>
+      <p>Images are generated in the page (SVG data URLs), so this demo works offline. Scroll down slowly and watch the log at the bottom: each image gets its real <code>src</code> only when it comes within 100px of the viewport, and new products load when the sentinel at the end of the list becomes visible.</p>
+
+      <div class="spacer">Scroll down</div>
+
+      <h2>Products</h2>
+      <ul class="grid" id="product-list"></ul>
+      <div id="sentinel" aria-hidden="true"></div>
+      <button type="button" id="load-more">Load more products</button>
+      <p id="list-status" role="status"></p>
+    </main>
+
+    <p id="event-log" aria-hidden="true">Log: nothing loaded yet</p>
+
+    <script>
+      const list = document.getElementById("product-list");
+      const sentinel = document.getElementById("sentinel");
+      const loadMoreButton = document.getElementById("load-more");
+      const listStatus = document.getElementById("list-status");
+      const eventLog = document.getElementById("event-log");
+      const PAGE_SIZE = 6;
+      const TOTAL = 30;
+      let nextIndex = 0;
+      let isLoading = false;
+
+      function logEvent(message) {
+        eventLog.textContent = `Log: ${message}`;
+        console.log(message);
+      }
+
+      // A fake image generator (instead of an external image service that may disappear)
+      function productImage(index) {
+        const hue = (index * 47) % 360;
+        const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300"><rect width="400" height="300" fill="hsl(${hue} 70% 55%)"/><text x="200" y="165" font-size="48" text-anchor="middle" fill="white" font-family="sans-serif">Product ${index + 1}</text></svg>`;
+        return `data:image/svg+xml,${encodeURIComponent(svg)}`;
+      }
+
+      // A fake API with a delay, like a real network request
+      function fetchProducts(start, count) {
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            const items = [];
+            for (let i = start; i < Math.min(start + count, TOTAL); i++) {
+              items.push({ id: i, name: `Product ${i + 1}`, image: productImage(i) });
+            }
+            resolve({ items, hasMore: start + count < TOTAL });
+          }, 400);
+        });
+      }
+
+      // 1. Lazy image loading with IntersectionObserver
+      const imageObserver = new IntersectionObserver(
+        (entries, observer) => {
+          for (const entry of entries) {
+            if (!entry.isIntersecting) continue;
+            const img = entry.target;
+            img.src = img.dataset.src;
+            observer.unobserve(img);
+            logEvent(`loaded image for ${img.alt}`);
+          }
+        },
+        { rootMargin: "100px 0px" }
+      );
+
+      function createProductItem(product) {
+        const li = document.createElement("li");
+        li.className = "card";
+        const img = document.createElement("img");
+        img.width = 400;
+        img.height = 300; // reserves space: no layout shift
+        img.alt = product.name;
+        img.dataset.src = product.image;
+        const title = document.createElement("h3");
+        title.textContent = product.name;
+        li.append(img, title);
+        imageObserver.observe(img);
+        return li;
+      }
+
+      async function loadNextPage() {
+        if (isLoading) return;
+        isLoading = true;
+        loadMoreButton.disabled = true;
+        listStatus.textContent = "Loading more products...";
+        const { items, hasMore } = await fetchProducts(nextIndex, PAGE_SIZE);
+        nextIndex += items.length;
+        list.append(...items.map(createProductItem));
+        listStatus.textContent = `${list.children.length} of ${TOTAL} products shown.`;
+        logEvent(`page loaded, ${list.children.length} products in the list`);
+        isLoading = false;
+        loadMoreButton.disabled = !hasMore;
+        if (!hasMore) {
+          sentinelObserver.disconnect();
+          loadMoreButton.hidden = true;
+          listStatus.textContent = `All ${TOTAL} products shown.`;
+        }
+      }
+
+      // 2. Infinite scroll: load more when the sentinel becomes visible
+      const sentinelObserver = new IntersectionObserver(([entry]) => {
+        if (entry.isIntersecting) loadNextPage();
+      });
+      sentinelObserver.observe(sentinel);
+
+      // 3. A button as an accessible alternative to infinite scroll
+      loadMoreButton.addEventListener("click", loadNextPage);
+    </script>
+  </body>
+</html>

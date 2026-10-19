@@ -1,0 +1,1221 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Progress Tracker</title>
+<style>
+  :root {
+    --bg: #f7f7f5;
+    --card: #ffffff;
+    --text: #1d1d1f;
+    --muted: #6b6b70;
+    --border: #e2e2e0;
+    --accent: #2f6fde;
+    --accent-soft: #e7efff;
+    --done: #1f8a4c;
+    --done-soft: #e5f5ec;
+    --revise: #b26a00;
+    --revise-soft: #fff3df;
+    --bar-bg: #ececea;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #141416;
+      --card: #1d1d20;
+      --text: #ececee;
+      --muted: #9a9aa2;
+      --border: #2e2e33;
+      --accent: #6b9bff;
+      --accent-soft: #1f2a44;
+      --done: #4cc37f;
+      --done-soft: #17301f;
+      --revise: #f0a940;
+      --revise-soft: #33270f;
+      --bar-bg: #2a2a2f;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #141416;
+    --card: #1d1d20;
+    --text: #ececee;
+    --muted: #9a9aa2;
+    --border: #2e2e33;
+    --accent: #6b9bff;
+    --accent-soft: #1f2a44;
+    --done: #4cc37f;
+    --done-soft: #17301f;
+    --revise: #f0a940;
+    --revise-soft: #33270f;
+    --bar-bg: #2a2a2f;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font: 15px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  main { max-width: 920px; margin: 0 auto; padding: 24px 16px 64px; }
+  h1 { font-size: 24px; margin: 0 0 4px; }
+  .sub { color: var(--muted); margin: 0 0 20px; }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+  .overall { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; }
+  .overall .big { font-size: 28px; font-weight: 700; }
+  .overall .stats { color: var(--muted); }
+  .bar { height: 8px; background: var(--bar-bg); border-radius: 99px; overflow: hidden; flex: 1 1 240px; }
+  .bar > span { display: block; height: 100%; background: var(--done); width: 0; transition: width .2s; }
+  .controls { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .controls input[type="search"] {
+    flex: 1 1 200px;
+    min-width: 0;
+    padding: 8px 10px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--bg);
+    color: var(--text);
+    font: inherit;
+  }
+  .seg { display: inline-flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  .seg button {
+    border: 0;
+    background: transparent;
+    color: var(--text);
+    padding: 7px 10px;
+    font: inherit;
+    cursor: pointer;
+  }
+  .seg button[aria-pressed="true"] { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+  .btn {
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: var(--text);
+    padding: 7px 10px;
+    border-radius: 8px;
+    font: inherit;
+    cursor: pointer;
+  }
+  .btn:hover, .seg button:hover { border-color: var(--accent); }
+  details.subject { padding: 0; }
+  details.subject > summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  details.subject > summary::-webkit-details-marker { display: none; }
+  .chev { transition: transform .15s; color: var(--muted); }
+  details[open] .chev { transform: rotate(90deg); }
+  .s-title { font-weight: 650; flex: 1 1 260px; }
+  .s-count { color: var(--muted); font-variant-numeric: tabular-nums; }
+  .s-bar { flex: 0 0 120px; }
+  ul.topics { list-style: none; margin: 0; padding: 0 8px 8px; }
+  li.topic {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    padding: 8px;
+    border-radius: 8px;
+  }
+  li.topic:hover { background: var(--bg); }
+  li.topic.is-done .t-link { color: var(--muted); text-decoration: line-through; }
+  li.topic input[type="checkbox"] { width: 18px; height: 18px; margin-top: 2px; accent-color: var(--done); flex: 0 0 auto; }
+  .t-main { flex: 1 1 auto; min-width: 0; }
+  .t-link { color: var(--text); text-decoration: none; font-weight: 500; overflow-wrap: anywhere; }
+  .t-link:hover { color: var(--accent); text-decoration: underline; }
+  .t-meta { color: var(--muted); font-size: 13px; }
+  .tag { font-size: 12px; padding: 1px 6px; border-radius: 99px; margin-left: 6px; }
+  .tag.iq { background: var(--accent-soft); color: var(--accent); }
+  .star {
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    color: var(--muted);
+    font-size: 13px;
+    padding: 2px 6px;
+    border-radius: 6px;
+    flex: 0 0 auto;
+  }
+  .star[aria-pressed="true"] { background: var(--revise-soft); color: var(--revise); font-weight: 600; }
+  .hidden { display: none !important; }
+  .note { color: var(--muted); font-size: 13px; margin-top: 8px; }
+  footer { color: var(--muted); font-size: 13px; margin-top: 24px; }
+  @media (max-width: 560px) {
+    .s-bar { flex: 1 1 100%; }
+    .controls .seg { width: 100%; }
+    .controls .seg button { flex: 1; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <h1>Master JavaScript — Progress Tracker</h1>
+  <p class="sub">Tick a topic when you finish it. Use "Revise" to mark topics you want to read again. Progress is saved in this browser.</p>
+
+  <section class="card overall" aria-label="Overall progress">
+    <div class="big" id="overallPct">0%</div>
+    <div class="bar" role="progressbar" aria-label="Overall progress" aria-valuemin="0" aria-valuemax="100" id="overallBar"><span></span></div>
+    <div class="stats" id="overallStats"></div>
+  </section>
+
+  <section class="card controls" aria-label="Filters">
+    <input type="search" id="search" placeholder="Search topics…" aria-label="Search topics">
+    <div class="seg" role="group" aria-label="Show">
+      <button type="button" data-filter="all" aria-pressed="true">All</button>
+      <button type="button" data-filter="todo" aria-pressed="false">Remaining</button>
+      <button type="button" data-filter="done" aria-pressed="false">Done</button>
+      <button type="button" data-filter="revise" aria-pressed="false">Revise</button>
+    </div>
+    <div class="seg" role="group" aria-label="Open links on">
+      <button type="button" data-links="github" aria-pressed="true" title="Opens the rendered page on GitHub (diagrams render there)">GitHub</button>
+      <button type="button" data-links="local" aria-pressed="false" title="Opens the local .md file">Local</button>
+    </div>
+    <button type="button" class="btn" id="expandAll">Expand all</button>
+    <button type="button" class="btn" id="collapseAll">Collapse all</button>
+  </section>
+
+  <div id="subjects"></div>
+
+  <section class="card" aria-label="Backup">
+    <div class="controls">
+      <button type="button" class="btn" id="exportBtn">Export progress</button>
+      <label class="btn" for="importFile">Import progress</label>
+      <input type="file" id="importFile" accept="application/json" class="hidden">
+      <button type="button" class="btn" id="resetBtn">Reset all</button>
+    </div>
+    <p class="note">Progress lives in this browser only. Export it now and then as a backup, or to move it to another computer.</p>
+  </section>
+
+  <footer>Topic list generated from the subject README files.</footer>
+</main>
+
+<script>
+const REPO_URL = "https://github.com/AnkitSharma745/Master_Javascript/blob/main/";
+const STORAGE_KEY = "master-js-progress-v1";
+/*DATA_START*/
+const SUBJECTS = [
+  {
+    "folder": "01-cs-and-web-fundamentals",
+    "title": "01 — Core Computer Science and Web Fundamentals",
+    "topics": [
+      {
+        "path": "01-cs-and-web-fundamentals/01-how-programs-run.md",
+        "label": "1. How programs run",
+        "kind": "topic"
+      },
+      {
+        "path": "01-cs-and-web-fundamentals/02-data-structures-and-big-o.md",
+        "label": "2. Data structures and Big-O",
+        "kind": "topic"
+      },
+      {
+        "path": "01-cs-and-web-fundamentals/03-operating-systems-processes-threads-memory.md",
+        "label": "3. Operating systems: processes, threads, memory",
+        "kind": "topic"
+      },
+      {
+        "path": "01-cs-and-web-fundamentals/04-networking-tcp-ip-and-dns.md",
+        "label": "4. Networking: TCP/IP and DNS",
+        "kind": "topic"
+      },
+      {
+        "path": "01-cs-and-web-fundamentals/05-http-https-and-tls.md",
+        "label": "5. HTTP, HTTPS and TLS",
+        "kind": "topic"
+      },
+      {
+        "path": "01-cs-and-web-fundamentals/06-what-happens-when-you-type-a-url.md",
+        "label": "6. What happens when you type a URL",
+        "kind": "topic"
+      },
+      {
+        "path": "01-cs-and-web-fundamentals/07-browser-architecture-and-rendering.md",
+        "label": "7. Browser architecture and rendering",
+        "kind": "topic"
+      },
+      {
+        "path": "01-cs-and-web-fundamentals/08-browser-storage-and-web-security-basics.md",
+        "label": "8. Browser storage and web security basics",
+        "kind": "topic"
+      },
+      {
+        "path": "01-cs-and-web-fundamentals/interview-questions.md",
+        "label": "Mixed interview questions",
+        "kind": "interview"
+      }
+    ]
+  },
+  {
+    "folder": "02-javascript",
+    "title": "02 — JavaScript",
+    "topics": [
+      {
+        "path": "02-javascript/01-basics-variables-types-operators.md",
+        "label": "1. Basics: variables, types, operators",
+        "kind": "topic"
+      },
+      {
+        "path": "02-javascript/02-type-coercion-and-equality.md",
+        "label": "2. Type coercion and equality",
+        "kind": "topic"
+      },
+      {
+        "path": "02-javascript/03-scope-hoisting-and-tdz.md",
+        "label": "3. Scope, hoisting and TDZ",
+        "kind": "topic"
+      },
+      {
+        "path": "02-javascript/04-functions-and-functional-programming.md",
+        "label": "4. Functions and functional programming",
+        "kind": "topic"
+      },
+      {
+        "path": "02-javascript/05-closures.md",
+        "label": "5. Closures",
+        "kind": "topic"
+      },
+      {
+        "path": "02-javascript/06-this-call-apply-bind.md",
+        "label": "6. `this`, call, apply, bind",
+        "kind": "topic"
+      },
+      {
+        "path": "02-javascript/07-objects-and-copying.md",
+        "label": "7. Objects and copying",
+        "kind": "topic"
+      },
+      {
+        "path": "02-javascript/08-prototypes-and-inheritance.md",
+        "label": "8. Prototypes and inheritance",
+        "kind": "topic"
+      },
+      {
+        "path": "02-javascript/09-classes.md",
+        "label": "9. Classes",
+        "kind": "topic"
+      },
+      {
+        "path": "02-javascript/10-arrays-and-array-methods.md",
+        "label": "10. Arrays and array methods",
+        "kind": "topic"
+      },
+      {
+        "path": "02-javascript/11-strings-numbers-and-dates.md",
+        "label": "11. Strings, numbers and dates",
+        "kind": "topic"
+      },
+      {
+        "path": "02-javascript/12-map-set-weakmap-weakset.md",
+        "label": "12. Map, Set, WeakMap, WeakSet",
+        "kind": "topic"
+      },
+      {
+        "path": "02-javascript/13-iterators-and-generators.md",
+        "label": "13. Iterators and generators",
+        "kind": "topic"
+      },
+      {
+        "path": "02-javascript/14-modules-esm-and-commonjs.md",
+        "label": "14. Modules: ESM and CommonJS",
+        "kind": "topic"
+      },
+      {
+        "path": "02-javascript/15-error-handling.md",
+        "label": "15. Error handling",
+        "kind": "topic"
+      },
+      {
+        "path": "02-javascript/16-event-loop.md",
+        "label": "16. The event loop",
+        "kind": "topic"
+      },
+      {
+        "path": "02-javascript/17-callbacks-and-promises.md",
+        "label": "17. Callbacks and promises",
+        "kind": "topic"
+      },
+      {
+        "path": "02-javascript/18-async-await.md",
+        "label": "18. Async/await",
+        "kind": "topic"
+      },
+      {
+        "path": "02-javascript/19-memory-management-and-garbage-collection.md",
+        "label": "19. Memory management and garbage collection",
+        "kind": "topic"
+      },
+      {
+        "path": "02-javascript/20-debounce-throttle-and-performance.md",
+        "label": "20. Debounce, throttle and performance",
+        "kind": "topic"
+      },
+      {
+        "path": "02-javascript/21-modern-javascript-features.md",
+        "label": "21. Modern JavaScript features",
+        "kind": "topic"
+      },
+      {
+        "path": "02-javascript/interview-questions.md",
+        "label": "Mixed interview questions",
+        "kind": "interview"
+      }
+    ]
+  },
+  {
+    "folder": "03-typescript",
+    "title": "03 — TypeScript",
+    "topics": [
+      {
+        "path": "03-typescript/01-typescript-basics-and-types.md",
+        "label": "1. Basics and types",
+        "kind": "topic"
+      },
+      {
+        "path": "03-typescript/02-interfaces-and-type-aliases.md",
+        "label": "2. Interfaces and type aliases",
+        "kind": "topic"
+      },
+      {
+        "path": "03-typescript/03-unions-narrowing-and-type-guards.md",
+        "label": "3. Unions, narrowing and type guards",
+        "kind": "topic"
+      },
+      {
+        "path": "03-typescript/04-functions-and-classes.md",
+        "label": "4. Functions and classes",
+        "kind": "topic"
+      },
+      {
+        "path": "03-typescript/05-generics.md",
+        "label": "5. Generics",
+        "kind": "topic"
+      },
+      {
+        "path": "03-typescript/06-keyof-typeof-indexed-and-mapped-types.md",
+        "label": "6. keyof, typeof, indexed and mapped types",
+        "kind": "topic"
+      },
+      {
+        "path": "03-typescript/07-conditional-types-and-infer.md",
+        "label": "7. Conditional types and infer",
+        "kind": "topic"
+      },
+      {
+        "path": "03-typescript/08-utility-types.md",
+        "label": "8. Utility types",
+        "kind": "topic"
+      },
+      {
+        "path": "03-typescript/09-modules-declaration-files-and-tsconfig.md",
+        "label": "9. Modules, declaration files and tsconfig",
+        "kind": "topic"
+      },
+      {
+        "path": "03-typescript/10-decorators.md",
+        "label": "10. Decorators",
+        "kind": "topic"
+      },
+      {
+        "path": "03-typescript/11-runtime-validation-and-type-safe-apis.md",
+        "label": "11. Runtime validation and type-safe APIs",
+        "kind": "topic"
+      },
+      {
+        "path": "03-typescript/12-typescript-in-real-projects.md",
+        "label": "12. TypeScript in real projects",
+        "kind": "topic"
+      },
+      {
+        "path": "03-typescript/interview-questions.md",
+        "label": "Mixed interview questions",
+        "kind": "interview"
+      }
+    ]
+  },
+  {
+    "folder": "04-oop-solid-design-patterns",
+    "title": "04 — OOP, SOLID and Design Patterns",
+    "topics": [
+      {
+        "path": "04-oop-solid-design-patterns/01-oop-four-pillars.md",
+        "label": "1. The four pillars of OOP",
+        "kind": "topic"
+      },
+      {
+        "path": "04-oop-solid-design-patterns/02-composition-inheritance-and-mixins.md",
+        "label": "2. Composition, inheritance and mixins",
+        "kind": "topic"
+      },
+      {
+        "path": "04-oop-solid-design-patterns/03-solid-principles.md",
+        "label": "3. SOLID principles",
+        "kind": "topic"
+      },
+      {
+        "path": "04-oop-solid-design-patterns/04-coupling-cohesion-and-design-principles.md",
+        "label": "4. Coupling, cohesion and design principles",
+        "kind": "topic"
+      },
+      {
+        "path": "04-oop-solid-design-patterns/05-dependency-inversion-and-injection.md",
+        "label": "5. Dependency inversion and injection",
+        "kind": "topic"
+      },
+      {
+        "path": "04-oop-solid-design-patterns/06-creational-patterns.md",
+        "label": "6. Creational patterns",
+        "kind": "topic"
+      },
+      {
+        "path": "04-oop-solid-design-patterns/07-structural-patterns.md",
+        "label": "7. Structural patterns",
+        "kind": "topic"
+      },
+      {
+        "path": "04-oop-solid-design-patterns/08-behavioral-patterns.md",
+        "label": "8. Behavioral patterns",
+        "kind": "topic"
+      },
+      {
+        "path": "04-oop-solid-design-patterns/09-patterns-in-real-javascript-apps.md",
+        "label": "9. Patterns in real JavaScript apps",
+        "kind": "topic"
+      },
+      {
+        "path": "04-oop-solid-design-patterns/interview-questions.md",
+        "label": "Mixed interview questions",
+        "kind": "interview"
+      }
+    ]
+  },
+  {
+    "folder": "05-frontend-engineering",
+    "title": "05 — Frontend Engineering",
+    "topics": [
+      {
+        "path": "05-frontend-engineering/01-html-semantics-and-forms.md",
+        "label": "1. HTML semantics and forms",
+        "kind": "topic"
+      },
+      {
+        "path": "05-frontend-engineering/02-css-layout-and-responsive-design.md",
+        "label": "2. CSS layout and responsive design",
+        "kind": "topic"
+      },
+      {
+        "path": "05-frontend-engineering/03-dom-and-events.md",
+        "label": "3. DOM and events",
+        "kind": "topic"
+      },
+      {
+        "path": "05-frontend-engineering/04-accessibility.md",
+        "label": "4. Accessibility",
+        "kind": "topic"
+      },
+      {
+        "path": "05-frontend-engineering/05-web-performance-and-core-web-vitals.md",
+        "label": "5. Web performance and Core Web Vitals",
+        "kind": "topic"
+      },
+      {
+        "path": "05-frontend-engineering/06-components-and-state-management.md",
+        "label": "6. Components and state management",
+        "kind": "topic"
+      },
+      {
+        "path": "05-frontend-engineering/07-api-integration-and-data-fetching.md",
+        "label": "7. API integration and data fetching",
+        "kind": "topic"
+      },
+      {
+        "path": "05-frontend-engineering/08-react-essentials.md",
+        "label": "8. React essentials",
+        "kind": "topic"
+      },
+      {
+        "path": "05-frontend-engineering/09-rendering-strategies-csr-ssr-ssg.md",
+        "label": "9. Rendering strategies: CSR, SSR, SSG",
+        "kind": "topic"
+      },
+      {
+        "path": "05-frontend-engineering/10-build-tools-and-bundlers.md",
+        "label": "10. Build tools and bundlers",
+        "kind": "topic"
+      },
+      {
+        "path": "05-frontend-engineering/interview-questions.md",
+        "label": "Mixed interview questions",
+        "kind": "interview"
+      }
+    ]
+  },
+  {
+    "folder": "06-angular-16",
+    "title": "06 — Angular 16",
+    "topics": [
+      {
+        "path": "06-angular-16/01-angular-fundamentals.md",
+        "label": "1. Angular fundamentals",
+        "kind": "topic"
+      },
+      {
+        "path": "06-angular-16/02-components-and-templates.md",
+        "label": "2. Components and templates",
+        "kind": "topic"
+      },
+      {
+        "path": "06-angular-16/03-directives-and-pipes.md",
+        "label": "3. Directives and pipes",
+        "kind": "topic"
+      },
+      {
+        "path": "06-angular-16/04-lifecycle-hooks.md",
+        "label": "4. Lifecycle hooks",
+        "kind": "topic"
+      },
+      {
+        "path": "06-angular-16/05-dependency-injection.md",
+        "label": "5. Dependency injection",
+        "kind": "topic"
+      },
+      {
+        "path": "06-angular-16/06-routing-guards-and-lazy-loading.md",
+        "label": "6. Routing, guards and lazy loading",
+        "kind": "topic"
+      },
+      {
+        "path": "06-angular-16/07-forms.md",
+        "label": "7. Forms",
+        "kind": "topic"
+      },
+      {
+        "path": "06-angular-16/08-httpclient-and-interceptors.md",
+        "label": "8. HttpClient and interceptors",
+        "kind": "topic"
+      },
+      {
+        "path": "06-angular-16/09-rxjs.md",
+        "label": "9. RxJS",
+        "kind": "topic"
+      },
+      {
+        "path": "06-angular-16/10-change-detection-and-signals.md",
+        "label": "10. Change detection and signals",
+        "kind": "topic"
+      },
+      {
+        "path": "06-angular-16/11-state-management-and-ngrx.md",
+        "label": "11. State management and NgRx",
+        "kind": "topic"
+      },
+      {
+        "path": "06-angular-16/12-performance.md",
+        "label": "12. Performance",
+        "kind": "topic"
+      },
+      {
+        "path": "06-angular-16/13-enterprise-architecture.md",
+        "label": "13. Enterprise architecture",
+        "kind": "topic"
+      },
+      {
+        "path": "06-angular-16/14-testing.md",
+        "label": "14. Testing",
+        "kind": "topic"
+      },
+      {
+        "path": "06-angular-16/15-security.md",
+        "label": "15. Security",
+        "kind": "topic"
+      },
+      {
+        "path": "06-angular-16/16-angular-16-vs-newer-versions.md",
+        "label": "16. Angular 16 vs newer versions",
+        "kind": "topic"
+      },
+      {
+        "path": "06-angular-16/interview-questions.md",
+        "label": "Mixed interview questions",
+        "kind": "interview"
+      }
+    ]
+  },
+  {
+    "folder": "07-nodejs-backend",
+    "title": "07 — Node.js and Backend Engineering",
+    "topics": [
+      {
+        "path": "07-nodejs-backend/01-nodejs-runtime-and-architecture.md",
+        "label": "1. Node.js runtime and architecture",
+        "kind": "topic"
+      },
+      {
+        "path": "07-nodejs-backend/02-node-event-loop.md",
+        "label": "2. The Node.js event loop",
+        "kind": "topic"
+      },
+      {
+        "path": "07-nodejs-backend/03-modules-npm-and-packages.md",
+        "label": "3. Modules, npm and packages",
+        "kind": "topic"
+      },
+      {
+        "path": "07-nodejs-backend/04-core-modules-fs-path-events-buffer.md",
+        "label": "4. Core modules: fs, path, events, Buffer",
+        "kind": "topic"
+      },
+      {
+        "path": "07-nodejs-backend/05-streams.md",
+        "label": "5. Streams",
+        "kind": "topic"
+      },
+      {
+        "path": "07-nodejs-backend/06-http-servers-and-express.md",
+        "label": "6. HTTP servers and Express",
+        "kind": "topic"
+      },
+      {
+        "path": "07-nodejs-backend/07-rest-api-design.md",
+        "label": "7. REST API design",
+        "kind": "topic"
+      },
+      {
+        "path": "07-nodejs-backend/08-validation-and-error-handling.md",
+        "label": "8. Validation and error handling",
+        "kind": "topic"
+      },
+      {
+        "path": "07-nodejs-backend/09-authentication-and-authorization.md",
+        "label": "9. Authentication and authorization",
+        "kind": "topic"
+      },
+      {
+        "path": "07-nodejs-backend/10-databases.md",
+        "label": "10. Databases",
+        "kind": "topic"
+      },
+      {
+        "path": "07-nodejs-backend/11-caching.md",
+        "label": "11. Caching",
+        "kind": "topic"
+      },
+      {
+        "path": "07-nodejs-backend/12-concurrency-worker-threads-and-cluster.md",
+        "label": "12. Concurrency: worker threads and cluster",
+        "kind": "topic"
+      },
+      {
+        "path": "07-nodejs-backend/13-background-jobs-and-queues.md",
+        "label": "13. Background jobs and queues",
+        "kind": "topic"
+      },
+      {
+        "path": "07-nodejs-backend/14-production-nodejs.md",
+        "label": "14. Production Node.js",
+        "kind": "topic"
+      },
+      {
+        "path": "07-nodejs-backend/interview-questions.md",
+        "label": "Mixed interview questions",
+        "kind": "interview"
+      }
+    ]
+  },
+  {
+    "folder": "08-electron-desktop",
+    "title": "08 — Electron and Desktop Development",
+    "topics": [
+      {
+        "path": "08-electron-desktop/01-electron-architecture-and-process-model.md",
+        "label": "1. Electron architecture and process model",
+        "kind": "topic"
+      },
+      {
+        "path": "08-electron-desktop/02-app-and-window-lifecycle.md",
+        "label": "2. App and window lifecycle",
+        "kind": "topic"
+      },
+      {
+        "path": "08-electron-desktop/03-ipc-and-preload-scripts.md",
+        "label": "3. IPC and preload scripts",
+        "kind": "topic"
+      },
+      {
+        "path": "08-electron-desktop/04-electron-security.md",
+        "label": "4. Electron security",
+        "kind": "topic"
+      },
+      {
+        "path": "08-electron-desktop/05-filesystem-child-processes-and-native-features.md",
+        "label": "5. Filesystem, child processes and native features",
+        "kind": "topic"
+      },
+      {
+        "path": "08-electron-desktop/06-packaging-installers-and-code-signing.md",
+        "label": "6. Packaging, installers and code signing",
+        "kind": "topic"
+      },
+      {
+        "path": "08-electron-desktop/07-auto-updates.md",
+        "label": "7. Auto-updates",
+        "kind": "topic"
+      },
+      {
+        "path": "08-electron-desktop/08-logging-crash-recovery-and-monitoring.md",
+        "label": "8. Logging, crash recovery and monitoring",
+        "kind": "topic"
+      },
+      {
+        "path": "08-electron-desktop/09-performance-architecture-and-alternatives.md",
+        "label": "9. Performance, architecture and alternatives",
+        "kind": "topic"
+      },
+      {
+        "path": "08-electron-desktop/interview-questions.md",
+        "label": "Mixed interview questions",
+        "kind": "interview"
+      }
+    ]
+  },
+  {
+    "folder": "09-system-design",
+    "title": "09 — Frontend and Full-Stack System Design",
+    "topics": [
+      {
+        "path": "09-system-design/01-system-design-interview-approach.md",
+        "label": "1. How to approach system design interviews",
+        "kind": "topic"
+      },
+      {
+        "path": "09-system-design/02-scalability-and-core-building-blocks.md",
+        "label": "2. Scalability and core building blocks",
+        "kind": "topic"
+      },
+      {
+        "path": "09-system-design/03-caching-strategies-and-invalidation.md",
+        "label": "3. Caching strategies and invalidation",
+        "kind": "topic"
+      },
+      {
+        "path": "09-system-design/04-api-styles-and-real-time-communication.md",
+        "label": "4. API styles and real-time communication",
+        "kind": "topic"
+      },
+      {
+        "path": "09-system-design/05-frontend-architecture-at-scale.md",
+        "label": "5. Frontend architecture at scale",
+        "kind": "topic"
+      },
+      {
+        "path": "09-system-design/06-auth-architecture-and-multi-tenancy.md",
+        "label": "6. Auth architecture and multi-tenancy",
+        "kind": "topic"
+      },
+      {
+        "path": "09-system-design/07-case-study-enterprise-admin-portal.md",
+        "label": "7. Enterprise admin portal",
+        "kind": "topic"
+      },
+      {
+        "path": "09-system-design/08-case-study-ecommerce-application.md",
+        "label": "8. E-commerce application",
+        "kind": "topic"
+      },
+      {
+        "path": "09-system-design/09-case-study-analytics-dashboard-and-large-tables.md",
+        "label": "9. Analytics dashboard and large tables",
+        "kind": "topic"
+      },
+      {
+        "path": "09-system-design/10-case-study-real-time-chat-and-notifications.md",
+        "label": "10. Real-time chat and notifications",
+        "kind": "topic"
+      },
+      {
+        "path": "09-system-design/11-case-study-autocomplete-search.md",
+        "label": "11. Autocomplete search",
+        "kind": "topic"
+      },
+      {
+        "path": "09-system-design/12-case-study-news-feed-infinite-scroll.md",
+        "label": "12. News feed with infinite scroll",
+        "kind": "topic"
+      },
+      {
+        "path": "09-system-design/13-case-study-url-shortener.md",
+        "label": "13. URL shortener",
+        "kind": "topic"
+      },
+      {
+        "path": "09-system-design/14-case-study-file-upload-service.md",
+        "label": "14. File upload service",
+        "kind": "topic"
+      },
+      {
+        "path": "09-system-design/interview-questions.md",
+        "label": "Mixed interview questions",
+        "kind": "interview"
+      }
+    ]
+  },
+  {
+    "folder": "10-testing-security-production",
+    "title": "10 — Testing, Security and Production Engineering",
+    "topics": [
+      {
+        "path": "10-testing-security-production/01-testing-fundamentals.md",
+        "label": "1. Testing fundamentals",
+        "kind": "topic"
+      },
+      {
+        "path": "10-testing-security-production/02-unit-testing-jest-and-vitest.md",
+        "label": "2. Unit testing with Jest and Vitest",
+        "kind": "topic"
+      },
+      {
+        "path": "10-testing-security-production/03-testing-nodejs-apis.md",
+        "label": "3. Testing Node.js APIs",
+        "kind": "topic"
+      },
+      {
+        "path": "10-testing-security-production/04-component-and-e2e-testing-playwright.md",
+        "label": "4. Component and E2E testing with Playwright",
+        "kind": "topic"
+      },
+      {
+        "path": "10-testing-security-production/05-web-security-xss-csrf-cors-csp.md",
+        "label": "5. Web security: XSS, CSRF, CORS, CSP",
+        "kind": "topic"
+      },
+      {
+        "path": "10-testing-security-production/06-secure-auth-secrets-and-dependencies.md",
+        "label": "6. Secure auth, secrets and dependencies",
+        "kind": "topic"
+      },
+      {
+        "path": "10-testing-security-production/07-debugging-and-profiling.md",
+        "label": "7. Debugging and profiling",
+        "kind": "topic"
+      },
+      {
+        "path": "10-testing-security-production/08-logging-monitoring-and-observability.md",
+        "label": "8. Logging, monitoring and observability",
+        "kind": "topic"
+      },
+      {
+        "path": "10-testing-security-production/09-reliability-and-resilience.md",
+        "label": "9. Reliability and resilience",
+        "kind": "topic"
+      },
+      {
+        "path": "10-testing-security-production/10-ci-cd-and-deployment.md",
+        "label": "10. CI/CD and deployment",
+        "kind": "topic"
+      },
+      {
+        "path": "10-testing-security-production/interview-questions.md",
+        "label": "Mixed interview questions",
+        "kind": "interview"
+      }
+    ]
+  },
+  {
+    "folder": "11-coding-interviews",
+    "title": "11 — Coding Problems and Technical Interviews",
+    "topics": [
+      {
+        "path": "11-coding-interviews/01-how-to-explain-technical-answers.md",
+        "label": "1. How to explain technical answers",
+        "kind": "topic"
+      },
+      {
+        "path": "11-coding-interviews/02-problem-solving-and-complexity.md",
+        "label": "2. Problem solving and complexity",
+        "kind": "topic"
+      },
+      {
+        "path": "11-coding-interviews/03-javascript-output-questions.md",
+        "label": "3. JavaScript output questions",
+        "kind": "topic"
+      },
+      {
+        "path": "11-coding-interviews/04-javascript-polyfills-and-implementations.md",
+        "label": "4. JavaScript polyfills and implementations",
+        "kind": "topic"
+      },
+      {
+        "path": "11-coding-interviews/05-machine-coding-round.md",
+        "label": "5. Machine coding round",
+        "kind": "topic"
+      },
+      {
+        "path": "11-coding-interviews/06-debugging-and-code-review.md",
+        "label": "6. Debugging and code review",
+        "kind": "topic"
+      },
+      {
+        "path": "11-coding-interviews/07-project-discussion-and-behavioral.md",
+        "label": "7. Project discussion and behavioral questions",
+        "kind": "topic"
+      }
+    ]
+  }
+];
+/*DATA_END*/
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    const parsed = raw ? JSON.parse(raw) : null;
+    if (parsed && typeof parsed === "object") {
+      return { done: parsed.done || {}, revise: parsed.revise || {}, links: parsed.links || "github", open: parsed.open || {} };
+    }
+  } catch (e) { /* storage unavailable */ }
+  return { done: {}, revise: {}, links: "github", open: {} };
+}
+function saveState() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) { /* ignore */ }
+}
+
+let state = loadState();
+let filter = "all";
+let query = "";
+
+const subjectsEl = document.getElementById("subjects");
+
+function hrefFor(path) {
+  return state.links === "local" ? path : REPO_URL + path;
+}
+
+function formatDate(iso) {
+  try { return new Date(iso).toLocaleDateString(); } catch (e) { return ""; }
+}
+
+function render() {
+  subjectsEl.textContent = "";
+  SUBJECTS.forEach((subject, si) => {
+    const details = document.createElement("details");
+    details.className = "card subject";
+    details.dataset.subject = String(si);
+    if (state.open[subject.folder] !== false) details.open = true;
+    details.addEventListener("toggle", () => {
+      state.open[subject.folder] = details.open;
+      saveState();
+    });
+
+    const summary = document.createElement("summary");
+    const chev = document.createElement("span");
+    chev.className = "chev";
+    chev.textContent = "▶";
+    chev.setAttribute("aria-hidden", "true");
+    const title = document.createElement("span");
+    title.className = "s-title";
+    title.textContent = subject.title;
+    const count = document.createElement("span");
+    count.className = "s-count";
+    const bar = document.createElement("div");
+    bar.className = "bar s-bar";
+    bar.setAttribute("role", "progressbar");
+    bar.setAttribute("aria-label", subject.title + " progress");
+    bar.setAttribute("aria-valuemin", "0");
+    bar.setAttribute("aria-valuemax", "100");
+    bar.appendChild(document.createElement("span"));
+    summary.append(chev, title, count, bar);
+    details.appendChild(summary);
+
+    const ul = document.createElement("ul");
+    ul.className = "topics";
+    subject.topics.forEach((topic) => {
+      const li = document.createElement("li");
+      li.className = "topic";
+      li.dataset.path = topic.path;
+      li.dataset.search = (topic.title + " " + subject.title).toLowerCase();
+
+      const box = document.createElement("input");
+      box.type = "checkbox";
+      box.id = "cb-" + topic.path;
+      box.checked = Boolean(state.done[topic.path]);
+      box.setAttribute("aria-label", "Mark done: " + topic.title);
+      box.addEventListener("change", () => {
+        if (box.checked) state.done[topic.path] = new Date().toISOString();
+        else delete state.done[topic.path];
+        saveState();
+        updateRow(li, topic);
+        updateCounts();
+        applyFilter();
+      });
+
+      const main = document.createElement("div");
+      main.className = "t-main";
+      const link = document.createElement("a");
+      link.className = "t-link";
+      link.href = hrefFor(topic.path);
+      link.target = "_blank";
+      link.rel = "noopener";
+      link.textContent = topic.label;
+      if (topic.kind === "interview") {
+        const tag = document.createElement("span");
+        tag.className = "tag iq";
+        tag.textContent = "interview bank";
+        link.appendChild(tag);
+      }
+      const meta = document.createElement("div");
+      meta.className = "t-meta";
+      main.append(link, meta);
+
+      const star = document.createElement("button");
+      star.type = "button";
+      star.className = "star";
+      star.textContent = "Revise";
+      star.title = "Mark this topic to revise later";
+      star.addEventListener("click", () => {
+        if (state.revise[topic.path]) delete state.revise[topic.path];
+        else state.revise[topic.path] = true;
+        saveState();
+        updateRow(li, topic);
+        updateCounts();
+        applyFilter();
+      });
+
+      li.append(box, main, star);
+      ul.appendChild(li);
+      updateRow(li, topic);
+    });
+    details.appendChild(ul);
+    subjectsEl.appendChild(details);
+  });
+  updateCounts();
+  applyFilter();
+}
+
+function updateRow(li, topic) {
+  const done = state.done[topic.path];
+  const revise = Boolean(state.revise[topic.path]);
+  li.classList.toggle("is-done", Boolean(done));
+  li.querySelector(".star").setAttribute("aria-pressed", String(revise));
+  li.querySelector(".t-meta").textContent = done ? "Done on " + formatDate(done) : "";
+}
+
+function updateCounts() {
+  let total = 0, doneCount = 0, reviseCount = 0;
+  SUBJECTS.forEach((subject, si) => {
+    const t = subject.topics.length;
+    const d = subject.topics.filter((x) => state.done[x.path]).length;
+    total += t; doneCount += d;
+    reviseCount += subject.topics.filter((x) => state.revise[x.path]).length;
+    const el = subjectsEl.querySelector('[data-subject="' + si + '"]');
+    if (!el) return;
+    const pct = t ? Math.round((d / t) * 100) : 0;
+    el.querySelector(".s-count").textContent = d + " / " + t;
+    el.querySelector(".s-bar > span").style.width = pct + "%";
+    el.querySelector(".s-bar").setAttribute("aria-valuenow", String(pct));
+  });
+  const pct = total ? Math.round((doneCount / total) * 100) : 0;
+  document.getElementById("overallPct").textContent = pct + "%";
+  document.querySelector("#overallBar > span").style.width = pct + "%";
+  document.getElementById("overallBar").setAttribute("aria-valuenow", String(pct));
+  document.getElementById("overallStats").textContent =
+    doneCount + " of " + total + " done · " + (total - doneCount) + " remaining · " + reviseCount + " marked to revise";
+}
+
+function applyFilter() {
+  subjectsEl.querySelectorAll("details.subject").forEach((details) => {
+    let visible = 0;
+    details.querySelectorAll("li.topic").forEach((li) => {
+      const path = li.dataset.path;
+      const isDone = Boolean(state.done[path]);
+      const isRevise = Boolean(state.revise[path]);
+      let show = true;
+      if (filter === "todo") show = !isDone;
+      if (filter === "done") show = isDone;
+      if (filter === "revise") show = isRevise;
+      if (query && !li.dataset.search.includes(query)) show = false;
+      li.classList.toggle("hidden", !show);
+      if (show) visible++;
+    });
+    details.classList.toggle("hidden", visible === 0);
+    if (query && visible) details.open = true;
+  });
+}
+
+document.querySelectorAll("[data-filter]").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    filter = btn.dataset.filter;
+    document.querySelectorAll("[data-filter]").forEach((b) => b.setAttribute("aria-pressed", String(b === btn)));
+    applyFilter();
+  });
+});
+
+function setLinks(mode) {
+  state.links = mode;
+  saveState();
+  document.querySelectorAll("[data-links]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.links === mode)));
+  subjectsEl.querySelectorAll("li.topic").forEach((li) => {
+    li.querySelector(".t-link").href = hrefFor(li.dataset.path);
+  });
+}
+document.querySelectorAll("[data-links]").forEach((btn) => {
+  btn.addEventListener("click", () => setLinks(btn.dataset.links));
+});
+
+document.getElementById("search").addEventListener("input", (e) => {
+  query = e.target.value.trim().toLowerCase();
+  applyFilter();
+});
+
+document.getElementById("expandAll").addEventListener("click", () => {
+  subjectsEl.querySelectorAll("details.subject").forEach((d) => { d.open = true; });
+});
+document.getElementById("collapseAll").addEventListener("click", () => {
+  subjectsEl.querySelectorAll("details.subject").forEach((d) => { d.open = false; });
+});
+
+document.getElementById("exportBtn").addEventListener("click", () => {
+  const blob = new Blob([JSON.stringify({ done: state.done, revise: state.revise }, null, 2)], { type: "application/json" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "master-js-progress-" + new Date().toISOString().slice(0, 10) + ".json";
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 0);
+});
+
+document.getElementById("importFile").addEventListener("change", async (e) => {
+  const file = e.target.files && e.target.files[0];
+  if (!file) return;
+  try {
+    const data = JSON.parse(await file.text());
+    if (!data || typeof data !== "object" || typeof data.done !== "object") throw new Error("bad file");
+    state.done = data.done || {};
+    state.revise = data.revise || {};
+    saveState();
+    render();
+    alert("Progress imported.");
+  } catch (err) {
+    alert("Could not read that file. Please choose a file created with \"Export progress\".");
+  }
+  e.target.value = "";
+});
+
+document.getElementById("resetBtn").addEventListener("click", () => {
+  if (!confirm("Clear all progress in this browser? Export first if you want a backup.")) return;
+  state.done = {};
+  state.revise = {};
+  saveState();
+  render();
+});
+
+setLinks(state.links === "local" ? "local" : "github");
+render();
+</script>
+</body>
+</html>

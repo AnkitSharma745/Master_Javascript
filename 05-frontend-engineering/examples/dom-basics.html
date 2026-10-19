@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>DOM basics</title>
+    <style>
+      body { font-family: system-ui, sans-serif; max-width: 48rem; margin: 2rem auto; padding: 0 1rem; line-height: 1.5; }
+      section { border: 1px solid #d1d5db; border-radius: 8px; padding: 1rem; margin-bottom: 1.5rem; }
+      .box { display: inline-grid; place-items: center; width: 5rem; height: 5rem; margin: 0.25rem; background: #bfdbfe; border-radius: 6px; }
+      .is-highlighted { background: #fde68a; }
+      pre { background: #f3f4f6; padding: 0.75rem; overflow: auto; }
+      :focus-visible { outline: 3px solid #1d4ed8; outline-offset: 2px; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>DOM basics</h1>
+      <p>Open the browser console (F12) to see extra output. Every button changes the DOM with a different API.</p>
+
+      <section aria-labelledby="create-heading">
+        <h2 id="create-heading">1. Creating and inserting elements</h2>
+        <button type="button" id="add-box">Add a box</button>
+        <button type="button" id="clear-boxes">Remove all boxes</button>
+        <div id="box-container" aria-live="polite"></div>
+      </section>
+
+      <section aria-labelledby="toggle-heading">
+        <h2 id="toggle-heading">2. classList and the hidden attribute</h2>
+        <button type="button" id="toggle-details" aria-expanded="true" aria-controls="details-text">Hide details</button>
+        <p id="details-text">These details can be hidden and shown. The button keeps <code>aria-expanded</code> in sync.</p>
+      </section>
+
+      <section aria-labelledby="attr-heading">
+        <h2 id="attr-heading">3. Attributes versus properties</h2>
+        <label for="email">Email</label>
+        <input id="email" type="email" value="old@example.com" />
+        <button type="button" id="show-email">Compare attribute and property</button>
+        <pre id="email-output">Type in the field, then press the button.</pre>
+      </section>
+
+      <section aria-labelledby="traverse-heading">
+        <h2 id="traverse-heading">4. Traversal and safe text</h2>
+        <ul id="product-list">
+          <li>TrailRunner 3</li>
+          <li>City Walker</li>
+          <li>Rain Jacket</li>
+        </ul>
+        <button type="button" id="highlight-last">Highlight the last item</button>
+        <label for="new-product">New product name</label>
+        <input id="new-product" type="text" value="&lt;img src=x onerror=alert('XSS')&gt;" />
+        <button type="button" id="add-product">Add product safely</button>
+      </section>
+    </main>
+
+    <script>
+      // 1. Creating and inserting
+      const boxContainer = document.getElementById("box-container");
+      let boxCount = 0;
+      document.getElementById("add-box").addEventListener("click", () => {
+        const box = document.createElement("div");
+        box.className = "box";
+        box.textContent = `Box ${++boxCount}`;
+        boxContainer.append(box);
+        console.log("children now:", boxContainer.children.length);
+      });
+      document.getElementById("clear-boxes").addEventListener("click", () => {
+        boxContainer.replaceChildren();
+        boxCount = 0;
+      });
+
+      // 2. Toggling visibility and ARIA state together
+      const toggleButton = document.getElementById("toggle-details");
+      const detailsText = document.getElementById("details-text");
+      toggleButton.addEventListener("click", () => {
+        const isExpanded = toggleButton.getAttribute("aria-expanded") === "true";
+        toggleButton.setAttribute("aria-expanded", String(!isExpanded));
+        toggleButton.textContent = isExpanded ? "Show details" : "Hide details";
+        detailsText.hidden = isExpanded;
+      });
+
+      // 3. Attributes (initial value) versus properties (current value)
+      const email = document.getElementById("email");
+      document.getElementById("show-email").addEventListener("click", () => {
+        document.getElementById("email-output").textContent =
+          `email.value (property, current):        ${email.value}\n` +
+          `email.getAttribute("value") (initial):  ${email.getAttribute("value")}\n` +
+          `email.defaultValue:                     ${email.defaultValue}`;
+      });
+
+      // 4. Traversal and safe insertion
+      const productList = document.getElementById("product-list");
+      document.getElementById("highlight-last").addEventListener("click", () => {
+        productList.querySelectorAll(".is-highlighted").forEach((li) => li.classList.remove("is-highlighted"));
+        productList.lastElementChild?.classList.add("is-highlighted");
+      });
+      document.getElementById("add-product").addEventListener("click", () => {
+        const name = document.getElementById("new-product").value.trim();
+        if (!name) return;
+        const li = document.createElement("li");
+        li.textContent = name; // ✅ shown as text; innerHTML would run the onerror code
+        productList.append(li);
+      });
+    </script>
+  </body>
+</html>

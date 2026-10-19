@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Accessible form validation</title>
+    <style>
+      body { font-family: system-ui, sans-serif; max-width: 36rem; margin: 2rem auto; padding: 0 1rem; line-height: 1.5; }
+      .field { margin-bottom: 1rem; }
+      label, legend { display: block; font-weight: 600; }
+      input { padding: 0.4rem; width: 100%; box-sizing: border-box; border: 1px solid #6b7280; border-radius: 4px; }
+      input[type="radio"] { width: auto; }
+      input[aria-invalid="true"] { border: 2px solid #b91c1c; }
+      .hint { color: #4b5563; margin: 0.25rem 0 0; }
+      .error { color: #b91c1c; margin: 0.25rem 0 0; }
+      .error::before { content: "Error: "; font-weight: 600; }
+      #error-summary { border: 3px solid #b91c1c; padding: 0.75rem 1rem; margin-bottom: 1rem; }
+      :focus-visible { outline: 3px solid #1d4ed8; outline-offset: 2px; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Create an account</h1>
+      <p>This form uses <code>novalidate</code> and the constraint validation API to show accessible custom errors: text next to each field, <code>aria-invalid</code>, <code>aria-describedby</code>, an error summary and focus management. Nothing is sent to a server.</p>
+
+      <div id="error-summary" role="alert" tabindex="-1" hidden>
+        <h2></h2>
+        <ul></ul>
+      </div>
+
+      <form id="signup-form" novalidate>
+        <div class="field">
+          <label for="email">Email (required)</label>
+          <input id="email" name="email" type="email" autocomplete="email" required aria-describedby="email-error" />
+          <p id="email-error" class="error" hidden></p>
+        </div>
+
+        <div class="field">
+          <label for="password">Password (required)</label>
+          <input id="password" name="password" type="password" autocomplete="new-password" required minlength="12" aria-describedby="password-hint password-error" />
+          <p id="password-hint" class="hint">At least 12 characters.</p>
+          <p id="password-error" class="error" hidden></p>
+        </div>
+
+        <div class="field">
+          <label for="confirm-password">Repeat password (required)</label>
+          <input id="confirm-password" name="confirmPassword" type="password" autocomplete="new-password" required aria-describedby="confirm-password-error" />
+          <p id="confirm-password-error" class="error" hidden></p>
+        </div>
+
+        <div class="field">
+          <label for="promo">Promo code (optional)</label>
+          <input id="promo" name="promo" type="text" pattern="[A-Z]{3}-[0-9]{3}" aria-describedby="promo-hint promo-error" />
+          <p id="promo-hint" class="hint">Format: three capital letters, a dash, three digits. Example: SUN-123.</p>
+          <p id="promo-error" class="error" hidden></p>
+        </div>
+
+        <fieldset class="field">
+          <legend>Plan</legend>
+          <label><input type="radio" name="plan" value="free" checked /> Free</label>
+          <label><input type="radio" name="plan" value="pro" /> Pro</label>
+        </fieldset>
+
+        <button type="submit">Create account</button>
+      </form>
+
+      <p id="form-status" role="status"></p>
+    </main>
+
+    <script>
+      const form = document.getElementById("signup-form");
+      const password = document.getElementById("password");
+      const confirmPassword = document.getElementById("confirm-password");
+      const summary = document.getElementById("error-summary");
+      const status = document.getElementById("form-status");
+
+      const labels = { email: "Email", password: "Password", "confirm-password": "Repeat password", promo: "Promo code" };
+
+      function messageFor(field) {
+        const v = field.validity;
+        if (v.valueMissing) return `Enter your ${labels[field.id].toLowerCase()}.`;
+        if (v.typeMismatch) return "Enter an email address like name@example.com.";
+        if (v.tooShort) return `Use at least ${field.minLength} characters. You entered ${field.value.length}.`;
+        if (v.patternMismatch) return "Use the format ABC-123, with capital letters.";
+        if (v.customError) return field.validationMessage;
+        return "Check this field.";
+      }
+
+      // tooShort is only reported for values the user typed, so we check length ourselves too
+      function validatePasswordRules() {
+        if (password.value && password.value.length < password.minLength) {
+          password.setCustomValidity(`Use at least ${password.minLength} characters. You entered ${password.value.length}.`);
+        } else {
+          password.setCustomValidity("");
+        }
+        if (confirmPassword.value && confirmPassword.value !== password.value) {
+          confirmPassword.setCustomValidity("The passwords do not match.");
+        } else {
+          confirmPassword.setCustomValidity(""); // always clear, or the field stays invalid
+        }
+      }
+
+      function showFieldState(field) {
+        const errorElement = document.getElementById(`${field.id}-error`);
+        if (field.validity.valid) {
+          field.removeAttribute("aria-invalid");
+          errorElement.hidden = true;
+          errorElement.textContent = "";
+          return null;
+        }
+        const message = messageFor(field);
+        field.setAttribute("aria-invalid", "true");
+        errorElement.textContent = message;
+        errorElement.hidden = false;
+        return { fieldId: field.id, message };
+      }
+
+      function showSummary(errors) {
+        const list = summary.querySelector("ul");
+        list.replaceChildren(
+          ...errors.map(({ fieldId, message }) => {
+            const li = document.createElement("li");
+            const link = document.createElement("a");
+            link.href = `#${fieldId}`;
+            link.textContent = message;
+            li.append(link);
+            return li;
+          })
+        );
+        summary.querySelector("h2").textContent =
+          errors.length === 1 ? "There is 1 problem with your form" : `There are ${errors.length} problems with your form`;
+        summary.hidden = false;
+        summary.focus();
+      }
+
+      // Re-check a field when the user leaves it, and clear errors as soon as they are fixed
+      form.addEventListener("focusout", (event) => {
+        if (!(event.target instanceof HTMLInputElement) || !event.target.willValidate) return;
+        validatePasswordRules();
+        if (event.target.value || event.target.hasAttribute("aria-invalid")) showFieldState(event.target);
+      });
+      form.addEventListener("input", (event) => {
+        if (event.target.getAttribute?.("aria-invalid") === "true") {
+          validatePasswordRules();
+          showFieldState(event.target);
+        }
+      });
+
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        validatePasswordRules();
+        // Only text-like inputs have an error element (buttons also report willValidate === true)
+        const fields = [...form.elements].filter(
+          (el) => el instanceof HTMLInputElement && el.willValidate && el.type !== "radio"
+        );
+        const errors = fields.map(showFieldState).filter(Boolean);
+
+        if (errors.length > 0) {
+          status.textContent = "";
+          showSummary(errors);
+          return;
+        }
+
+        summary.hidden = true;
+        const data = Object.fromEntries(new FormData(form));
+        delete data.password;
+        delete data.confirmPassword;
+        status.textContent = `Account would be created for ${data.email} on the ${data.plan} plan.`;
+        form.reset();
+      });
+    </script>
+  </body>
+</html>

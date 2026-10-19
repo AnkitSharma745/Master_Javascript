@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Web component basics</title>
+    <style>
+      body { font-family: system-ui, sans-serif; max-width: 44rem; margin: 2rem auto; padding: 0 1rem; line-height: 1.5; }
+      /* This page style does NOT reach inside the shadow DOM */
+      .name { color: red; }
+      /* Custom properties DO pass into the shadow DOM: theming */
+      user-badge.theme-dark { --badge-bg: #111827; --badge-text: #f9fafb; }
+      :focus-visible { outline: 3px solid #1d4ed8; outline-offset: 2px; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Web component basics</h1>
+      <p>A custom element (<code>&lt;user-badge&gt;</code>) with shadow DOM, a slot, <code>observedAttributes</code> and a custom event. The page rule <code>.name { color: red }</code> does not affect the badges, because their styles are encapsulated.</p>
+
+      <p>
+        <user-badge id="asha" name="Asha" status="online"><small>Admin</small></user-badge>
+        <user-badge name="Ravi" status="offline" class="theme-dark"></user-badge>
+      </p>
+
+      <button type="button" id="toggle-status">Toggle Asha's status</button>
+      <p id="event-output" role="status"></p>
+    </main>
+
+    <script>
+      class UserBadge extends HTMLElement {
+        static observedAttributes = ["name", "status"];
+
+        constructor() {
+          super();
+          this.attachShadow({ mode: "open" });
+          this.shadowRoot.innerHTML = `
+            <style>
+              :host { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.2rem 0.6rem;
+                      border-radius: 999px; background: var(--badge-bg, #e5e7eb); color: var(--badge-text, #111827); }
+              .dot { width: 0.6rem; height: 0.6rem; border-radius: 50%; background: #6b7280; }
+              :host([status="online"]) .dot { background: #15803d; }
+            </style>
+            <span class="dot" aria-hidden="true"></span>
+            <span class="name"></span>
+            <slot></slot>
+          `; // static markup only: no user data inside this string
+        }
+
+        connectedCallback() {
+          this.render();
+        }
+
+        attributeChangedCallback(name, oldValue, newValue) {
+          if (oldValue === newValue) return;
+          this.render();
+          if (name === "status" && oldValue !== null) {
+            this.dispatchEvent(new CustomEvent("status-change", {
+              detail: { name: this.getAttribute("name"), status: newValue },
+              bubbles: true,
+              composed: true, // cross the shadow boundary
+            }));
+          }
+        }
+
+        render() {
+          const name = this.getAttribute("name") ?? "Guest";
+          const status = this.getAttribute("status") ?? "offline";
+          this.shadowRoot.querySelector(".name").textContent = `${name} (${status})`; // safe text
+        }
+      }
+
+      customElements.define("user-badge", UserBadge);
+
+      document.getElementById("toggle-status").addEventListener("click", () => {
+        const asha = document.getElementById("asha");
+        asha.setAttribute("status", asha.getAttribute("status") === "online" ? "offline" : "online");
+      });
+
+      document.addEventListener("status-change", (event) => {
+        document.getElementById("event-output").textContent = `${event.detail.name} is now ${event.detail.status}.`;
+      });
+    </script>
+  </body>
+</html>

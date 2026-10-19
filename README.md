@@ -1,58 +1,63 @@
-# Master JavaScript: learn, build, explain
+# Master JavaScript — Full-Stack Knowledge Base and Interview Guide
 
-A dependency-aware learning and interview practice repository for JavaScript, TypeScript, Angular 16, and Node.js engineers. Use it to write code, trace execution, debug failures, and defend design decisions in your own words.
+One place to learn JavaScript, TypeScript, OOP and design patterns, frontend engineering, Angular 16, Node.js, Electron, system design, testing, security and production engineering, from the basics to senior level.
 
-This release contains a coherent **foundation and priority lessons**, executable labs, a TypeScript API with a browser client, and an Angular 16 feature exercise. Advanced extensions are explicitly marked **planned** in the [curriculum](curriculum/README.md). A document or passing test does not establish mastery or guarantee interview success.
+Every topic is explained in simple English with many examples and diagrams. Every topic ends with interview questions and real answers: a short answer you can say out loud, a detailed explanation, follow-up questions and common mistakes.
 
 ## Start here
 
-1. Read [how to study](docs/study-guide.md), then take the [diagnostic](interviews/diagnostic.md).
-2. Start with [F01: programs and problem solving](lessons/01-foundations/F01-programs.md). Follow the numbered [master curriculum](curriculum/README.md); prerequisites determine what to study next.
-3. Predict outputs before running examples. Attempt practice before opening [solutions](practice/solutions.md).
-4. Build the [projects](projects/README.md), explain one decision aloud, and record evidence in the [revision tracker](revision/README.md).
+1. **Open [`progress-tracker.html`](progress-tracker.html) in your browser.** It lists every topic. Tick a topic when you finish it; your progress is saved in the browser.
+2. **Read [How to explain technical answers](11-coding-interviews/01-how-to-explain-technical-answers.md).** It teaches the answer structure used in every interview section: define → why → how → example → where → trade-offs.
+3. **Go through the subjects in order**, starting with [01 — Fundamentals](01-cs-and-web-fundamentals/README.md) or [02 — JavaScript](02-javascript/README.md).
 
-Experienced learners may skip only skills they can demonstrate independently. Angular work experience does not replace JavaScript, HTTP, and TypeScript prerequisites.
+That's all you need to know. Each topic document has a table of contents at the top and starts teaching right away.
 
-## Run the learning system
+## Subjects
 
-Use Node.js 22.20+ on the 22 line, or Node.js 24 LTS, and npm. Root examples use TypeScript 5.9.3. These are reproducible teaching baselines, not claims about the newest release.
+| # | Subject | What it covers | Mixed interview questions |
+| --- | --- | --- | --- |
+| 01 | [Core CS and Web Fundamentals](01-cs-and-web-fundamentals/README.md) | How code runs, data structures, OS, networking, HTTP/TLS, browsers, storage | [Questions](01-cs-and-web-fundamentals/interview-questions.md) |
+| 02 | [JavaScript](02-javascript/README.md) | Scope, closures, `this`, prototypes, async, event loop, memory, modern features | [Questions](02-javascript/interview-questions.md) |
+| 03 | [TypeScript](03-typescript/README.md) | Type system, generics, advanced and utility types, tsconfig, runtime validation | [Questions](03-typescript/interview-questions.md) |
+| 04 | [OOP, SOLID and Design Patterns](04-oop-solid-design-patterns/README.md) | OOP pillars, SOLID, dependency injection, creational/structural/behavioral patterns | [Questions](04-oop-solid-design-patterns/interview-questions.md) |
+| 05 | [Frontend Engineering](05-frontend-engineering/README.md) | HTML, CSS, DOM, accessibility, performance, state, data fetching, React, rendering | [Questions](05-frontend-engineering/interview-questions.md) |
+| 06 | [Angular 16](06-angular-16/README.md) | Components, DI, routing, forms, RxJS, change detection, NgRx, architecture, testing | [Questions](06-angular-16/interview-questions.md) |
+| 07 | [Node.js and Backend](07-nodejs-backend/README.md) | Runtime, event loop, streams, Express, REST, auth, databases, caching, production | [Questions](07-nodejs-backend/interview-questions.md) |
+| 08 | [Electron and Desktop](08-electron-desktop/README.md) | Process model, IPC, security, packaging, auto-updates, crash recovery | [Questions](08-electron-desktop/interview-questions.md) |
+| 09 | [System Design](09-system-design/README.md) | Scalability, caching, APIs, real-time, frontend architecture, 8 case studies | [Questions](09-system-design/interview-questions.md) |
+| 10 | [Testing, Security and Production](10-testing-security-production/README.md) | Jest, Playwright, XSS/CSRF/CORS/CSP, debugging, observability, CI/CD | [Questions](10-testing-security-production/interview-questions.md) |
+| 11 | [Coding Interviews](11-coding-interviews/README.md) | Explaining answers, problem solving, output questions, polyfills, machine coding, behavioral | — |
 
-```sh
-npm ci
-npm run check
-npm run lab
-npm run build
-npm run start:api
-```
+## How each topic document works
 
-Open `http://127.0.0.1:3000` after starting the API to use the local issue board. See its [run guide and limitations](projects/issue-board/README.md). `npm run check` checks navigation, curriculum structure, annotated JavaScript examples, Mermaid syntax, TypeScript, and behavior tests. It does not run an Angular browser application or check external URLs.
+- **Top:** what you will learn, what to read first, and a table of contents.
+- **Middle:** the concept explained step by step: what it is, why it exists, how it works inside, diagrams, code examples from simple to realistic, common mistakes and best practices.
+- **"How to explain this in an interview":** included for the most important topics. It shows how to structure your spoken answer.
+- **Interview questions:** questions with a short spoken answer, a detailed explanation, follow-up questions with answers, and common mistakes.
+- **Summary:** the key points to revise in two minutes.
 
-Angular 16 has a separate pinned toolchain and [run guide](projects/angular16-feature/README.md). It is an unsupported maintenance target; its historical Node compatibility differs from the root runtime. See [version policy](references/versions.md).
+## If your interview is soon
 
-## Find material
+Study these first, then fill in the rest:
 
-| Study area | Entry point |
+- **Frontend / Angular role:** JavaScript 03–06, 16–18 → TypeScript 01–05 → Angular 05, 09, 10, 02, 06, 08 → Frontend 03, 05 → System design 05, 11 → Coding interviews 03, 04, 05.
+- **Backend / Node.js role:** JavaScript 05, 16–18 → Node.js 01, 02, 05, 06, 07, 09, 10, 11 → System design 01–04, 13 → Security 05, 06.
+- **Desktop / Electron role:** JavaScript 16–18 → Node.js 01, 02 → all of Electron (start with 01, 03, 04) → Fundamentals 03.
+- **Every role:** Coding interviews 01 and 07.
+
+## Versions used
+
+| Technology | Version assumed |
 | --- | --- |
-| Programming, browsers, HTTP | [Foundations](lessons/01-foundations/README.md) |
-| Values, scope, objects, collections, modules | [JavaScript](lessons/02-javascript/README.md) |
-| Event loop, promises, cancellation, concurrency | [Asynchronous JavaScript](lessons/03-async/README.md) |
-| Functional programming and module design | [Functional programming](lessons/04-functional/README.md) |
-| Useful types, validation, generics, configuration | [TypeScript](lessons/05-typescript/README.md) |
-| OOP, SOLID, refactoring | [Software design](lessons/06-design/README.md) |
-| Pattern selection and implementations | [Design patterns](lessons/07-patterns/README.md) |
-| Angular 16, change detection, RxJS | [Angular](lessons/08-angular/README.md) |
-| Enterprise frontend and system design | [Frontend architecture](lessons/09-frontend/README.md) |
-| Node runtime, APIs, streams, persistence | [Node.js](lessons/10-node/README.md) |
-| Security, reliability, testing, observability | [Production engineering](lessons/11-production/README.md) |
-| Complexity, algorithms, coding practice | [Algorithms](lessons/12-algorithms/README.md) and [problem set](practice/README.md) |
-| Communication, behavioral answers, AI review | [Interview communication](lessons/13-communication/README.md) |
-| Role tracks, questions, mock interviews | [Interview system](interviews/README.md) |
-| Recall cards, comparisons, assessments | [Revision](revision/README.md) |
-| Executable examples and projects | [Labs](labs/README.md) and [projects](projects/README.md) |
-| Research and version boundaries | [Sources](references/README.md) |
+| JavaScript | ECMAScript 2025 (each modern feature is marked with the year it arrived) |
+| TypeScript | 5.x |
+| Angular | 16 (newer-version differences are clearly marked) |
+| Node.js | 22 and 24 LTS |
+| Electron | Current stable releases, with secure defaults |
+| React | 18 and 19 (frontend chapter only) |
 
-## Changes and contributions
+Sources and version notes are listed in [REFERENCES.md](REFERENCES.md). What changed in this repository, and why, is in [AUDIT.md](AUDIT.md).
 
-The [audit](docs/audit/original-audit.md), [migration map](docs/audit/migration.md), and [implementation report](docs/implementation-report.md) explain changes and remaining gaps. Original material lives in the [archive](archive/README.md), with corrections and notices; it is supplementary reading.
+## What comes next
 
-Use the [lesson template](docs/lesson-template.md) and [contribution guide](CONTRIBUTING.md). Update `curriculum/manifest.json` when adding lessons; run `npm run indexes` followed by `npm run check`. Preserve IDs, cite version-sensitive claims, and test the behavior your example teaches.
+A dedicated **data structures and algorithms (DSA)** section is planned after this one. For now, [problem solving and complexity](11-coding-interviews/02-problem-solving-and-complexity.md) covers the main coding-round patterns.
