@@ -385,11 +385,13 @@ console.log(typeof window.ipcRenderer);          // undefined — not leaked
 
 With `sandbox: true` (the default since Electron 20), the preload script does **not** get full Node.js. It gets a small, safe set:
 
-| Available in a sandboxed preload | |
-| --- | --- |
-| `require('electron')` | only `contextBridge`, `crashReporter`, `ipcRenderer`, `nativeImage`, `webFrame`, `webUtils` |
-| Node.js modules | `events`, `timers`, `url` (also as `node:events`, `node:timers`, `node:url`) |
-| Globals | `Buffer`, `process`, `clearImmediate`, `setImmediate` |
+| Available in a sandboxed preload | Electron 45 and newer | Electron 44 and older |
+| --- | --- | --- |
+| `require('electron')` | only `contextBridge`, `crashReporter`, `ipcRenderer`, `nativeImage`, `webFrame`, `webUtils` | same |
+| Node.js modules | none — `require` loads only `electron` (and `electron/renderer`, `electron/common`) | `events`, `timers`, `url` (also as `node:events`, `node:timers`, `node:url`) |
+| Globals | `process`, `global` | `Buffer`, `process`, `clearImmediate`, `setImmediate` |
+
+Electron 45 removed the small Node.js shims from sandboxed preloads. If old preload code uses `Buffer`, `setImmediate` or `require('events')`, replace them with web APIs: `Uint8Array` and `TextEncoder`/`TextDecoder` instead of `Buffer`, `setTimeout` or `queueMicrotask` instead of `setImmediate`, `EventTarget` instead of `EventEmitter`, and the global `URL` class.
 
 So `require('node:fs')` or `require('./my-helper')` fails in a sandboxed preload. If your preload is split into several files (for example it imports a shared list of IPC channel names), you must **bundle** it into one file with Vite, webpack or esbuild. This is explained in [IPC and preload scripts](03-ipc-and-preload-scripts.md).
 
@@ -842,13 +844,21 @@ Plain `npm install electron` plus `electron .` is fine for learning. Real projec
 **Electron Forge** is the official all-in-one tool from the Electron team. It creates a project, runs it in development, and packages it into installers (Squirrel.Windows, MSI with WiX, ZIP, DMG, deb, rpm).
 
 ```bash
-npx create-electron-app@latest orderdesk --template=vite-typescript
+npx create-electron-app@latest orderdesk --template vite --typescript
 cd orderdesk
 npm start        # development with hot reload for the renderer
 npm run make     # build installers for the current platform
 ```
 
-Forge templates include `vite`, `vite-typescript`, `webpack` and `webpack-typescript`. Forge marks its Vite support as experimental (since Forge 7.5), which means minor Forge releases may contain breaking changes for Vite users. Forge also includes a plugin for flipping Electron fuses (see [Electron security](04-electron-security.md#electron-fuses)).
+This document uses **Electron Forge 8** (8.0.1, released September 2026). Important facts about Forge 8:
+
+- Templates are `vite` and `webpack`. You add `--typescript` for TypeScript. (Forge 7 had separate `vite-typescript` and `webpack-typescript` templates; Forge 8 removed them.)
+- Projects are created with `create-electron-app`. The old `electron-forge init` and `electron-forge import` commands were removed.
+- All `@electron-forge/*` packages are **ESM-only** and need **Node.js 22.17 or newer** on your build machine.
+- The **Vite plugin is stable** now. (In Forge 7 it was marked experimental.) It builds main and preload bundles as `.cjs` files.
+- `electron-forge publish` was renamed to **`electron-forge release`**. The old name still works as a deprecated alias.
+
+Forge also includes a plugin for flipping Electron fuses (see [Electron security](04-electron-security.md#electron-fuses)). Forge's makers and signing setup are covered in [Packaging, installers and code signing](06-packaging-installers-and-code-signing.md).
 
 ### electron-vite
 
@@ -899,8 +909,8 @@ Each Electron release contains **one specific Chromium version and one specific 
 
 ```js
 // main process
-console.log(process.versions.electron); // e.g. 44.0.0
-console.log(process.versions.chrome);   // e.g. 152.0.xxxx.xx
+console.log(process.versions.electron); // e.g. 45.0.0
+console.log(process.versions.chrome);   // e.g. 156.0.8078.48
 console.log(process.versions.node);     // e.g. 24.x.x
 console.log(process.versions.v8);       // V8 version used by both Chromium and Node.js
 ```
@@ -920,6 +930,7 @@ Example pairs from the official release schedule:
 | 40 | 144 | 24.11 |
 | 42 | 148 | 24.15 |
 | 44 | 152 | 24.18 |
+| 45 | 156 | 24.22 |
 
 Check https://releases.electronjs.org for the exact versions of any release.
 
@@ -934,12 +945,12 @@ One small modern change: starting with Electron 42, the `electron` npm package d
 - The Electron team supports the **latest three stable major versions**. Older versions stop receiving security fixes.
 - So one major version is supported for roughly six months.
 
-At the time of writing (October 2026), Electron 42, 43 and 44 are the supported stable lines, and Electron 45 is scheduled to become stable on October 20, 2026 (which ends support for 42).
+At the time of writing (late October 2026), **Electron 45** is the newest stable major. It became stable on October 20, 2026. The supported stable lines are **43, 44 and 45**. Electron 42 reached end of life on the same day. Electron 46 is in alpha and is planned for January 2027.
 
 What this means for a team:
 
 - **Plan regular upgrades.** If you upgrade once a year, your users run an unsupported Chromium for months.
-- **Read the breaking changes document** before each upgrade. For example, Electron 44 removed the `clipboard` module from renderers and changed the main-process clipboard methods to return promises.
+- **Read the breaking changes document** before each upgrade. For example, Electron 44 removed the `clipboard` module from renderers, changed the main-process clipboard methods to return promises, and stopped publishing 32-bit Windows builds. Electron 45 removed `Buffer`, `setImmediate` and the small Node.js shims from sandboxed preloads, and deprecated the synchronous `safeStorage` methods.
 - **Automate upgrade testing.** A CI job that runs your end-to-end tests against the next Electron beta catches problems early.
 - **Ship auto-updates** so users actually receive the new Electron (see [Auto-updates](07-auto-updates.md)).
 
@@ -1063,7 +1074,7 @@ See [The process model at a glance](#the-process-model-at-a-glance). The key rel
 > A preload script is a JavaScript file that runs in the renderer process before the page loads. It runs in an isolated world, separate from the page's JavaScript, and it has access to a few Electron APIs like `ipcRenderer` and `contextBridge`. We need it because the page itself has no Node.js or Electron access for security reasons, but it still needs some desktop features. The preload uses `contextBridge.exposeInMainWorld` to give the page a small set of specific functions, like `saveOrder` or `getAppInfo`, and each function sends one IPC message to main. The rule is: expose narrow functions, never `ipcRenderer` itself.
 
 **Detailed explanation:**
-With `sandbox: true`, the preload can only `require('electron')` (limited to `contextBridge`, `crashReporter`, `ipcRenderer`, `nativeImage`, `webFrame`, `webUtils`), plus `events`, `timers` and `url`. It has `Buffer`, `process`, `setImmediate` and `clearImmediate`. Context isolation means the page cannot see or modify the preload's variables or built-ins.
+With `sandbox: true`, the preload can only `require('electron')` (limited to `contextBridge`, `crashReporter`, `ipcRenderer`, `nativeImage`, `webFrame`, `webUtils`) and has the `process` global. Electron 44 and older also gave it `events`, `timers`, `url`, `Buffer`, `setImmediate` and `clearImmediate`; Electron 45 removed those shims, so use web APIs such as `Uint8Array`, `TextEncoder` and `setTimeout` instead. Context isolation means the page cannot see or modify the preload's variables or built-ins.
 
 **Code:**
 
@@ -1201,7 +1212,7 @@ worker.postMessage({ type: 'start', storeId: 'STORE-042' });
 > Electron ships a new major version every eight weeks, following every second Chromium release. Only the latest three stable majors are supported with security fixes, so each major is supported for about six months. For a team, that means upgrades are a regular task, not a once-a-year project. We read the breaking-changes notes, run our end-to-end tests against the next beta in CI, rebuild native modules, and ship through auto-update so users actually get the patched Chromium.
 
 **Follow-up questions:**
-- **What is a recent breaking change you know?** — For example, Electron 44 removed the `clipboard` module from renderers and made main-process clipboard methods promise-based. Electron 30 deprecated `BrowserView` in favor of `WebContentsView`.
+- **What is a recent breaking change you know?** — For example, Electron 44 removed the `clipboard` module from renderers and made main-process clipboard methods promise-based. Electron 45 removed `Buffer` and `setImmediate` from sandboxed preloads. Electron 30 deprecated `BrowserView` in favor of `WebContentsView`.
 - **How do you reduce upgrade risk?** — Keep the main process thin, wrap Electron APIs in your own small services, keep E2E tests (Playwright `_electron`), and upgrade one major at a time.
 
 **Common mistakes:** Pinning an old Electron "because it works". Not knowing the support window.
@@ -1367,6 +1378,7 @@ win.loadURL('app://bundle/index.html');
 - Electron: Electron Releases (timelines and support) — https://www.electronjs.org/docs/latest/tutorial/electron-timelines
 - Electron Release Schedule — https://releases.electronjs.org/schedule
 - Electron: Breaking Changes — https://www.electronjs.org/docs/latest/breaking-changes
-- Electron Forge: Vite + TypeScript template — https://www.electronforge.io/templates/vite-+-typescript
+- Electron Forge documentation — https://www.electronforge.io/
+- Electron Forge 8 release notes (ESM-only, Node.js 22.17+, stable Vite plugin, `release` command, merged templates) — https://github.com/electron/forge/releases/tag/v8.0.1
 - Chromium: Multi-process Architecture — https://www.chromium.org/developers/design-documents/multi-process-architecture/
 
