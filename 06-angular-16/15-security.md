@@ -313,7 +313,7 @@ Notes:
 
 ### What it is
 
-**Trusted Types** is a browser security feature (supported in Chromium-based browsers) that blocks dangerous DOM sinks like `element.innerHTML = string` unless the value is a special "trusted" object created by an approved **policy**. You enable it with a CSP header. Then any code (yours or a library's) that writes raw strings into those sinks fails, which turns DOM XSS bugs into visible errors.
+**Trusted Types** is a browser security feature (first shipped in Chromium-based browsers; check MDN for current support in other browsers) that blocks dangerous DOM sinks like `element.innerHTML = string` unless the value is a special "trusted" object created by an approved **policy**. You enable it with a CSP header. Then any code (yours or a library's) that writes raw strings into those sinks fails, which turns DOM XSS bugs into visible errors.
 
 ### Angular support
 
@@ -687,6 +687,8 @@ export class ProfileComponent {
 
 ### Q4. Why is using ElementRef to set innerHTML dangerous?
 
+**What the interviewer is checking:** whether you know where Angular's protection stops.
+
 **Short answer:** Angular's sanitization runs only for template bindings. `elementRef.nativeElement.innerHTML = value` (or `Renderer2.setProperty(el, 'innerHTML', value)`) writes straight into the DOM, so any attacker-controlled HTML runs, for example through `onerror`. Use `[innerHTML]` binding instead, or sanitize first with `DomSanitizer.sanitize(SecurityContext.HTML, value)`. Direct DOM access also breaks SSR and hydration, which is another reason to avoid it.
 
 ### Q5. How do you use a Content Security Policy with Angular 16?
@@ -703,6 +705,8 @@ export class ProfileComponent {
 **Common mistakes:** Adding `'unsafe-inline'` for styles without mentioning the nonce option.
 
 ### Q6. How does Angular help with CSRF? What does the server need to do?
+
+**What the interviewer is checking:** whether you know the cookie-to-header pattern, its limits in Angular, and the server's part.
 
 **Short spoken answer (30–60 seconds):**
 > HttpClient implements the cookie-to-header pattern. If the server sets a cookie called XSRF-TOKEN, Angular's built-in interceptor reads it and sends its value in an X-XSRF-TOKEN header. It does this only for mutating requests, not GET or HEAD, and only for relative URLs, so the token isn't sent to other origins. A malicious site can make the browser send cookies, but it can't read our cookie to set the header, so the server can reject requests where the header is missing or doesn't match. The server must generate the token, set the cookie, and verify the header; Angular only does the client part. Names are configurable with HttpClientXsrfModule.withOptions or withXsrfConfiguration. SameSite cookies add another layer.
@@ -722,6 +726,8 @@ export class ProfileComponent {
 
 ### Q8. Where should an Angular app store access tokens?
 
+**What the interviewer is checking:** whether you can explain the XSS versus CSRF trade-off of each storage option.
+
 **Short spoken answer (30–60 seconds):**
 > It's a trade-off. localStorage is simple and survives reloads, but any XSS can read and steal the token. In-memory storage is harder to steal persistently but is lost on reload, so it needs a silent refresh. An httpOnly, Secure, SameSite cookie can't be read by JavaScript at all, so XSS can't exfiltrate it, but the browser sends it automatically, so I need CSRF protection. For new enterprise apps I prefer a backend-for-frontend: the Angular app uses an httpOnly session cookie with its own backend, and the backend holds the real tokens. If tokens must be in the browser, I use short-lived access tokens, refresh token rotation and strong XSS defenses like CSP.
 
@@ -737,24 +743,44 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 };
 ```
 
+**What the interviewer is checking:** code review for token leaks and unsafe origin checks.
+
 **Short spoken answer (30–60 seconds):**
 > It adds the token to every request, including requests to third-party domains like analytics, CDNs or public APIs, so it leaks the user's token to them. It also sends "Bearer null" when there is no token. I'd check that the request goes to our own API origin, using a proper origin comparison, not a loose startsWith that `api.example.com.evil.net` could pass, and only then clone with the header. I'd also question reading the token from localStorage, which is exposed to XSS, and prefer an AuthService that keeps it in memory or a BFF with cookies.
 
 **Code:** see [Attach tokens only to your own API](#attach-tokens-only-to-your-own-api).
 
+**Follow-up questions:**
+- **Why is `req.url.startsWith('https://api.example.com')` not enough?** — `https://api.example.com.evil.net/x` also starts with that text. Add the trailing slash (`'https://api.example.com/'`) or compare `new URL(req.url, location.origin).origin` with the allowed origin.
+- **How would you test that the fix works?** — With `provideHttpClient(withInterceptors([authInterceptor]))` and `provideHttpClientTesting()`: make one request to your API and one to another host, and check that only the first has the `Authorization` header. See [Testing guards and interceptors](14-testing.md#testing-guards-and-interceptors).
+
 ### Q10. What security risks does server-side rendering add?
+
+**What the interviewer is checking:** awareness that SSR moves Angular code into a shared server process.
 
 **Short answer:** Server-side singletons are shared by all users in one Node process, so caching per-user data in a root service can leak it between users. Transfer state serializes server-fetched data into the HTML, so nothing sensitive should be in it (Angular 18+ excludes requests with auth headers from the HTTP transfer cache by default). Server code that fetches user-influenced URLs can cause SSRF. Trusting the `Host` header can lead to poisoned links. And rendering is CPU heavy, so you need timeouts and rate limiting. Browser-only APIs like `localStorage` must be guarded with `isPlatformBrowser`.
 
 ### Q11. Why does keeping Angular updated matter for security, and what is the status of Angular 16?
 
+**What the interviewer is checking:** whether you treat upgrades as a security task, and know the support policy.
+
 **Short spoken answer (30–60 seconds):**
 > Angular publishes security fixes only for supported versions. Versions up to 21 got about six months of active support and twelve months of LTS, so 18 months in total; from Angular 22 the team moved to a yearly major release with 24 months of support. Angular 16 was released in May 2023 and its LTS ended in November 2024, so it no longer gets security patches. A production Angular 16 app should have an upgrade plan, updating one major version at a time with `ng update` and the official update guide, plus dependency scanning with npm audit or Dependabot in CI.
 
+**Follow-up questions:**
+- **`npm audit` reports a vulnerability in a dev dependency. Is it urgent?** — Check if the code runs in production or only at build time, and whether the vulnerable function is reachable. Build-time tools matter too (supply-chain risk), but a runtime library in the bundle is usually more urgent.
+- **Can you get security fixes for Angular 16 at all?** — Not from the Angular team anymore. Some companies buy extended support from third-party vendors, but the real fix is to upgrade.
+
 ### Q12. Scenario: a security scan reports XSS in your Angular app. How do you investigate?
+
+**What the interviewer is checking:** a calm, systematic process: reproduce, find the sink, fix the root cause, prevent regressions.
 
 **Short spoken answer (30–60 seconds):**
 > First I reproduce it with the reported payload and find the sink. In Angular apps the usual suspects are: calls to bypassSecurityTrust methods, a "safe HTML" pipe, direct writes with nativeElement.innerHTML or Renderer2, third-party libraries that render HTML like editors or tooltips, and server-side template rendering of index.html. I search the codebase for those patterns. Then I fix the root cause: remove the bypass or sanitize properly, use bindings instead of DOM writes, configure the library's sanitization, and add a regression test with the payload. I also check whether the data should be sanitized on the server when saved, and I strengthen the CSP so a future bug has less impact.
+
+**Follow-up questions:**
+- **What do you search for in the codebase?** — `bypassSecurityTrust`, `innerHTML`, `outerHTML`, `insertAdjacentHTML`, `document.write`, `Renderer2` with `setProperty`, `eval`, `new Function`, and pipes named like `safeHtml`.
+- **The scanner reports XSS in `{{ value }}` interpolation. Is it real?** — Usually a false positive, because interpolation always sets text. Check if the same value also reaches a dangerous sink somewhere else, or if the server renders it into `index.html`.
 
 ---
 

@@ -1070,7 +1070,7 @@ This is one more reason reducers must be immutable.
 
 ### Selectors with parameters
 
-Old NgRx versions allowed "selectors with props". That API was deprecated in NgRx 11 and removed later. Today you use a **factory function** that returns a selector:
+Old NgRx versions allowed "selectors with props". That API was deprecated in NgRx 11, so do not use it in new code. Today you use a **factory function** that returns a selector:
 
 ```ts
 export const selectProductById = (id: string) =>

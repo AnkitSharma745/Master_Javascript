@@ -555,7 +555,7 @@ Rules that follow from this:
 - An interceptor **later** in the list sees the changes made by earlier ones. Here, `errorInterceptor` sees the request with the `Authorization` header.
 - On the way back, the interceptor **closest to the backend** sees the response first. Here `errorInterceptor` can handle an error before `authInterceptor` and `loggingInterceptor` see it.
 - Put a **logging/timing** interceptor first, so it measures everything, including retries done by later interceptors.
-- Put a **retry** interceptor after the auth interceptor if each retry should carry the current token.
+- Put a **retry** interceptor after the auth interceptor (closer to the backend), so each retry resends the request that already has the `Authorization` header. Be careful: each interceptor function runs **once** per request. A retry resubscribes to the Observable that `next()` returned; it does not call the interceptor functions again. So a retry does **not** read a new token, whatever the order (verified in Angular 16.2). If the token can change between attempts, do two things: put the retry interceptor **before** the auth interceptor, and make the auth interceptor read the token inside `defer()`: `return defer(() => next(withToken(req, auth.getAccessToken())))`. Then each retry resubscribes to the deferred Observable and reads the current token (verified).
 - With `provideHttpClient`, the order of **features** also matters: `provideHttpClient(withInterceptors([a, b]), withInterceptorsFromDi())` runs `a`, then `b`, then the DI-based class interceptors. (In Angular 16, the built-in XSRF interceptor is added by `provideHttpClient` itself, before your interceptors.)
 - Class interceptors run in the order their providers were registered. In large apps with providers in several modules this is hard to predict. That is one reason the Angular docs recommend functional interceptors.
 
@@ -571,7 +571,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const apiBaseUrl = inject(API_BASE_URL); // e.g. 'https://api.myshop.com'
 
   // Never send your token to third-party servers (CDNs, analytics, other APIs)
-  const isOwnApi = req.url.startsWith('/api/') || req.url.startsWith(apiBaseUrl);
+  const isOwnApi = req.url.startsWith('/api/') || req.url.startsWith(`${apiBaseUrl}/`); // keep the trailing slash
   const token = auth.getAccessToken();
   if (!isOwnApi || !token || req.context.get(SKIP_AUTH)) {
     return next(req);
@@ -580,7 +580,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 };
 ```
 
-The `isOwnApi` check is a **security** rule. An interceptor runs for **every** request, including calls to external services. Attaching your access token to them leaks it. Token storage and other auth security rules are in [Security](15-security.md) and [Secure auth, secrets and dependencies](../10-testing-security-production/06-secure-auth-secrets-and-dependencies.md).
+The `isOwnApi` check is a **security** rule. Keep the trailing slash in the check: without it, `https://api.myshop.com.evil.net` would also match `https://api.myshop.com`. An interceptor runs for **every** request, including calls to external services. Attaching your access token to them leaks it. Token storage and other auth security rules are in [Security](15-security.md) and [Secure auth, secrets and dependencies](../10-testing-security-production/06-secure-auth-secrets-and-dependencies.md).
 
 ### 2. Global error handling
 
@@ -913,18 +913,9 @@ cancelUpload(): void {
 
 **Cross-site request forgery (CSRF or XSRF)** is an attack where another website makes the user's browser send a request to your API, using the user's cookies. The attack and defenses are explained in depth in [Web security: XSS, CSRF, CORS and CSP](../10-testing-security-production/05-web-security-xss-csrf-cors-csp.md).
 
-Angular's `HttpClient` supports the **cookie-to-header** defense:
+Short reminder: Angular's `HttpClient` supports the **cookie-to-header** defense. The server sets an `XSRF-TOKEN` cookie. For mutating requests (not `GET`/`HEAD`) to **relative URLs**, Angular's built-in interceptor copies the cookie value into an `X-XSRF-TOKEN` header, and the server checks that they match. It is on by default with `HttpClientModule` and `provideHttpClient()`. It never adds the header to absolute URLs, so a cross-origin API needs its own setup.
 
-1. The server sets a cookie, by default named `XSRF-TOKEN`, with a random value. (The cookie must be readable by JavaScript, so it is **not** `HttpOnly`.)
-2. For **mutating** requests (anything except `GET` and `HEAD`) to **relative URLs**, Angular reads the cookie and copies its value into a header, by default `X-XSRF-TOKEN`.
-3. The server checks that the header matches the cookie. A malicious site cannot read your cookies, so it cannot set the header.
-
-Facts about Angular 16's built-in XSRF interceptor (checked in the Angular 16.2 source):
-
-- It skips `GET` and `HEAD` requests.
-- It skips **absolute URLs** (starting with `http://` or `https://`), so the token is never sent to other origins. If your API is on another domain with an absolute URL, the built-in support does not add the header; you need your own interceptor and backend setup.
-- It does not overwrite a header with the same name if you already set it.
-- It is active by default with `HttpClientModule` and with `provideHttpClient()`.
+The step-by-step flow, a sequence diagram and the exact rules of Angular 16's XSRF interceptor are in [Angular security: XSRF protection with HttpClient](15-security.md#xsrf-protection-with-httpclient).
 
 Customize names:
 
@@ -971,10 +962,11 @@ Interceptors are tested the same way, with `provideHttpClient(withInterceptors([
 ## Newer Angular versions
 
 > **Newer Angular (17+):**
-> - `withFetch()` left developer preview after v16, and server-side rendering setups recommend it.
+> - **Angular 17:** `withFetch()` became stable, and server-side rendering setups recommend it.
 > - **Angular 18** deprecated `HttpClientModule` (and `HttpClientXsrfModule`, `HttpClientJsonpModule`). The replacement is `provideHttpClient(withInterceptorsFromDi())` in your providers, plus the matching `with...` features. An `ng update` migration does the change.
 > - **Angular 19.2** added `httpResource()` (experimental at first), which loads HTTP data directly into signals.
-> - **Angular 21+** (according to the current angular.dev setup guide): `HttpClient` can be injected without calling `provideHttpClient()`, `fetch` is the default backend, and `withXhr()` switches back to `XMLHttpRequest` (for example, when you need upload progress).
+> - **Angular 21**: `HttpClient` is provided in root by default, so you can inject it without calling `provideHttpClient()`. You still call it to configure interceptors and other features.
+> - **Angular 22**: `fetch` is the default backend and `withFetch()` is deprecated. `withXhr()` switches back to `XMLHttpRequest` (for example, when you need upload progress).
 > - Functional interceptors remain the recommended style.
 
 For an Angular 16 app, the safest future-proof choices are: `provideHttpClient()` instead of `HttpClientModule` where possible, functional interceptors, and `HttpContext` tokens for per-request options.
@@ -1115,7 +1107,7 @@ Follow-up: **What if two templates use `user$ | async` on the same HTTP Observab
 **Code:** See the sequence diagram in [Interceptor order](#interceptor-order).
 
 **Follow-up questions:**
-- **Where should a retry interceptor go relative to the auth interceptor?** — After it (closer to the backend) if each retry should reuse the request with the token; the retry resubscribes to `next(req)` below it. If the token might change between retries, put token logic so it runs on each attempt.
+- **Where should a retry interceptor go relative to the auth interceptor?** — After it (closer to the backend), so each retry resends the request with the header already added. A retry resubscribes to the Observable from `next(req)`; it does not run the earlier interceptor functions again. So if the token can change between attempts, put the retry interceptor **before** the auth interceptor, and make the auth interceptor read the token inside `defer(() => next(withToken(req, auth.getAccessToken())))`. Each retry then resubscribes to the deferred Observable and reads the current token.
 
 ---
 
@@ -1268,7 +1260,7 @@ export class ApiInterceptor implements HttpInterceptor {
 - **Token refresh:** catch 401, share one in-flight refresh Observable, retry the original request with `switchMap`, fail all waiters and log out if refresh fails, skip the refresh call itself.
 - **Cancellation** = unsubscribe (via `switchMap`, `async` pipe, `takeUntilDestroyed`); the server may still finish the work.
 - **XSRF:** cookie `XSRF-TOKEN` → header `X-XSRF-TOKEN` for non-GET/HEAD requests to relative URLs; the backend must validate it.
-- Newer Angular deprecated `HttpClientModule` (v18) and added `httpResource` (v19.2) and fetch-by-default (v21+ docs).
+- Newer Angular deprecated `HttpClientModule` (v18) and added `httpResource` (v19.2). `HttpClient` is provided by default since v21, and the fetch backend is the default since v22.
 
 ## References
 

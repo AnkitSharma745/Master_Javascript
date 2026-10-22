@@ -344,7 +344,7 @@ export class NotificationsComponent implements OnInit {
 }
 ```
 
-Fixes: use the `async` pipe, use `toSignal()`, or call `this.cdr.markForCheck()` inside `subscribe`.
+Fixes: use the `async` pipe, use `toSignal()`, or call `this.cdr.markForCheck()` inside `subscribe`. How the `async` pipe subscribes, stores values and unsubscribes is explained step by step in [Directives and pipes: the async pipe in depth](03-directives-and-pipes.md#the-async-pipe-in-depth).
 
 ### Advantages and disadvantages of OnPush
 
@@ -437,7 +437,7 @@ private readonly cdr = inject(ChangeDetectorRef);
 | `detectChanges()` | Runs change detection **now**, synchronously, for this view and its children. | You need the DOM updated immediately; detached views; code outside NgZone; tests |
 | `detach()` | Removes this view from the change detection tree. Ticks skip it until reattached. | Views that update rarely or on your own schedule (live charts, huge tables) |
 | `reattach()` | Puts a detached view back into the tree. | Re-enable automatic checks |
-| `checkNoChanges()` | Runs the dev-mode check: throws if a binding changed. | Rare; mostly tests. Deprecated in Angular 17 |
+| `checkNoChanges()` | Runs the dev-mode check: throws if a binding changed. | Rare; mostly tests. Deprecated in newer Angular (the v17 docs already mark it deprecated) |
 
 ### markForCheck vs detectChanges
 
@@ -584,9 +584,7 @@ Common fixes: move the logic earlier (`ngOnInit`, or the constructor), derive th
 
 ## trackBy and list rendering
 
-`*ngFor` must decide which DOM elements to keep, move, create or destroy when the array changes. By default it tracks items by **object identity** (reference).
-
-With immutable updates or a fresh API response, **every item is a new object**. Without `trackBy`, Angular destroys all rows and creates new ones. That is slow for big lists, loses focus and scroll state in inputs, and restarts child components.
+Short reminder: by default `*ngFor` tracks items by **object identity**. Immutable updates and fresh API responses create **new objects**, so without `trackBy` Angular destroys and recreates every row. The full explanation is in [Directives and pipes: trackBy](03-directives-and-pipes.md#trackby), and a measured comparison is in [Performance: trackBy for lists](12-performance.md#trackby-for-lists). This matters for change detection because immutable data (which OnPush needs) is exactly what makes `trackBy` necessary.
 
 ```ts
 @Component({
@@ -791,7 +789,7 @@ Rules for `effect` in Angular 16:
 - It must be created in an **injection context** (constructor or field initializer), or you pass `{ injector }`.
 - It is **destroyed automatically** with the component (or service) that created it. It returns an `EffectRef` with `destroy()` if you need to stop it earlier. `manualCleanup: true` turns off the automatic destroy.
 - It runs **asynchronously**. In Angular 16, effects are queued when their signals change and run during the next change detection. Several changes in a row produce one run with the latest values.
-- **Writing to signals inside an effect throws** (NG0600) unless you pass `{ allowSignalWrites: true }`. (Angular 19 removed this restriction and the flag.)
+- **Writing to signals inside an effect throws** (NG0600) unless you pass `{ allowSignalWrites: true }`. (Angular 19 removed this restriction. The flag still exists there, but it is deprecated and does nothing.)
 - The effect function receives an `onCleanup` function to register cleanup that runs before the next run and on destroy.
 
 ```ts
@@ -1188,13 +1186,13 @@ More examples and fixes are in [Lifecycle hooks](04-lifecycle-hooks.md).
 
 ### Q10. Why is calling a function in a template a performance problem?
 
-**Short answer:** Angular re-evaluates every binding on every check of the component. A function call like `{{ getTotal(cart) }}` runs each time, maybe dozens of times per second with the Default strategy. If it loops over big arrays, it gets slow. Use a **pure pipe** (re-runs only when its input references change), a field computed when the data changes, or a `computed` signal (memoized). Calling a signal getter like `{{ total() }}` is fine, because it only returns the cached value.
+**Short answer:** Angular re-evaluates every binding on every check of the component. A function call like `{{ getTotal(cart) }}` runs each time, maybe dozens of times per second with the Default strategy. If it loops over big arrays, it gets slow. Use a **pure pipe** (re-runs only when its input references change), a field computed when the data changes, or a `computed` signal (memoized). Calling a signal getter like `{{ total() }}` is fine, because it only returns the cached value. The full spoken answer with follow-ups is in [Directives and pipes Q10](03-directives-and-pipes.md#q10-why-should-you-avoid-method-calls-in-templates-when-is-it-acceptable) and [Performance Q5](12-performance.md#q5-why-is-calling-a-method-in-a-template-a-performance-problem-what-do-you-use-instead).
 
 ---
 
 ### Q11. What is trackBy and why does it matter?
 
-**Short answer:** `*ngFor` tracks items by object reference by default. When you load a new array from the API or update immutably, all objects are new, so Angular destroys and recreates every DOM row. `trackBy` gives a stable identity (usually an `id`) so Angular reuses existing rows and only updates changed bindings. It saves DOM work and keeps state like focus and component instances. In Angular 17+, `@for` requires a `track` expression.
+**Short answer:** `*ngFor` tracks items by object reference by default. When you load a new array from the API or update immutably, all objects are new, so Angular destroys and recreates every DOM row. `trackBy` gives a stable identity (usually an `id`) so Angular reuses existing rows and only updates changed bindings. It saves DOM work and keeps state like focus and component instances. In Angular 17+, `@for` requires a `track` expression. The full spoken answer with follow-ups is in [Directives and pipes Q3](03-directives-and-pipes.md#q3-what-is-trackby-and-why-is-it-important) and [Performance Q4](12-performance.md#q4-what-does-trackby-do-and-why-does-it-matter).
 
 ```html
 <li *ngFor="let user of users; trackBy: trackById">{{ user.name }}</li>

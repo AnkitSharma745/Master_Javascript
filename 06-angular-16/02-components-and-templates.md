@@ -813,7 +813,7 @@ export class TabDirective {
 @Component({
   selector: 'app-tabs',
   standalone: true,
-  imports: [NgFor, NgTemplateOutlet],
+  imports: [NgFor, NgIf, NgTemplateOutlet],
   template: `
     <nav>
       <button *ngFor="let tab of tabs; let i = index"
@@ -841,7 +841,7 @@ export class TabsComponent implements AfterContentInit {
 </app-tabs>
 ```
 
-(The `TabsComponent` must also import `NgIf`.) Each tab's content is a template, so only the active tab is created.
+Each tab's content is a template, so only the active tab is created.
 
 Important details:
 
@@ -1782,7 +1782,14 @@ export class UserEditorComponent {
 
 ### Q19. Why does Angular warn about "ExpressionChangedAfterItHasBeenChecked" when a child emits an output in `ngAfterViewInit`?
 
-**Short answer:** In development mode, Angular checks each view twice in a row and expects the same values. If a child emits in `ngAfterViewInit` and the parent changes a bound field in its handler, the parent's binding has already been checked in this pass, so the second check sees a different value and throws. Real Angular 16 output for a parent template `<p>{{ status }}</p><app-emitter (ready)="status = $event" />`: `NG0100: ExpressionChangedAfterItHasBeenCheckedError: Expression has changed after it was checked. Previous value: 'loading'. Current value: 'loaded'.` Fixes: emit earlier (for example in `ngOnInit`), restructure so the parent owns the value, or as a last resort defer the emit to the next tick. The full explanation is in [Lifecycle hooks](04-lifecycle-hooks.md#expressionchangedafterithasbeencheckederror).
+**Short answer:** In development mode, after each change detection pass Angular runs a second, check-only pass. It expects every binding to have the same value as before. Now look at the order:
+
+1. Angular checks the parent's bindings (`status` is `'loading'`).
+2. The child's `ngAfterViewInit` runs and emits.
+3. The parent's handler sets `status = 'loaded'`. But the parent's binding was already checked in this pass.
+4. The second, check-only pass sees a different value and throws.
+
+Real Angular 16 output for a parent template `<p>{{ status }}</p><app-emitter (ready)="status = $event" />`: `NG0100: ExpressionChangedAfterItHasBeenCheckedError: Expression has changed after it was checked. Previous value: 'loading'. Current value: 'loaded'.` Fixes: emit earlier (for example in `ngOnInit`), restructure so the parent owns the value, or as a last resort defer the emit to the next tick. The full explanation is in [Lifecycle hooks](04-lifecycle-hooks.md#expressionchangedafterithasbeencheckederror).
 
 ### Q20. What is the difference between `providers` on a component and `providedIn: 'root'`?
 

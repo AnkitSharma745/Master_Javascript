@@ -1,6 +1,6 @@
 # Lifecycle Hooks
 
-> In this document you will learn every Angular lifecycle hook: when it runs, how often, in which order for parents and children, and what work belongs in it. You will also learn why `ExpressionChangedAfterItHasBeenCheckedError` happens and how to fix it, plus the Angular 16 additions `DestroyRef`, `takeUntilDestroyed` and `afterRender`. Lifecycle questions are very common because they show whether you understand how Angular creates, updates and destroys components.
+> In this document you will learn every Angular lifecycle hook: when it runs, how often, in which order for parents and children, and what work belongs in it. You will also learn why `ExpressionChangedAfterItHasBeenCheckedError` happens and how to fix it, plus the Angular 16 additions `DestroyRef`, `takeUntilDestroyed` and `afterRender`. Lifecycle questions show the interviewer whether you understand how Angular creates, updates and destroys components.
 
 **Before this:** [Components and templates](02-components-and-templates.md) · [Change detection basics](01-angular-fundamentals.md#zonejs-and-change-detection-in-one-page) · **Interview questions:** [jump to the interview section](#interview-questions)
 
@@ -68,7 +68,7 @@ Think of a hotel guest. Check-in (constructor) gives them a room key. Unpacking 
 
 ## Constructor vs ngOnInit
 
-This is one of the most asked Angular questions.
+This is a classic Angular interview question.
 
 | | `constructor` | `ngOnInit` |
 | --- | --- | --- |
@@ -777,6 +777,8 @@ this.user = 'Ravi';   // then change detection
 
 ### Q8. Debugging: after navigating away from a page, a console log from that page keeps appearing every few seconds. What is wrong?
 
+**What the interviewer is checking:** That you recognize a missing cleanup (a memory leak) and know the cleanup tools.
+
 **Short spoken answer (30–60 seconds):**
 > The page component started something that keeps running after it was destroyed — probably an `interval` subscription, a `setInterval`, or a WebSocket — and never cleaned it up. The callback still holds a reference to the component, so the component can't be garbage collected either; that's a memory leak. I'd find where the subscription or timer is created and add cleanup: `takeUntilDestroyed()`, an unsubscribe in `ngOnDestroy`, `clearInterval`, or better, show the stream with the async pipe. In Chrome DevTools I can confirm the fix with a heap snapshot after navigating back and forth.
 
@@ -856,8 +858,14 @@ export class UserPanelComponent implements OnInit, AfterViewInit {
 
 ### Q16. Your component shows data from an input object. The parent updates `config.pageSize = 50`, but your `ngOnChanges` never runs. Why, and what are your options?
 
+**What the interviewer is checking:** Reference vs mutation, and whether you fix the data flow instead of adding workarounds.
+
 **Short spoken answer (30–60 seconds):**
 > `ngOnChanges` runs only when the input binding gets a new value by reference. The parent mutated a property of the same object, so from Angular's point of view the input didn't change. The best fix is in the parent: create a new object, `this.config = { ...this.config, pageSize: 50 }`. That also makes OnPush work. If I can't change the parent, I could detect the mutation in `ngDoCheck` with a `KeyValueDiffer`, but that runs on every pass, so it's a workaround. Another design is to pass the primitive value itself, `[pageSize]="config.pageSize"`, so each change is a new primitive value.
+
+**Follow-up questions:**
+- **Would `OnPush` on your component show the new page size?** — No. `OnPush` also compares input references, so the component is not checked for this change. A new object fixes both problems.
+- **Is `ngDoCheck` with a differ ever the right choice?** — Only when you cannot control the parent (for example a third-party wrapper). Keep the diff cheap, because `ngDoCheck` runs on every pass.
 
 **Common mistakes:** Calling `detectChanges()` everywhere instead of fixing the data flow.
 

@@ -62,7 +62,7 @@ export class HighlightDirective {}
 
 Selectors can be attributes (`[appHighlight]`), elements (`app-x`), classes (`.x`), or combinations (`input[type=email][appEmail]`). Attribute selectors are by far the most common for directives.
 
-Several directives can match the same element. A component can only be one per element.
+Several directives can match the same element. But only one component can match an element.
 
 ---
 
@@ -398,7 +398,7 @@ export class AutofocusDirective implements AfterViewInit {
 
 ### Example 3: Renderer2 for DOM changes
 
-**`Renderer2`** is Angular's abstraction for DOM changes. It works on the server and in web workers, and it is the safe way to add classes, attributes and listeners from code.
+**`Renderer2`** is Angular's abstraction for DOM changes. It also works with server-side rendering, and it is the safe way to add classes, attributes and listeners from code.
 
 ```ts
 import { Directive, ElementRef, Input, OnChanges, Renderer2 } from '@angular/core';
@@ -537,7 +537,7 @@ The `hasView` flag prevents creating a second copy when the input is set to `fal
 A realistic directive used in admin apps: show content only for users with a role, and react when the user's roles change.
 
 ```ts
-import { Directive, Input, OnDestroy, TemplateRef, ViewContainerRef, inject } from '@angular/core';
+import { Directive, Injectable, Input, OnDestroy, TemplateRef, ViewContainerRef, inject } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
@@ -1017,7 +1017,7 @@ flowchart TD
 ### When impure pipes are correct
 
 - The pipe depends on something **other than its inputs**: the current time, a subscription, a translation that can change at runtime.
-- Built-in impure pipes: `async` (keeps a subscription), `json`, `keyvalue` (it checks the object for changes with a differ), `slice` is pure.
+- Built-in impure pipes: `async` (keeps a subscription), `json`, and `keyvalue` (it checks the object for changes with a differ). `slice` and the formatting pipes (`date`, `currency`, `number`...) are pure.
 
 Even then, keep the `transform` very fast and return the **same reference** when nothing changed, or downstream bindings will see a "new" value every pass.
 
@@ -1181,7 +1181,7 @@ Is every method call bad? No. A method that returns a field or does trivial work
 
 ## Newer Angular: built-in control flow
 
-> **Newer Angular (17+):** Angular 17 added a built-in control flow syntax in templates (developer preview in 17, stable in 18). It replaces `*ngIf`, `*ngFor` and `ngSwitch`. In **Angular 20**, `NgIf`, `NgFor` and `NgSwitch` are **deprecated**, with removal planned for v22. None of this exists in Angular 16.
+> **Newer Angular (17+):** Angular 17 added a built-in control flow syntax in templates (developer preview in 17, stable in 18). It replaces `*ngIf`, `*ngFor` and `ngSwitch`. In **Angular 20**, `NgIf`, `NgFor` and `NgSwitch` are **deprecated**. Angular 22 still ships them (deprecated, not removed). None of the new syntax exists in Angular 16.
 
 ```html
 <!-- Angular 17+ -->
@@ -1358,7 +1358,7 @@ trackById(index: number, user: User): number { return user.id; }
 
 **Follow-up questions:**
 - **Why subscribe to a roles stream instead of reading once?** — Roles can change during the session (login, logout, role switch, token refresh). Reading once would show stale UI.
-- **What happens with `OnPush` parents?** — The embedded views are created by the directive directly, so they appear at once. If you only changed a field, you would need `markForCheck()`.
+- **What happens with `OnPush` parents?** — The directive creates and clears the views itself, so elements are added or removed right away. But the bindings inside a new view are only updated when change detection checks the host component. If the host is `OnPush` and the roles change from outside (for example a service call that is not from an event in this component), inject `ChangeDetectorRef` in the directive and call `markForCheck()` after `updateView()`.
 
 **Common mistakes:** Treating front-end checks as authorization.
 
@@ -1441,6 +1441,8 @@ export class AppComponent {
 <h2>{{ (product$ | async)?.name }}</h2>
 <p>{{ (product$ | async)?.price | currency }}</p>
 ```
+
+**What the interviewer is checking:** That you know each `async` pipe is its own subscription, and that `HttpClient` Observables are cold.
 
 **Short spoken answer (30–60 seconds):**
 > Each async pipe subscribes separately. `HttpClient` Observables are cold: every subscription sends a new request. So two async pipes mean two GET requests. I'd fix it by subscribing once with `*ngIf="product$ | async as product"` around both elements, or by sharing the stream with `shareReplay({ bufferSize: 1, refCount: true })` if several parts of the template or several components need it.
@@ -1553,7 +1555,7 @@ settings = { theme: 'dark', lang: 'en', autosave: true };
 
 ### Q17. What is the difference between `ElementRef` and `Renderer2`?
 
-**Short answer:** `ElementRef` is a wrapper around the host DOM element (`nativeElement`). Using `nativeElement` directly works in the browser but not where there is no real DOM (server-side rendering, web workers), and direct `innerHTML` writes skip Angular's sanitization. `Renderer2` is Angular's abstraction for DOM operations (`addClass`, `setStyle`, `setAttribute`, `listen`, `createElement`) that works on every platform. Prefer bindings first, then `Renderer2`, and use `nativeElement` only for things like `focus()` or handing the element to a third-party library.
+**Short answer:** `ElementRef` is a wrapper around the host DOM element (`nativeElement`). Using `nativeElement` directly works in the browser but not where there is no real DOM (server-side rendering), and direct `innerHTML` writes skip Angular's sanitization. `Renderer2` is Angular's abstraction for DOM operations (`addClass`, `setStyle`, `setAttribute`, `listen`, `createElement`) that works on every platform. Prefer bindings first, then `Renderer2`, and use `nativeElement` only for things like `focus()` or handing the element to a third-party library.
 
 ### Q18. What are `ngClass` and `ngStyle`, and do you still need them?
 

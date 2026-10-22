@@ -442,15 +442,7 @@ So there are three ways to make runtime faster:
 
 ### What it is
 
-`ChangeDetectionStrategy.OnPush` tells Angular: "skip this component and its children during change detection, unless something relevant happened to it."
-
-An OnPush component is checked only when:
-
-1. One of its `@Input` references changes (compared with `===`).
-2. An event handler bound in its template (or in a child's template) runs, like `(click)`.
-3. The `async` pipe in its template receives a new value (it calls `markForCheck()`).
-4. You call `ChangeDetectorRef.markForCheck()` (or `detectChanges()`) yourself.
-5. A signal read in its template changes (Angular 16, signals developer preview).
+Short reminder: `ChangeDetectionStrategy.OnPush` tells Angular to skip a component and its children unless it was marked dirty: a new `@Input` reference, an event in its template, the `async` pipe, `markForCheck()`, or a signal read in its template. The exact rules and verified behavior are in [Change detection and signals: the OnPush strategy](10-change-detection-and-signals.md#the-onpush-strategy). Here we focus on what OnPush saves.
 
 ```ts
 @Component({
@@ -543,7 +535,7 @@ A cleaner way is to expose the data as an Observable and use the `async` pipe, w
 
 ### The problem
 
-`*ngFor` must decide which DOM rows to keep, move, create or remove when the array changes. By default, it compares items by **identity** (the object reference). When you reload data from the server, every object is new, even if the data is the same. So Angular destroys every row and creates every row again. For a table with 500 rows, this is slow and also loses focus, scroll position inside rows and CSS animations.
+Short reminder (full explanation in [Directives and pipes: trackBy](03-directives-and-pipes.md#trackby)): `*ngFor` compares items by **identity**. After a reload from the server every object is new, so Angular destroys and recreates every row. For a table with 500 rows, this is slow and also loses focus, scroll position inside rows and CSS animations.
 
 ### The fix
 
@@ -663,7 +655,7 @@ Also watch out for **getters** used in templates (`get fullName()`). A getter is
 
 ### The problem
 
-Zone.js triggers change detection after **every** event handler that runs inside Angular's zone. Some events fire very often:
+Zone.js triggers change detection after **every** event handler that runs inside Angular's zone (how this works: [Change detection and signals: running code outside Angular](10-change-detection-and-signals.md#running-code-outside-angular)). Some events fire very often:
 
 - `mousemove`, `pointermove`, `scroll`, `resize`, `wheel`, `touchmove`
 - `requestAnimationFrame` loops
@@ -1129,7 +1121,7 @@ trackById(_index: number, user: User): string { return user.id; }
 ```
 
 **Follow-up questions:**
-- **What happens if trackBy returns duplicate keys?** — Angular cannot match rows correctly and may reuse the wrong DOM. In Angular 17+ `@for` warns about duplicate keys in dev mode.
+- **What happens if trackBy returns duplicate keys?** — Angular cannot match rows correctly and may reuse the wrong DOM. Newer Angular versions show a dev-mode warning for duplicate `track` keys in `@for` (error code NG0955).
 - **What changed in newer Angular?** — The `@for` block (17+) requires `track`, for example `track user.id`.
 
 **Common mistakes:** Saying trackBy reduces change detection runs. It reduces DOM work, not the number of cycles.

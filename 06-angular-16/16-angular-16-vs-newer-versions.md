@@ -108,7 +108,7 @@ Angular 16 (May 2023) started this new era. Here is what it added, with the stat
 | **`runInInjectionContext`**, `assertInInjectionContext` | Stable | Run code where `inject()` works |
 | **`provideZoneChangeDetection({ eventCoalescing: true })`** | Stable | Configure NgZone in standalone apps |
 | **TypeScript 5.0 support**, ngcc removed (Ivy-only libraries) | Stable | View Engine libraries no longer work |
-| **Functional guard helpers** (`mapToCanActivate` etc.) | Stable | Class-based guards and resolvers were deprecated in 15.2 in favor of functional ones |
+| **Functional guard helpers** (`mapToCanActivate` etc.) | Stable | Class-based guards and resolvers were deprecated in 15.2 in favor of functional ones (the deprecation of the guard interfaces was later removed, in June 2024 / 18.0.x; see [Routing](06-routing-guards-and-lazy-loading.md#functional-vs-class-based-guards-the-history)) |
 | **Input transforms**: `@Input({ transform: booleanAttribute })` (16.1) | Stable | Convert input values, for example `disabled=""` to `true` |
 | **`withFetch()`** fetch backend for HttpClient (16.1) | Developer preview | Use `fetch` instead of XHR (useful for SSR) |
 | **`afterRender`, `afterNextRender`** (16.2) | Developer preview | Run code after Angular renders (DOM measurements, third-party libraries) |
@@ -278,7 +278,7 @@ Released 19 November 2025.
 
 Minor releases:
 
-- **21.1**: Signal Forms `[field]` renamed `[formField]`; spread syntax in template expressions; multiple consecutive `@case` blocks; standalone `isActive()` router function; `ChangeDetectionStrategy.Default` deprecated.
+- **21.1**: Signal Forms `[field]` renamed `[formField]`; spread syntax in template expressions; multiple consecutive `@case` blocks; standalone `isActive()` router function.
 - **21.2**: **arrow functions** and `instanceof` in templates; exhaustive `@switch` checks with `@default never;`; **`ChangeDetectionStrategy.Eager`** added as the new name for `Default`; resource snapshots; more Signal Forms features (`[formRoot]`, submission options).
 
 ## Angular 22
@@ -622,6 +622,8 @@ A very common follow-up. A good answer:
 
 ### Q4. Compare `@Input()` with signal `input()`.
 
+**What the interviewer is checking:** whether you can map the Angular 16 API to the modern one and explain why the new one is better.
+
 **Short spoken answer (30–60 seconds):**
 > `@Input()` is a decorator on a class property; Angular assigns a new value, and I react with ngOnChanges or a setter. `input()` arrived in 17.1 and became stable in 19. It creates a read-only signal, so I read it with `name()`, and I can derive values with computed or react with effect instead of ngOnChanges. Required inputs are `input.required<T>()`, and it supports alias and transform like the decorator. Signal inputs work naturally with OnPush and zoneless change detection, because Angular knows exactly which component reads the signal. One difference: a signal input cannot be written from inside the component; for two-way binding you use `model()`.
 
@@ -637,10 +639,20 @@ userId = input.required<string>();
 user = httpResource<User>(() => `/api/users/${this.userId()}`); // httpResource stable in 22
 ```
 
+**Follow-up questions:**
+- **Can you call `this.userId.set(...)` on a signal input?** — No. `input()` returns a read-only `InputSignal`. Only the parent changes it. If the child must change the value too, use `model()`.
+- **How do you migrate many `@Input`s at once?** — Run `ng generate @angular/core:signals` (19+). It converts inputs, outputs and queries, and it skips cases it cannot convert safely, for example inputs that are written inside the component.
+
 ### Q5. What are `linkedSignal` and `resource`, and when were they added?
+
+**What the interviewer is checking:** whether you follow the newer signal APIs and know their status.
 
 **Short spoken answer (30–60 seconds):**
 > Both arrived in Angular 19. `linkedSignal` is a writable signal whose value is computed from a source, but the user can also set it; when the source changes, it resets. A typical case is a selected item that should reset when the list changes. It became stable in 20. `resource` loads async data reactively: you give it params as a signal-based function and a loader, and it exposes value, isLoading, error and reload, and re-runs when the params change. `rxResource` does the same with an Observable, and `httpResource`, added in 19.2, wraps HttpClient. They were experimental for a while and became stable in Angular 22.
+
+**Follow-up questions:**
+- **How would you write the "selected item resets when the list changes" case in Angular 16?** — With a `BehaviorSubject` for the selection and code that resets it when the list Observable emits, or with a `computed` plus a separate writable signal and an `effect`. `linkedSignal` replaces that glue code.
+- **What happens to an old request when the params of a `resource` change?** — The resource aborts or ignores the old load and starts a new one, similar to `switchMap` in RxJS. So you do not get stale results.
 
 ### Q6. What are Signal Forms?
 
@@ -648,8 +660,14 @@ user = httpResource<User>(() => `/api/users/${this.userId()}`); // httpResource 
 
 ### Q7. What changed about change detection defaults in Angular 22?
 
+**What the interviewer is checking:** whether you know the newest breaking default and how the upgrade keeps old code working.
+
 **Short spoken answer (30–60 seconds):**
-> In 22, components that don't specify a change detection strategy use OnPush by default. The old Default strategy was renamed `ChangeDetectionStrategy.Eager` — the alias was added in 21.2, and Default was deprecated in 21.1. `ng update` runs a migration that adds `changeDetection: ChangeDetectionStrategy.Eager` to existing components without an explicit strategy, so their behavior doesn't change. Combined with zoneless being the default for new apps since 21, new Angular apps now follow the "signals plus OnPush" model by default.
+> In 22, components that don't specify a change detection strategy use OnPush by default. The old Default strategy has a new name: `ChangeDetectionStrategy.Eager`. The Eager alias was added in 21.2, so teams could start using it before upgrading. `ng update` runs a migration that adds `changeDetection: ChangeDetectionStrategy.Eager` to existing components without an explicit strategy, so their behavior doesn't change. Combined with zoneless being the default for new apps since 21, new Angular apps now follow the "signals plus OnPush" model by default.
+
+**Follow-up questions:**
+- **Will my old components break after `ng update` to 22?** — Not because of this change. The migration adds `Eager` to every component that had no strategy, so they keep the old behavior. New components you generate get OnPush.
+- **What must you check before removing `Eager` from a component?** — That the view updates only through inputs, template events, the `async` pipe, signals or `markForCheck`. A field changed inside `setTimeout` or a plain subscription will no longer update the screen.
 
 ### Q8. How would you upgrade an Angular 16 application to the latest version?
 
@@ -668,8 +686,14 @@ user = httpResource<User>(() => `/api/users/${this.userId()}`); // httpResource 
 
 ### Q10. What is the support status of Angular 16, and why should a company care?
 
+**What the interviewer is checking:** whether you understand the support policy and the security cost of staying on an old version.
+
 **Short spoken answer (30–60 seconds):**
 > Angular 16 was released in May 2023. It had six months of active support and twelve months of LTS, so support ended in November 2024. Today it receives no bug fixes or security patches, and its official Node versions, 16 and 18, are end-of-life too. That means known vulnerabilities in Angular or its toolchain won't be fixed. A company running Angular 16 in production should plan an upgrade. From Angular 22 the policy changed to yearly majors with 24 months of support, which makes it easier to stay on a supported version.
+
+**Follow-up questions:**
+- **What is the difference between active support and LTS?** — Active support gets new features and normal bug fixes. LTS gets only critical fixes and security patches.
+- **How do you convince a manager to fund the upgrade?** — Talk about risk: no security patches, end-of-life Node versions, libraries dropping support, and harder hiring. Then show a plan with small, one-major-at-a-time steps that keep the app releasable.
 
 ### Q11. Your new job uses Angular 21 and you have only used Angular 16. How do you prepare?
 

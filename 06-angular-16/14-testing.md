@@ -77,7 +77,7 @@ ng test --no-watch --code-coverage   # single run with coverage report in covera
 ng test --browsers=ChromeHeadless    # useful in CI
 ```
 
-> **Newer Angular:** an experimental Web Test Runner builder arrived in 17.1. An experimental Vitest-based `@angular/build:unit-test` builder arrived in 20. In **21**, Vitest became the **default** for new projects and the unit-test builder became stable; Karma is still supported as an option, and the experimental Jest and Web Test Runner builders were announced for removal. 22 added migration helpers (`migrate-karma-to-vitest`, `refactor-jasmine-vitest`). TestBed itself works the same way with all runners. See [Angular 16 vs newer versions](16-angular-16-vs-newer-versions.md).
+> **Newer Angular:** an experimental Web Test Runner builder arrived in 17.1. An experimental Vitest-based `@angular/build:unit-test` builder arrived in 20. In **21**, Vitest became the **default** for new projects and the unit-test builder became stable; Karma is still supported as an option, and the experimental Jest and Web Test Runner builders were announced for removal. Migration helpers followed: the `refactor-jasmine-vitest` schematic (21, stable in 22) and the `migrate-karma-to-vitest` update migration (22). TestBed itself works the same way with all runners. See [Angular 16 vs newer versions](16-angular-16-vs-newer-versions.md).
 
 ## Jasmine basics in five minutes
 
@@ -712,7 +712,7 @@ it('shows the user name after loading', waitForAsync(() => {
 
 Limitations: `fakeAsync` cannot control real `XMLHttpRequest` calls (use `HttpTestingController` instead) and requires `zone.js/testing` (included by the CLI test setup).
 
-> **Newer Angular:** `fakeAsync` depends on Zone.js. In zoneless apps and with the Vitest runner (default in 21), teams use Vitest fake timers or `await fixture.whenStable()`; in 22 the CLI added a `zone.js/plugins/vitest-patch` option to keep `fakeAsync` working under Vitest.
+> **Newer Angular:** `fakeAsync` depends on Zone.js. In zoneless apps and with the Vitest runner (default in 21), teams use Vitest fake timers or `await fixture.whenStable()`. For apps that still use Zone.js, `zone.js/testing` gained Vitest support in 2026 (zone.js 0.16.2), and the CLI 22 Vitest runner detects Zone.js at runtime, so existing `fakeAsync` tests can keep working.
 
 ## Testing pipes and directives
 
@@ -845,7 +845,8 @@ Register the interceptor and the testing backend together, make a request throug
 // Functional interceptor (Angular 15+)
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const token = inject(AuthService).getToken();
-  if (!token || !req.url.startsWith('/api')) return next(req);
+  // Trailing slash: '/api' alone would also match '/api-public/...' or '/apidocs'
+  if (!token || !req.url.startsWith('/api/')) return next(req);
   return next(req.clone({ setHeaders: { Authorization: `Bearer ${token}` } }));
 };
 ```
@@ -1167,7 +1168,13 @@ it('shows the title', () => {
 
 **Answer:** The assertion fails: expected `''` to be `'Orders'`. Add `fixture.detectChanges();` after `createComponent`.
 
+**Follow-up questions:**
+- **Why does the `h1` exist if change detection did not run?** — `createComponent` already creates the component's DOM elements. Only the bindings (the text `{{ title }}`) are filled in by change detection.
+- **Would `fixture.autoDetectChanges()` fix it?** — Yes. Calling it runs a first change detection right away, and then runs it again after async events.
+
 ### Q6. How do you mock dependencies in Angular tests? What are the options?
+
+**What the interviewer is checking:** whether you know the DI-based mocking options and when each fits.
 
 **Short spoken answer (30–60 seconds):**
 > I replace them through providers. The most common is `{ provide: RealService, useValue: fake }`, where the fake is a Jasmine spy object from `jasmine.createSpyObj`, or an object with `jest.fn()` functions in Jest. I can also use `useClass` with a hand-written fake class when the fake needs behavior. For HTTP I don't mock the service, I use HttpTestingController. For the NgRx store I use `provideMockStore`. For child components I prefer stub components with the same selector and inputs; NO_ERRORS_SCHEMA works but hides mistakes. I try to mock only boundaries, like HTTP, the store or browser APIs, and keep the logic under test real.
@@ -1180,10 +1187,16 @@ it('shows the title', () => {
 
 ### Q7. How do you test a functional route guard?
 
+**What the interviewer is checking:** whether you know that functional guards need an injection context in tests.
+
 **Short spoken answer (30–60 seconds):**
 > A functional guard is a function that uses `inject()`, so it needs an injection context. I configure TestBed with fake providers, for example a fake AuthService and `provideRouter([])`, and then call the guard inside `TestBed.runInInjectionContext(() => authGuard(route, state))`, passing simple route and state objects. Then I assert the result: `true` for allowed users, or a UrlTree to the login page for others, which I can check with `router.serializeUrl`. If the guard returns an observable, I subscribe or use `firstValueFrom`. For class-based guards I just inject the class and call `canActivate`.
 
 **Code:** see [Functional guards with TestBed.runInInjectionContext](#functional-guards-with-testbedrunininjectioncontext).
+
+**Follow-up questions:**
+- **What happens if you call the guard without `runInInjectionContext`?** — `inject()` throws error NG0203: "inject() must be called from an injection context".
+- **How do you test the guard together with real routing?** — Use `RouterTestingHarness` with `provideRouter` and a route that has the guard, navigate, and check which component or URL you end up on.
 
 ### Q8. How do you test an HTTP interceptor?
 
@@ -1191,8 +1204,14 @@ it('shows the title', () => {
 
 ### Q9. What are component harnesses and why use them?
 
+**What the interviewer is checking:** whether you know how to write tests that survive library upgrades.
+
 **Short spoken answer (30–60 seconds):**
 > Harnesses are classes from the Angular CDK testing package that interact with a component through a stable, user-level API, like `select.clickOptions({ text: 'Shipped' })` or `button.click()`, instead of querying internal DOM and CSS classes. Angular Material ships harnesses for all its components, and I can write my own for design system components by extending ComponentHarness. Tests become more readable and much less fragile: if Material changes its internal DOM in an upgrade, the harness is updated, not my tests. Harness methods are async because they run change detection and wait for the component to be stable.
+
+**Follow-up questions:**
+- **How do you get a harness in a test?** — `const loader = TestbedHarnessEnvironment.loader(fixture);` then `await loader.getHarness(MatButtonHarness.with({ text: 'Save' }))`.
+- **Why must harness tests be `async`?** — Every harness method returns a Promise, because it runs change detection and waits for the component to become stable.
 
 **Common mistakes:** Querying `.mat-mdc-*` classes directly in tests.
 
@@ -1215,8 +1234,14 @@ it('shows the title', () => {
 
 ### Q13. Debugging: this test passes alone but fails when run with others. What could cause it?
 
+**What the interviewer is checking:** test isolation and a systematic way to debug flaky tests.
+
 **Short spoken answer (30–60 seconds):**
 > Usually shared state between tests. Common causes: a module-level variable or a singleton object mutated in one test and reused in another, a fake object defined outside `beforeEach` so spies keep call counts, timers or subscriptions left running from a previous test, global objects like localStorage or window properties not cleaned up, or test order dependence with randomized Jasmine order. I fix it by creating all fakes and state inside `beforeEach`, cleaning up globals in `afterEach`, destroying fixtures, and making each test independent. Running with a fixed random seed helps reproduce it.
+
+**Follow-up questions:**
+- **How do you run Jasmine with a fixed order or seed in Karma?** — In `karma.conf.js`, set `client: { jasmine: { random: false } }` to turn off random order, or `seed: '12345'` to repeat the failing order.
+- **Does TestBed leak state between tests?** — TestBed resets the testing module before each test, so injected services are new. Leaks usually come from module-level variables, globals or timers outside TestBed.
 
 ---
 

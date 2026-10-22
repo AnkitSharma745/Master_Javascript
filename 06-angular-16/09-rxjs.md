@@ -283,7 +283,7 @@ export class MouseTrackerComponent implements AfterViewInit, OnDestroy {
 `defer` is useful when you want something fresh for every subscriber. A common case is wrapping a Promise-returning function so it stays lazy:
 
 ```js
-import { defer } from 'rxjs';
+import { defer, from } from 'rxjs';
 
 // ❌ Wrong: fetch() runs immediately, even if nobody subscribes
 const eager$ = from(fetch('/api/settings'));
@@ -1606,7 +1606,7 @@ export class LivePricesComponent implements OnInit {
 }
 ```
 
-If you call `takeUntilDestroyed()` without an argument inside `ngOnInit`, Angular throws error NG0203, because `ngOnInit` is not an injection context. Injection context rules are explained in [Dependency injection](05-dependency-injection.md).
+If you call `takeUntilDestroyed()` without an argument inside `ngOnInit`, Angular throws error NG0203. `DestroyRef`, the exact error message and the comparison with the `destroy$` pattern are in [Lifecycle hooks: DestroyRef and takeUntilDestroyed](04-lifecycle-hooks.md#destroyref-and-takeuntildestroyed). Injection context rules are in [Dependency injection](05-dependency-injection.md#the-injection-context-rule).
 
 ### Strategy 4: take(1) or first() for one value
 
@@ -2541,7 +2541,7 @@ export class LiveUpdatesService {
 
 **What the interviewer is checking:** A follow-up that exposes shallow "always unsubscribe" answers.
 
-**Short answer:** `HttpClient` Observables complete after the response (for normal requests), and completion cleans up the subscription. So they do not leak in the usual sense. But there are good reasons to cancel anyway: if the user leaves the page while a slow request is running, the callback still runs on a destroyed component, and the request still uses bandwidth. Using the `async` pipe, `switchMap` or `takeUntilDestroyed` cancels the request when it is no longer needed. Exceptions: requests with `reportProgress` or `observe: 'events'` emit several events, but they still complete at the end.
+**Short answer:** `HttpClient` Observables complete after the response (for normal requests), and completion cleans up the subscription. So they do not leak in the usual sense. But there are good reasons to cancel anyway: if the user leaves the page while a slow request is running, the callback still runs on a destroyed component, and the request still uses bandwidth. Using the `async` pipe, `switchMap` or `takeUntilDestroyed` cancels the request when it is no longer needed. One detail: requests with `reportProgress` or `observe: 'events'` emit several events instead of one. They still complete at the end, so the same rules apply.
 
 ---
 

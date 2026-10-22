@@ -700,7 +700,7 @@ after 200 ms       -> INVALID { usernameTaken: true }, server called only once
 **Common mistakes:**
 
 - Returning an Observable that never completes (like `valueChanges`). The documentation requires the Observable to complete; keep it to one HTTP call.
-- Putting `debounceTime` inside the validator: `of(value).pipe(debounceTime(400), ...)` does not help, because each call gets a fresh Observable. Use `timer`.
+- Putting `debounceTime` inside the validator: `of(value).pipe(debounceTime(400), ...)` does not help. Each call gets a fresh Observable with one value, and `of` completes at once, so `debounceTime` emits immediately. (Verified: three quick changes sent every request.) Use `timer`.
 - Using an async validator for something a sync validator can do.
 
 ---
@@ -1109,7 +1109,7 @@ For a control that wraps several inputs (for example, a phone number with countr
 > **Newer Angular (17+):**
 > - **Angular 18** added unified control state change events: `control.events` emits `ValueChangeEvent`, `StatusChangeEvent`, `PristineChangeEvent`, `TouchedChangeEvent`, `FormSubmittedEvent` and `FormResetEvent`. In Angular 16 there is no observable for touched or pristine changes.
 > - Newer versions let `FormControl`/`FormGroup` constructors and `reset` take more options, and template control flow (`@if`, `@for`) replaces `*ngIf`/`*ngFor` in form templates.
-> - **Signal-based forms** (`@angular/forms/signals`) were introduced as an **experimental** API in Angular 21. They are not related to Angular 16.
+> - **Signal-based forms** (`@angular/forms/signals`) were introduced as an **experimental** API in Angular 21 and became **stable in Angular 22**. They do not exist in Angular 16.
 > - Reactive forms and template-driven forms with `FormControl`, `FormGroup`, `FormArray`, typed forms and `ControlValueAccessor` work the same way in all these versions.
 
 ---
@@ -1340,6 +1340,10 @@ Follow-up: **What does `form.reset()` do to a `FormArray` with three added lines
 **Short spoken answer (30–60 seconds):**
 > I show an error when the control is invalid and the user has interacted with it, meaning touched, or after they tried to submit. Otherwise the user sees red errors before typing anything. On submit, if the form is invalid, I call markAllAsTouched so every error appears, and I do not send the request. For accessibility, every input has a label, the error text has an id referenced by aria-describedby, and aria-invalid is set. In big apps I put the message mapping in a reusable error component, so "required" or "minlength" messages are consistent everywhere.
 
+**Follow-up questions:**
+- **Why not disable the submit button while the form is invalid?** — It is common, but the user may not know why the button is disabled. Letting them click, then calling `markAllAsTouched()`, shows every error and explains what to fix.
+- **How do you show an error that comes from the server?** — Set it on the control with `control.setErrors({ server: message })` and show it with the other messages. It is cleared the next time the user changes the value, because validation runs again.
+
 ---
 
 ### Q10. Debugging: a teammate says "my form is valid but the submit button stays disabled" — or "the form value is missing a field". What do you check?
@@ -1438,5 +1442,5 @@ export class ProfileComponent implements OnInit {
 - Angular 16 — `ControlValueAccessor` API: https://v16.angular.io/api/forms/ControlValueAccessor
 - Angular 16 — `Validators` API: https://v16.angular.io/api/forms/Validators
 - Angular — Forms guide (current): https://angular.dev/guide/forms
-- Angular — Signal Forms overview (experimental, v21): https://angular.dev/guide/forms/signals/overview
+- Angular — Signal Forms overview (experimental in v21, stable in v22): https://angular.dev/guide/forms/signals/overview
 - MDN — Client-side form validation: https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Forms/Form_validation

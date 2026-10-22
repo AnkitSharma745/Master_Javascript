@@ -1043,7 +1043,9 @@ NG0200: Circular dependency in DI detected for A.
 
 1. **Extract** the shared logic into a third service `C` that both use.
 2. **Invert** one direction with events: `B` exposes an Observable that `A` subscribes to, instead of `B` calling `A`.
-3. **Inject lazily** as a last resort: inject `Injector` and call `injector.get(A)` inside a method, not in the constructor. A common real case is an HTTP interceptor that needs a service which itself uses `HttpClient`.
+3. **Inject lazily** as a last resort: inject `Injector` and call `injector.get(A)` inside a method, not in the constructor.
+
+A note on a famous old case: an HTTP interceptor that injects an `AuthService`, which itself injects `HttpClient`. In very old Angular versions (around v4–v5) this gave a cyclic dependency error. In Angular 16 it does **not**: `HttpClient` creates the interceptors lazily, on the first request, when `HttpClient` already exists. I verified this with both a functional and a class-based interceptor in Angular 16.2. You only need to be careful that the refresh call made by `AuthService` does not go through the same 401 logic again (see [Token refresh with request queueing](08-httpclient-and-interceptors.md#token-refresh-with-request-queueing)).
 
 ---
 
@@ -1475,7 +1477,7 @@ export class SharedModule {}
 > `forwardRef(() => SomeClass)` delays reading a class reference until Angular needs it. It solves the problem of referring to a class that isn't defined yet at that point in the file — classes aren't hoisted. The common real case is a custom form control providing `NG_VALUE_ACCESSOR` with `useExisting: forwardRef(() => MyComponent)` inside its own decorator, where the class doesn't exist yet. It does not fix a real circular dependency where service A needs B and B needs A — Angular throws NG0200 "Circular dependency in DI detected". For that, I extract shared logic into a third service, replace one direction with an event stream, or as a last resort inject `Injector` and resolve lazily inside a method.
 
 **Follow-up questions:**
-- **Where does a circular dependency commonly appear in Angular?** — An HTTP interceptor that injects an auth service which itself injects `HttpClient`. Resolving the service lazily with `injector.get()` inside `intercept()`, or splitting the token-refresh logic out, fixes it.
+- **Where does a circular dependency commonly appear in Angular?** — Between two feature services that call each other, for example `OrderService` needs `CartService` and `CartService` needs `OrderService`. Extract the shared part into a third service. (The old "interceptor injects `AuthService`, which injects `HttpClient`" cycle is not a problem in Angular 16, because interceptors are created lazily on the first request. It was a real error only in very old versions.)
 
 **Common mistakes:** Adding `forwardRef` everywhere until the error disappears.
 

@@ -82,7 +82,7 @@ Do not confuse them. Interviewers sometimes check this.
 
 - Angular uses **semantic versioning**: major.minor.patch (for example 16.2.12).
 - Until v22, a new major version came out about **every 6 months**. Starting with v22 (June 2026), the official plan is one major version per year.
-- Angular 16 was released in **May 2023**. It is no longer officially supported (the official release page lists v2 to v19 as unsupported). But many company apps still run Angular 16, so this repository teaches Angular 16 first and marks newer changes clearly.
+- Angular 16 was released in **May 2023**. Its long-term support (LTS) ended in **November 2024**, so it is no longer officially supported (the official release page lists v2 to v19 as unsupported). But many company apps still run Angular 16, so this repository teaches Angular 16 first and marks newer changes clearly.
 
 ---
 
@@ -614,7 +614,8 @@ With standalone components, each component says exactly what it needs. The compo
 | --- | --- |
 | v14 | Standalone components, directives and pipes added as **developer preview** |
 | v15 | **Stable**. `bootstrapApplication`, `provideRouter`, `provideHttpClient` stable too |
-| v16 | `ng new --standalone`, and a migration schematic: `ng generate @angular/core:standalone` |
+| v15.2 | Migration schematic: `ng generate @angular/core:standalone` |
+| v16 | `ng new --standalone` creates a standalone app |
 | v17 | `ng new` creates standalone apps by default |
 | v19 | `standalone: true` is the default in the decorator. NgModule-declared components must now say `standalone: false` |
 
@@ -934,7 +935,7 @@ Angular template expressions look like JavaScript, but they are more limited:
 
 The safe navigation operator `?.`, the non-null assertion `!` and pipes are explained in [Components and templates](02-components-and-templates.md#template-syntax-essentials).
 
-> **Self-closing tags:** Angular 16 supports self-closing tags for components: `<app-product-card [product]="p" />`. Older code always writes the closing tag.
+> **Self-closing tags:** since v15.1, Angular supports self-closing tags for components, so Angular 16 accepts `<app-product-card [product]="p" />`. Older code always writes the closing tag.
 
 ---
 
@@ -1042,7 +1043,7 @@ Benefits of Ivy:
 
 - **Smaller bundles**: unused Angular features are tree-shaken because each instruction is a separate function.
 - **Locality**: each component is compiled using only its own metadata, so builds are faster and libraries can ship pre-compiled code.
-- Made standalone components, better debugging (`ng.getComponent(el)` in the browser console in dev mode) and stricter template type checking possible.
+- **New features**: Ivy made standalone components and stricter template type checking possible. It also gives better debugging: in dev mode you can type `ng.getComponent(el)` in the browser console.
 
 ### AOT vs JIT
 
@@ -1462,7 +1463,18 @@ export class OrdersModule {}
 
 ### Q11. What is Ivy?
 
-**Short answer:** Ivy is Angular's current compiler and rendering engine (default since v9; the old View Engine was removed in v13). It compiles each component into a template function with plain DOM instructions, which gives smaller bundles through tree-shaking, faster builds through locality (each component is compiled using only its own metadata), stricter template type checking, and it made standalone components possible. See [Ivy](#ivy) for real compiled output.
+**Short answer:** Ivy is Angular's current compiler and rendering engine. It is the default since v9, and the old View Engine was removed in v13. Ivy compiles each component into a template function with plain DOM instructions. This gives you:
+
+- smaller bundles, because unused instructions are tree-shaken;
+- faster builds through **locality** (each component is compiled using only its own metadata);
+- stricter template type checking;
+- the base that made standalone components possible.
+
+See [Ivy](#ivy) for real compiled output.
+
+**Follow-up questions:**
+- **What is "creation mode" and "update mode" in a compiled template?** — Creation mode builds the DOM nodes once. Update mode runs on every change detection pass and only re-checks the bindings.
+- **Can an Angular 16 app use old View Engine libraries?** — No. Angular 16 removed `ngcc`, the tool that converted old View Engine libraries during the build. Libraries must now be published in the Ivy (partial compilation) format.
 
 ### Q12. What is the difference between AOT and JIT compilation?
 

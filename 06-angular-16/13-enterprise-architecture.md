@@ -641,19 +641,23 @@ Angular sends every uncaught error (in change detection, event handlers, lifecyc
 ```ts
 @Injectable()
 export class GlobalErrorHandler implements ErrorHandler {
-  private logger = inject(LoggerService);
+  // Inject only the Injector here. Get the other services later, inside handleError
+  // (see the note below about cyclic dependencies).
+  private injector = inject(Injector);
   private zone = inject(NgZone);
-  private notifications = inject(NotificationService);
 
   handleError(error: unknown): void {
     if (error instanceof HttpErrorResponse) {
       return; // already handled and logged by the HTTP interceptor
     }
+    const logger = this.injector.get(LoggerService);
+    const notifications = this.injector.get(NotificationService);
+
     const err = error instanceof Error ? error : new Error(String(error));
-    this.logger.error(err.message, { stack: err.stack, url: location.href });
+    logger.error(err.message, { stack: err.stack, url: location.href });
 
     // ErrorHandler can be called outside Angular's zone; re-enter to update the UI
-    this.zone.run(() => this.notifications.showError('Something went wrong. Please try again.'));
+    this.zone.run(() => notifications.showError('Something went wrong. Please try again.'));
   }
 }
 
@@ -662,7 +666,7 @@ export class GlobalErrorHandler implements ErrorHandler {
 
 Notes:
 
-- `ErrorHandler` is created very early. Use `inject()` (or `Injector`) carefully: injecting services that depend on `HttpClient` in the constructor can create cyclic dependency problems. A common trick is to get them lazily with `this.injector.get(LoggerService)` inside `handleError`.
+- `ErrorHandler` is created very early. Injecting services that depend on `HttpClient` or the `Router` directly (in the constructor or a field) can create cyclic dependency errors. That is why the example injects only `Injector` and gets `LoggerService` lazily with `this.injector.get(LoggerService)` inside `handleError`.
 - Errors in an RxJS subscription without an `error` callback are reported too, because RxJS rethrows them asynchronously inside the zone.
 - Do not show the raw error to users. Show a friendly message and log the details.
 
@@ -750,18 +754,7 @@ sequenceDiagram
 | Permission directive (`*appHasPermission`) | Hide buttons the user cannot use |
 | Backend | The **real** security: checks the token and permissions on every request |
 
-```ts
-export const authInterceptor: HttpInterceptorFn = (req, next) => {
-  const token = inject(AuthService).getToken();
-  const config = inject(ConfigService);
-
-  // Only attach the token to our own API, never to third-party URLs
-  if (!token || !req.url.startsWith(config.value.apiUrl)) {
-    return next(req);
-  }
-  return next(req.clone({ setHeaders: { Authorization: `Bearer ${token}` } }));
-};
-```
+The auth interceptor itself is shown in [HttpClient and interceptors](08-httpclient-and-interceptors.md#1-auth-token-only-for-your-own-api). The key security rule (attach the token only to your own API origin, and compare origins carefully) is explained in [Angular security](15-security.md#attach-tokens-only-to-your-own-api).
 
 Important architecture points:
 
@@ -993,6 +986,8 @@ Rules that only live in a wiki are forgotten. Automate them.
 
 ### Q6. What is Nx and how does it help architecture?
 
+**What the interviewer is checking:** whether you know how to enforce boundaries with tools in a large codebase.
+
 **Short spoken answer (30–60 seconds):**
 > Nx is a build system for monorepos with good Angular support. It lets me split the code into libraries with types like feature, ui, data-access and util, and scopes for domains, and the enforce-module-boundaries lint rule checks every import against tags, so for example a ui library cannot depend on data-access, and the orders domain cannot import catalog internals. Nx also computes a project graph, runs only affected builds and tests for a change, and caches results locally or remotely, so CI stays fast as the repo grows. Generators keep new libraries consistent.
 
@@ -1021,8 +1016,14 @@ Rules that only live in a wiki are forgotten. Automate them.
 
 ### Q8. Built-in Angular i18n or a runtime library like Transloco?
 
+**What the interviewer is checking:** whether you can compare two approaches and choose based on requirements.
+
 **Short spoken answer (30–60 seconds):**
 > Angular's built-in i18n with @angular/localize marks text with the i18n attribute, extracts it to translation files and compiles one build per locale. It has no runtime cost and supports ICU plurals, but switching language means loading another URL, and changing a translation needs a rebuild. Runtime libraries like Transloco or ngx-translate load JSON translations at runtime, allow instant language switching with one build, and let translators update texts without a deployment, at a small runtime cost. I choose built-in i18n for performance-critical public sites with few language switches, and a runtime library for enterprise apps where users switch languages or translations change often. In both cases I use Angular's locale-aware pipes and plan for RTL and longer text.
+
+**Follow-up questions:**
+- **How do you translate text in TypeScript code with built-in i18n?** — With the `$localize` tagged template: ``$localize`Order saved` ``. It is translated at build time like template text.
+- **How does the `currency` pipe know the format?** — It uses `LOCALE_ID` and the locale data registered with `registerLocaleData` (the CLI does this for you with `--localize`).
 
 **Common mistakes:** Forgetting date, number and currency formatting and RTL.
 
@@ -1032,8 +1033,14 @@ Rules that only live in a wiki are forgotten. Automate them.
 
 ### Q10. Where should business logic live in an Angular app?
 
+**What the interviewer is checking:** separation of concerns and testability.
+
 **Short spoken answer (30–60 seconds):**
 > Not in templates and mostly not in components. Rules like "an order can be cancelled only if it's not shipped" belong in the state layer: a service, a facade, NgRx reducers and selectors, or pure functions in a util library that are easy to unit test. Components call those and display the result. Data mapping and validation of API responses belong in the data-access layer. This way the logic is reusable across screens, testable without the DOM, and the backend can enforce the same rule independently, because the frontend rule is for UX only.
+
+**Follow-up questions:**
+- **Is it wrong to have any logic in a component?** — No. Simple view logic (toggle a panel, format a label) is fine. Business rules that other screens or tests need belong outside.
+- **How do you test a rule like "can cancel only if not shipped"?** — Put it in a pure function (`canCancel(order)`) and unit test it with plain inputs, without TestBed.
 
 **Common mistakes:** Duplicating the same rule in several components.
 
@@ -1049,6 +1056,8 @@ Rules that only live in a wiki are forgotten. Automate them.
 export class SharedModule {}
 ```
 
+**What the interviewer is checking:** whether you can spot module design problems and the DI side effect of providers in shared modules.
+
 **Short spoken answer (30–60 seconds):**
 > Three problems. First, it is a "god module": every feature that imports it depends on everything, so changes ripple and it is hard to see what each feature really uses. Second, it contains feature-specific things, like OrdersWidgetComponent, which belongs to the orders feature, and a chart component that pulls a heavy library into every importer. Third, it provides stateful services. When a lazy-loaded module imports SharedModule, that lazy module's injector gets its own instances of OrdersService and CartService, so you can end up with two carts. I would move feature components into their features, provide services with `providedIn: 'root'`, and split shared into small focused modules or standalone components that import only what they need.
 
@@ -1056,7 +1065,13 @@ export class SharedModule {}
 
 ### Q12. How do you migrate an Angular 16 NgModule codebase toward standalone, safely?
 
+**What the interviewer is checking:** whether you plan a low-risk, incremental migration.
+
 **Short answer:** Incrementally. Write new features as standalone. Use the official schematic `ng generate @angular/core:standalone`, which runs in steps: convert declarations to standalone, remove unnecessary NgModules, then switch bootstrapping to `bootstrapApplication`. Migrate one feature at a time, run tests after each step, and remember that NgModules and standalone components interoperate (a standalone component can import an NgModule and vice versa), so there is no need for a big-bang rewrite. Move module `providers` to `providedIn: 'root'` or route `providers`.
+
+**Follow-up questions:**
+- **What are the three steps of the standalone schematic?** — (1) Convert all components, directives and pipes to standalone. (2) Remove unnecessary NgModule classes. (3) Bootstrap the project with `bootstrapApplication`. Run tests and build after each step.
+- **What can go wrong with providers during the move?** — A service provided in a lazy NgModule gets a new place. If you move it to `providedIn: 'root'`, it becomes one app-wide instance. If it must stay per feature, use route `providers` instead.
 
 ---
 
