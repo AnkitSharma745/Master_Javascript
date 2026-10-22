@@ -2,7 +2,7 @@
 
 > In this document you will learn why Electron security is different from web security, how a small XSS bug can become full control of a user's computer, and how to prevent that by following the official Electron security checklist item by item, with code. You will finish with a complete secure configuration and a code-review exercise. Security is one of the most important Electron interview topics, especially for senior and desktop roles.
 
-**Before this:** [Electron architecture and process model](01-electron-architecture-and-process-model.md) · [IPC and preload scripts](03-ipc-and-preload-scripts.md) · [Web security: XSS, CSRF, CORS, CSP](../10-testing-security-production/05-web-security-xss-csrf-cors-csp.md) · **Interview questions:** [jump to the interview section](#interview-questions)
+**Before this:** [Electron architecture and process model](01-electron-architecture-and-process-model.md) · [IPC and preload scripts](03-ipc-and-preload-scripts.md) · [Web security: XSS, CSRF, CORS, CSP](../01-cs-and-web-fundamentals/08-browser-storage-and-web-security-basics.md) · **Interview questions:** [jump to the interview section](#interview-questions)
 
 ## Table of contents
 
@@ -318,7 +318,7 @@ This lets an HTTPS page load scripts, styles or iframes over plain HTTP ("mixed 
 
 ### What it is
 
-A **Content Security Policy (CSP)** is a list of rules that tells Chromium which sources of scripts, styles, images, connections and frames the page may use. It is your main protection **after** an injection: even if an attacker inserts `<script>` or an inline event handler into the page, CSP can stop it from running. CSP in depth is covered in [Web security: XSS, CSRF, CORS, CSP](../10-testing-security-production/05-web-security-xss-csrf-cors-csp.md).
+A **Content Security Policy (CSP)** is a list of rules that tells Chromium which sources of scripts, styles, images, connections and frames the page may use. It is your main protection **after** an injection: even if an attacker inserts `<script>` or an inline event handler into the page, CSP can stop it from running. CSP in depth is covered in [Web security: XSS, CSRF, CORS, CSP](../01-cs-and-web-fundamentals/08-browser-storage-and-web-security-basics.md).
 
 ### A good default for an Electron app
 
@@ -646,7 +646,7 @@ Practical rules:
 
 - Upgrade at least every few months; track the release schedule.
 - Apply minor/patch releases quickly (they often contain security fixes).
-- Update your other dependencies too (`npm audit`, Dependabot or Renovate). See [Secure auth, secrets and dependencies](../10-testing-security-production/06-secure-auth-secrets-and-dependencies.md).
+- Update your other dependencies too (`npm audit`, Dependabot or Renovate). See [Authentication and authorization](../07-nodejs-backend/09-authentication-and-authorization.md).
 - Ship through a working, signed auto-update channel ([Auto-updates](07-auto-updates.md)).
 
 More on versions: [Release cadence and support policy](01-electron-architecture-and-process-model.md#release-cadence-and-support-policy).

@@ -247,7 +247,7 @@ safeCounts.set("__proto__", 5);
 console.log(safeCounts.get("__proto__")); // 5
 ```
 
-Worse, code that copies untrusted keys into objects (for example, a naive deep merge of JSON) can modify `Object.prototype` itself. This is called **prototype pollution**, and it has caused real vulnerabilities in popular npm packages. A `Map`, or an object created with `Object.create(null)`, has no prototype to pollute. See [Secure auth, secrets and dependencies](../10-testing-security-production/06-secure-auth-secrets-and-dependencies.md).
+Worse, code that copies untrusted keys into objects (for example, a naive deep merge of JSON) can modify `Object.prototype` itself. This is called **prototype pollution**, and it has caused real vulnerabilities in popular npm packages. A `Map`, or an object created with `Object.create(null)`, has no prototype to pollute. See [Authentication and authorization](../07-nodejs-backend/09-authentication-and-authorization.md).
 
 ### Performance
 
@@ -1184,7 +1184,7 @@ const elementDataSafe = new WeakMap();
 
 **Follow-up questions:**
 - **When is explicit cleanup still needed with a WeakMap?** — When something else also references the element, such as a global event listener, a timer, or an RxJS subscription. The `WeakMap` only stops itself from being the cause.
-- **How do you find what retains an object?** — In Chrome DevTools Memory panel, select the object in a heap snapshot and read the "Retainers" section. See [Debugging and profiling](../10-testing-security-production/07-debugging-and-profiling.md).
+- **How do you find what retains an object?** — In Chrome DevTools Memory panel, select the object in a heap snapshot and read the "Retainers" section. See [Debugging and code review](../11-coding-interviews/06-debugging-and-code-review.md).
 
 **Where this is used in real projects:** directives that store per-element state, chart libraries that attach instances to containers, tooltips and popovers.
 

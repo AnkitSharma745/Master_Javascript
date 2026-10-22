@@ -2340,7 +2340,7 @@ console.log(q.dequeue(), q.dequeue()); // 3 4
 **Follow-up questions:**
 - **How do you convert between them?** — `new Map(Object.entries(obj))` and `Object.fromEntries(map)`.
 - **What is `Object.create(null)`?** — An object with no prototype, so no inherited keys. It is a safer plain-object dictionary, but it still only supports string and symbol keys.
-- **What is prototype pollution?** — An attack where user input such as `__proto__` keys modifies `Object.prototype` through unsafe object merging. Using `Map` for user-controlled keys avoids a whole class of these bugs (see [Web security](../10-testing-security-production/05-web-security-xss-csrf-cors-csp.md)).
+- **What is prototype pollution?** — An attack where user input such as `__proto__` keys modifies `Object.prototype` through unsafe object merging. Using `Map` for user-controlled keys avoids a whole class of these bugs (see [Web security](../01-cs-and-web-fundamentals/08-browser-storage-and-web-security-basics.md)).
 
 **Common mistakes:** Using an object to count arbitrary words. Expecting object keys to keep numeric types.
 

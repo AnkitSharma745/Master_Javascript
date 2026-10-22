@@ -133,7 +133,7 @@ Rules:
 - Never log them. Redact them in logs and error messages.
 - Give each service its own credentials with the least privileges it needs.
 
-More in [Secure auth, secrets and dependencies](../10-testing-security-production/06-secure-auth-secrets-and-dependencies.md).
+More in [Authentication and authorization](../07-nodejs-backend/09-authentication-and-authorization.md).
 
 ### `NODE_ENV`
 
@@ -291,7 +291,7 @@ app.use(
 
 Now `logger.info("order placed")` anywhere in the request's async flow includes `requestId`. When you call another service, forward the header: `fetch(url, { headers: { "x-request-id": requestContext.getStore()?.requestId ?? "" } })`. With OpenTelemetry tracing (later), the trace ID plays the same role across services.
 
-The broader topic of logs, metrics and traces is in [Logging, monitoring and observability](../10-testing-security-production/08-logging-monitoring-and-observability.md).
+The broader topic of logs, metrics and traces is in Production Node.js.
 
 ---
 
@@ -594,7 +594,7 @@ CMD ["node", "--max-old-space-size=384", "dist/server.js"]
 
 ## Security hardening
 
-This section covers the Node.js-specific hardening of a service. Attacks like XSS, CSRF and CORS in depth are in [Web security](../10-testing-security-production/05-web-security-xss-csrf-cors-csp.md); secrets and dependency security in [Secure auth, secrets and dependencies](../10-testing-security-production/06-secure-auth-secrets-and-dependencies.md).
+This section covers the Node.js-specific hardening of a service. Attacks like XSS, CSRF and CORS in depth are in [Web security](../01-cs-and-web-fundamentals/08-browser-storage-and-web-security-basics.md); secrets and dependency security in [Authentication and authorization](../07-nodejs-backend/09-authentication-and-authorization.md).
 
 ### Security headers with helmet
 
@@ -751,7 +751,7 @@ Most of your code is other people's code (`node_modules`). Supply-chain attacks 
 - Run **`npm audit`** (or `npm audit --omit=dev` for production dependencies) in CI, and use Dependabot or Renovate for updates.
 - Review new dependencies: maintenance, download counts, install scripts. Fewer dependencies = smaller risk.
 - Consider `npm install --ignore-scripts` in CI where possible (install scripts run arbitrary code).
-- More details: [Modules, npm and packages](03-modules-npm-and-packages.md) and [Secure auth, secrets and dependencies](../10-testing-security-production/06-secure-auth-secrets-and-dependencies.md).
+- More details: [Modules, npm and packages](03-modules-npm-and-packages.md) and [Authentication and authorization](../07-nodejs-backend/09-authentication-and-authorization.md).
 
 ### Least privilege
 
@@ -1089,7 +1089,7 @@ More in [Databases](10-databases.md). Caching to reduce database load is in [Cac
 | **Metrics** | How is the system doing overall, over time? | p95 latency 180 ms, 2% errors, ELU 0.7 |
 | **Traces** | Where did the time go in this request, across services? | API 400 ms = DB 30 ms + payments 350 ms |
 
-Logging was covered above. The full topic (dashboards, alerting, SLOs) is in [Logging, monitoring and observability](../10-testing-security-production/08-logging-monitoring-and-observability.md).
+Logging was covered above. The full topic (dashboards, alerting, SLOs) is in Production Node.js.
 
 ### Metrics with Prometheus
 
@@ -1225,7 +1225,7 @@ What the application must do to make this work:
    - **Queue messages:** new workers must handle old message formats, and old workers must ignore unknown fields.
 4. **Fast rollback:** keep the previous image, automate rollback, and watch error rate and latency after each deploy.
 
-The deployment pipeline itself (CI/CD, environments, approvals) is in [CI/CD and deployment](../10-testing-security-production/10-ci-cd-and-deployment.md).
+The deployment pipeline itself (CI/CD, environments, approvals) is in Production Node.js.
 
 ---
 

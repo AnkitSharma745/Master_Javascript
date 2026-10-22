@@ -29,7 +29,7 @@
 21. [Summary](#summary)
 22. [References](#references)
 
-This document is the **architecture** view. How to hash passwords, build JWTs, write Express auth middleware, set up Passport or implement TOTP is in [Authentication and authorization in Node.js](../07-nodejs-backend/09-authentication-and-authorization.md). The secure auth checklist, secrets management and dependency security are in [Secure auth, secrets and dependencies](../10-testing-security-production/06-secure-auth-secrets-and-dependencies.md).
+This document is the **architecture** view. How to hash passwords, build JWTs, write Express auth middleware, set up Passport or implement TOTP is in [Authentication and authorization in Node.js](../07-nodejs-backend/09-authentication-and-authorization.md). The secure auth checklist, secrets management and dependency security are in [Authentication and authorization](../07-nodejs-backend/09-authentication-and-authorization.md).
 
 ---
 

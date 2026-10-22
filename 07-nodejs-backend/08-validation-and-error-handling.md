@@ -133,7 +133,7 @@ Rules of thumb:
 
 1. **Prefer validation over sanitization.** If a field should be a number, reject `"12abc"`. Do not try to "fix" it. Guessing what the user meant leads to bugs.
 2. **Sanitize only when you must accept rich content** (HTML from a WYSIWYG editor, Markdown).
-3. **Encode at output, not at input.** Store the user's text as it is, and escape it when you render it in HTML, put it in SQL (parameters) or pass it to a shell. The right escaping depends on the destination, and you do not know all destinations when you save the data. Angular escapes interpolated values automatically; SQL drivers escape parameters. XSS is covered in [Web security: XSS, CSRF, CORS, CSP](../10-testing-security-production/05-web-security-xss-csrf-cors-csp.md).
+3. **Encode at output, not at input.** Store the user's text as it is, and escape it when you render it in HTML, put it in SQL (parameters) or pass it to a shell. The right escaping depends on the destination, and you do not know all destinations when you save the data. Angular escapes interpolated values automatically; SQL drivers escape parameters. XSS is covered in [Web security: XSS, CSRF, CORS, CSP](../01-cs-and-web-fundamentals/08-browser-storage-and-web-security-basics.md).
 
 ---
 
@@ -1013,7 +1013,7 @@ Tested: an operation that failed with `503` twice succeeded on the third attempt
 - **Retry budgets:** allow retries only up to a percentage of normal traffic.
 - **Idempotency:** retries of writes need idempotency keys ([REST API design](07-rest-api-design.md#idempotency-keys-for-safe-retries)).
 
-Resilience patterns (circuit breakers, bulkheads, fallbacks) are covered in [Reliability and resilience](../10-testing-security-production/09-reliability-and-resilience.md).
+Resilience patterns (circuit breakers, bulkheads, fallbacks) are covered in [Production Node.js](../07-nodejs-backend/14-production-nodejs.md).
 
 ---
 

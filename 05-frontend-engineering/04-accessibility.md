@@ -928,7 +928,7 @@ test("checkout page has no detectable accessibility violations", async ({ page }
 });
 ```
 
-Also use **role-based queries** in tests: `page.getByRole("button", { name: "Place order" })` (Playwright) or `getByRole` (Testing Library). If a test cannot find a button by its role and name, a screen reader user cannot find it either. See [Component and E2E testing](../10-testing-security-production/04-component-and-e2e-testing-playwright.md).
+Also use **role-based queries** in tests: `page.getByRole("button", { name: "Place order" })` (Playwright) or `getByRole` (Testing Library). If a test cannot find a button by its role and name, a screen reader user cannot find it either. See [Component and E2E testing](../06-angular-16/14-testing.md).
 
 ### 2. Keyboard-only testing (do this for every feature)
 

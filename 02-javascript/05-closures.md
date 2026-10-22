@@ -990,7 +990,7 @@ Other helpful tools:
 - `console.dir(someFunction)` in the Chrome console shows an internal `[[Scopes]]` entry with the captured environments.
 - For Node.js: run `node --inspect app.js` and open `chrome://inspect`, or call `v8.writeHeapSnapshot()` and load the file in DevTools.
 
-More in [Memory management and garbage collection](19-memory-management-and-garbage-collection.md) and [Debugging and profiling](../10-testing-security-production/07-debugging-and-profiling.md).
+More in [Memory management and garbage collection](19-memory-management-and-garbage-collection.md) and [Debugging and code review](../11-coding-interviews/06-debugging-and-code-review.md).
 
 ---
 

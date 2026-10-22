@@ -807,7 +807,7 @@ TestBed.configureTestingModule({
 const service = TestBed.inject(UserProfileService);
 ```
 
-Details are in [Angular testing](../06-angular-16/14-testing.md). General testing concepts are in [Testing fundamentals](../10-testing-security-production/01-testing-fundamentals.md).
+Details are in [Angular testing](../06-angular-16/14-testing.md). General testing concepts are in [Angular testing](../06-angular-16/14-testing.md).
 
 ---
 

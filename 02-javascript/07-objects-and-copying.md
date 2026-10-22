@@ -1066,7 +1066,7 @@ console.log(order.createdAt.getUTCFullYear()); // 2024
 ### Safety notes
 
 - `JSON.parse` throws a `SyntaxError` on invalid input. Always wrap parsing of external data (local storage, messages, files) in `try/catch`.
-- `JSON.parse` only creates data; it never runs code. But parsed data can still be dangerous when merged carelessly. For example, `JSON.parse('{"__proto__": {"isAdmin": true}}')` creates an **own** property named `__proto__`. If a naive deep-merge function later copies it with normal assignment, it can change the prototype of objects (**prototype pollution**). Validate input and use safe merge functions. See [Web security](../10-testing-security-production/05-web-security-xss-csrf-cors-csp.md) and [Runtime validation](../03-typescript/11-runtime-validation-and-type-safe-apis.md).
+- `JSON.parse` only creates data; it never runs code. But parsed data can still be dangerous when merged carelessly. For example, `JSON.parse('{"__proto__": {"isAdmin": true}}')` creates an **own** property named `__proto__`. If a naive deep-merge function later copies it with normal assignment, it can change the prototype of objects (**prototype pollution**). Validate input and use safe merge functions. See [Web security](../01-cs-and-web-fundamentals/08-browser-storage-and-web-security-basics.md) and [Runtime validation](../03-typescript/11-runtime-validation-and-type-safe-apis.md).
 
 ---
 

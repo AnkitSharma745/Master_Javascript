@@ -145,7 +145,7 @@ console.log(`${{ id: 1 }}`); // [object Object]
 console.log(`${null} and ${undefined}`); // null and undefined
 ```
 
-**Security note:** template literals do **not** escape HTML. Building HTML with `${userInput}` and putting it into `innerHTML` creates an XSS hole. Use `textContent`, or let your framework escape values (Angular and React do this for you in templates). See [Web security: XSS, CSRF, CORS, CSP](../10-testing-security-production/05-web-security-xss-csrf-cors-csp.md).
+**Security note:** template literals do **not** escape HTML. Building HTML with `${userInput}` and putting it into `innerHTML` creates an XSS hole. Use `textContent`, or let your framework escape values (Angular and React do this for you in templates). See [Web security: XSS, CSRF, CORS, CSP](../01-cs-and-web-fundamentals/08-browser-storage-and-web-security-basics.md).
 
 ---
 

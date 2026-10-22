@@ -1103,7 +1103,7 @@ A common, balanced pattern for single-page apps:
 
 Many teams go one step further with a **Backend-for-Frontend (BFF)**: the browser only has a session cookie, and the BFF server keeps the tokens and adds them to API calls. No token is ever visible to JavaScript.
 
-No storage choice fixes XSS. If an attacker can run JavaScript in your page, they can make requests as the user. Preventing XSS comes first: see [Web security: XSS, CSRF, CORS, CSP](../10-testing-security-production/05-web-security-xss-csrf-cors-csp.md) and [Secure auth, secrets and dependencies](../10-testing-security-production/06-secure-auth-secrets-and-dependencies.md).
+No storage choice fixes XSS. If an attacker can run JavaScript in your page, they can make requests as the user. Preventing XSS comes first: see [Web security: XSS, CSRF, CORS, CSP](../01-cs-and-web-fundamentals/08-browser-storage-and-web-security-basics.md) and [Authentication and authorization](../07-nodejs-backend/09-authentication-and-authorization.md).
 
 ### Attaching the token: the interceptor idea
 
@@ -1230,7 +1230,7 @@ In your JavaScript, `fetch` rejects with a plain `TypeError` ("Failed to fetch")
 
 ### What it means
 
-The **same-origin policy** stops JavaScript on one origin (scheme + host + port) from reading responses from another origin. **CORS** (Cross-Origin Resource Sharing) is how a **server** says "this other origin is allowed to read my responses", using response headers like `Access-Control-Allow-Origin`. The basics of origins are in [Browser storage and web security basics](../01-cs-and-web-fundamentals/08-browser-storage-and-web-security-basics.md); the full mechanism and its security use are in [Web security: XSS, CSRF, CORS, CSP](../10-testing-security-production/05-web-security-xss-csrf-cors-csp.md).
+The **same-origin policy** stops JavaScript on one origin (scheme + host + port) from reading responses from another origin. **CORS** (Cross-Origin Resource Sharing) is how a **server** says "this other origin is allowed to read my responses", using response headers like `Access-Control-Allow-Origin`. The basics of origins are in [Browser storage and web security basics](../01-cs-and-web-fundamentals/08-browser-storage-and-web-security-basics.md); the full mechanism and its security use are in [Web security: XSS, CSRF, CORS, CSP](../01-cs-and-web-fundamentals/08-browser-storage-and-web-security-basics.md).
 
 Key facts for a frontend developer:
 
@@ -1337,7 +1337,7 @@ function reportError(error, context) {
 }
 ```
 
-A **correlation id** (for example sent as an `X-Request-Id` header and shown in the error message) lets support and backend developers find the exact request in server logs. Never log tokens, passwords or full personal data. More in [Logging, monitoring and observability](../10-testing-security-production/08-logging-monitoring-and-observability.md).
+A **correlation id** (for example sent as an `X-Request-Id` header and shown in the error message) lets support and backend developers find the exact request in server logs. Never log tokens, passwords or full personal data. More in [Production Node.js](../07-nodejs-backend/14-production-nodejs.md).
 
 ---
 
@@ -1770,7 +1770,7 @@ Tested: three parallel calls with the same key made one network call and receive
 - **Does an `HttpOnly` cookie fully protect you from XSS?** — No. An attacker running script in your page can still send requests as the user while the page is open. It only prevents stealing the token for later use elsewhere.
 - **What does `SameSite=Lax` do?** — The cookie is not sent on most cross-site requests (like a form POST from another site), which blocks most CSRF attacks, while still being sent when the user follows a normal link to your site.
 
-**Where this is used in real projects:** Every SPA login design. See [Secure auth, secrets and dependencies](../10-testing-security-production/06-secure-auth-secrets-and-dependencies.md).
+**Where this is used in real projects:** Every SPA login design. See [Authentication and authorization](../07-nodejs-backend/09-authentication-and-authorization.md).
 
 ### Q17. Several requests fail with 401 at the same time because the access token expired. How do you refresh the token correctly?
 

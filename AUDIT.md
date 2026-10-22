@@ -33,7 +33,7 @@ The repository had gone through two earlier stages.
 
 ## 3. Decisions
 
-1. **Simple structure:** Subject → topic documents → interview questions. There are 11 numbered subject folders, each with a `README.md` (study order), numbered topic documents, and an `interview-questions.md` for mixed, cross-topic practice.
+1. **Simple structure:** Subject → topic documents → interview questions. There are 10 numbered subject folders (01–09 and 11), each with a `README.md` (study order) and numbered topic documents. Eight of them also have an `interview-questions.md` for mixed, cross-topic practice. Folder number 10 is intentionally unused (see section 6).
 2. **One standard format for every topic:** concept explanation (what, why, simple explanation, analogy, how it works inside, diagrams, examples from simple to realistic, walkthroughs, real-world use, trade-offs, alternatives, mistakes, best practices). Then **Interview questions**, where each important question has a short spoken answer, detailed explanation, code or diagram, follow-ups with answers, common mistakes and real-world usage. Then a **Summary** and **References**.
 3. **Teach explaining, not just knowing:** the most important topics include a "How to explain this in an interview" section (define → why → how → example → where → trade-offs). A dedicated document, [How to explain technical answers](11-coding-interviews/01-how-to-explain-technical-answers.md), teaches the method with weak vs strong answers.
 4. **Simple English everywhere:** short sentences, plain words, every technical term explained the first time.
@@ -69,7 +69,7 @@ The old folders were removed after their useful content was rewritten into the n
 | `lessons/08-angular` | [06 — Angular 16](06-angular-16/README.md) |
 | `lessons/09-frontend` | [05 — Frontend](05-frontend-engineering/README.md), [09 — System Design](09-system-design/README.md) |
 | `lessons/10-node` | [07 — Node.js](07-nodejs-backend/README.md) |
-| `lessons/11-production` | [10 — Testing, Security, Production](10-testing-security-production/README.md) |
+| `lessons/11-production` | [07/14 Production Node.js](07-nodejs-backend/14-production-nodejs.md), [01/08 Web security basics](01-cs-and-web-fundamentals/08-browser-storage-and-web-security-basics.md) |
 | `lessons/12-algorithms` | [01/02 Data structures](01-cs-and-web-fundamentals/02-data-structures-and-big-o.md), [11/02 Problem solving](11-coding-interviews/02-problem-solving-and-complexity.md) |
 | `lessons/13-communication`, `interviews/mock-interviews.md` | [11/01 How to explain answers](11-coding-interviews/01-how-to-explain-technical-answers.md), [11/07 Project and behavioral](11-coding-interviews/07-project-discussion-and-behavioral.md) |
 | `interviews/answers.md`, `questions.json` | Questions were rewritten with full answers inside the relevant topic documents and the subject interview banks |
@@ -83,7 +83,7 @@ The old folders were removed after their useful content was rewritten into the n
 | `references/` | [REFERENCES.md](REFERENCES.md) |
 | `docs/audit`, `docs/implementation-report.md` | This document |
 
-**Removed without a replacement (on purpose):** `curriculum/` (manifest and generated indexes), `revision/` (flashcards, spaced-repetition CLI, scoring templates), `interviews/diagnostic.md`, `interviews/tracks.md`, `docs/lesson-template.md`, `docs/study-guide.md`, `CONTRIBUTING.md` (written for the manifest workflow), and the `scripts/` and `tests/` that existed only to check those systems. The owner asked for no learning-management features. A simple checklist page replaces them.
+**Removed without a replacement (on purpose):** `curriculum/` (manifest and generated indexes), `revision/` (flashcards, spaced-repetition CLI, scoring templates), `interviews/diagnostic.md`, `interviews/tracks.md`, `docs/lesson-template.md`, `docs/study-guide.md`, `CONTRIBUTING.md` (written for the manifest workflow), and the old `scripts/`, `tests/`, `labs/`, `projects/` and `tsconfig.json` that existed only to run those systems. One small script remains: `npm run check` validates links and Mermaid diagrams (also run by the GitHub workflow). The owner asked for no learning-management features. A simple checklist page replaces them.
 
 ## 5. One home per concept
 
@@ -93,7 +93,7 @@ To avoid repeating explanations, each overlapping concept has one main document:
 | --- | --- | --- |
 | Rendering pipeline | [01/07](01-cs-and-web-fundamentals/07-browser-architecture-and-rendering.md) | Frontend performance |
 | Web security basics (origin, SOP, cookies) | [01/08](01-cs-and-web-fundamentals/08-browser-storage-and-web-security-basics.md) | Security, Angular, Node |
-| XSS, CSRF, CORS, CSP in depth | [10/05](10-testing-security-production/05-web-security-xss-csrf-cors-csp.md) | Angular security, Electron security |
+| XSS, CSRF, CORS, CSP essentials | [01/08](01-cs-and-web-fundamentals/08-browser-storage-and-web-security-basics.md) | Angular security, Node.js production, Electron security |
 | Browser event loop | [02/16](02-javascript/16-event-loop.md) | Node event loop (differences only) |
 | Node event loop phases | [07/02](07-nodejs-backend/02-node-event-loop.md) | JS event loop |
 | `class` language mechanics | [02/09](02-javascript/09-classes.md) | OOP chapters |
@@ -104,3 +104,55 @@ To avoid repeating explanations, each overlapping concept has one main document:
 | Auth implementation | [07/09](07-nodejs-backend/09-authentication-and-authorization.md) | Auth architecture, secure auth checklist |
 | Debounce/throttle | [02/20](02-javascript/20-debounce-throttle-and-performance.md) | Polyfills, RxJS |
 | Polyfill implementations | [11/04](11-coding-interviews/04-javascript-polyfills-and-implementations.md) | Topic docs (core idea only) |
+
+## 6. Scope changes made during the rebuild
+
+The owner made three scope decisions while the work was in progress:
+
+1. **Subject 10 (Testing, Security and Production) was dropped.** The repository was already very large. The folder was removed before any of it was written. Links that pointed to it now go to the closest existing document:
+   - security → [01/08 Web security basics](01-cs-and-web-fundamentals/08-browser-storage-and-web-security-basics.md) and [07/09 Auth](07-nodejs-backend/09-authentication-and-authorization.md)
+   - observability, reliability, CI/CD → [07/14 Production Node.js](07-nodejs-backend/14-production-nodejs.md)
+   - testing → [06/14 Angular testing](06-angular-16/14-testing.md)
+   - debugging → [11/06 Debugging and code review](11-coding-interviews/06-debugging-and-code-review.md)
+2. **Subject 01 was kept lighter.** The six full documents stayed. The two remaining topics, operating systems (03) and browser storage with web-security basics (08), were written as compact documents, because they are common interview topics. Subject 01 has no mixed interview-questions file.
+3. **One subject at a time.** After JavaScript, each subject was finished and reviewed before the next one started.
+
+## 7. What the repository contains now
+
+| Subject | Topic docs | Interview questions in topic docs | Mixed question bank |
+| --- | --- | --- | --- |
+| 01 Core CS and web fundamentals | 8 | 164 | — |
+| 02 JavaScript | 21 | 462 | yes (26 mixed + 54 rapid) |
+| 03 TypeScript | 12 | 215 | yes (21 mixed + 52 rapid) |
+| 04 OOP, SOLID, design patterns | 9 + runnable examples | 177 | yes (28 mixed + 60 rapid) |
+| 05 Frontend engineering | 10 + HTML demos | 207 | yes (25 mixed + 56 rapid) |
+| 06 Angular 16 | 16 | 272 | yes (26 mixed + 65 rapid) |
+| 07 Node.js and backend | 14 | 278 | yes (25 mixed + 58 rapid) |
+| 08 Electron and desktop | 9 | 174 | yes (24 mixed + 55 rapid) |
+| 09 System design (6 concepts + 8 case studies) | 14 | 202 | yes (26 mixed + 53 rapid) |
+| 11 Coding interviews | 7 | 201 (including 105 mixed output questions) | — |
+| **Total** | **120** | **about 2,350** | **8 banks** |
+
+In total there are about 1.5 million words and 510 Mermaid diagrams.
+
+## 8. Validation performed
+
+- **Writing check:** every subject except 01 and 11 got a separate editor pass after it was written. The editors fixed technical errors, made version facts consistent, removed duplicate explanations and checked the style. Bugs they found include:
+  - a token-refresh retry that never sent the new token (Angular 08)
+  - a sender check that rejected the real app (Electron 07)
+  - a login rate-limit key that blocked neither attack (Node 09/14)
+  - a dialog that could repeat a delete (Frontend 01/04)
+  - several wrong outputs and wrong version dates
+- **Code:** JavaScript examples and every output-prediction answer were run with Node.js 22.20.
+  - TypeScript examples were type-checked with TypeScript 5.9 in `--strict` mode.
+  - Angular 16 examples were compiled and run with the real Angular 16.2.12 compiler, RxJS 7.8.2 and zone.js, using a local install.
+  - DOM examples were run with jsdom.
+- **Diagrams and links:** `npm run check` parses all 510 Mermaid diagrams and checks about 8,900 internal links and anchors. It passes with 0 broken diagrams and 0 broken links.
+- **Version facts:** checked against primary sources: TC39 proposals, MDN compatibility data, nodejs.org, angular.dev and the Angular changelog, electronjs.org and its release schedule, TypeScript release notes and RFCs.
+
+## 9. Known gaps
+
+- **Not executed:** packages that were not installed locally (Express, NgRx, the Angular router, React, Electron itself, Redis, RabbitMQ, Kafka, Prisma, Zod in some places) and browser-only APIs. This code was written from the official documentation and reviewed, but not run. The documents say which examples were not run.
+- **Length:** most documents are longer than first planned (8,000–17,000 words), because of the many examples and interview answers. Each has a table of contents and a two-minute summary at the end.
+- **Dropped topics (by the owner's choice):** dedicated chapters on Jest/Vitest/Playwright, CI/CD, observability and resilience patterns. The essentials appear inside Angular 14 (testing), Node.js 14 (production) and CS 08 (web security).
+- **Next phase:** a dedicated data structures and algorithms (DSA) section, which the owner will specify.

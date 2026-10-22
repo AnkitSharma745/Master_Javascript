@@ -32,7 +32,7 @@
 
 The example app is **OrderDesk**, an Angular point-of-sale app on Windows store PCs. It has a main window, a customer-facing second screen, a `PrinterAgent.exe` helper for the receipt printer, and a utility process that syncs orders to the backend. Stores are often unattended at night, so the app must recover from failures without a technician.
 
-General observability concepts (structured logs, metrics, traces, alerting) are covered in [Logging, monitoring and observability](../10-testing-security-production/08-logging-monitoring-and-observability.md), and resilience patterns in [Reliability and resilience](../10-testing-security-production/09-reliability-and-resilience.md). This document focuses on what is specific to Electron.
+General observability concepts (structured logs, metrics, traces, alerting) are covered in [Production Node.js](../07-nodejs-backend/14-production-nodejs.md), and resilience patterns in [Production Node.js](../07-nodejs-backend/14-production-nodejs.md). This document focuses on what is specific to Electron.
 
 ---
 

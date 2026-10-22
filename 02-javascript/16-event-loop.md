@@ -955,7 +955,7 @@ Often the best fix is to avoid the work: render only the visible rows (virtual s
 
 ### How to find long tasks
 
-- The **Performance** panel in Chrome DevTools marks long tasks with a red corner. See [Debugging and profiling](../10-testing-security-production/07-debugging-and-profiling.md).
+- The **Performance** panel in Chrome DevTools marks long tasks with a red corner. See [Debugging and code review](../11-coding-interviews/06-debugging-and-code-review.md).
 - In production, you can observe them with `PerformanceObserver`:
 
 ```js
@@ -1256,7 +1256,7 @@ In Electron, the **main process** controls all windows. If the main process bloc
 
 Tests should not wait for real time. Test tools replace the timer functions with fake ones:
 
-- Jest and Vitest: `jest.useFakeTimers()` / `vi.useFakeTimers()`, then move time forward with `advanceTimersByTime(ms)`. Remember that promise callbacks are microtasks, so after advancing timers you often need an `await` to let them run. See [Unit testing with Jest and Vitest](../10-testing-security-production/02-unit-testing-jest-and-vitest.md).
+- Jest and Vitest: `jest.useFakeTimers()` / `vi.useFakeTimers()`, then move time forward with `advanceTimersByTime(ms)`. Remember that promise callbacks are microtasks, so after advancing timers you often need an `await` to let them run. See [Angular testing](../06-angular-16/14-testing.md).
 - Angular: `fakeAsync` with `tick(ms)`, `flush()` and `flushMicrotasks()`. See [Angular testing](../06-angular-16/14-testing.md).
 
 ---

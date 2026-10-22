@@ -826,7 +826,7 @@ Details and measurement are in [web performance and Core Web Vitals](../05-front
 4. **Coupon abuse.** Rate limit coupon attempts. Coupons have usage limits enforced with conditional updates, just like inventory.
 5. **Account security.** Rate-limit login, detect credential stuffing (many failed logins from many IPs), offer MFA. See [authentication](../07-nodejs-backend/09-authentication-and-authorization.md).
 6. **Insecure direct object references.** `GET /orders/o_55120` must check that the order belongs to the signed-in user. Use non-guessable IDs as an extra layer, not as the only check.
-7. **XSS and CSP.** Product descriptions from a CMS and user reviews are untrusted content. Sanitize rich text and use a strict CSP. A script injected into a checkout page can steal card details typed into the page ("Magecart" style attacks), which is one more reason to use provider-hosted fields in an iframe. See [web security](../10-testing-security-production/05-web-security-xss-csrf-cors-csp.md).
+7. **XSS and CSP.** Product descriptions from a CMS and user reviews are untrusted content. Sanitize rich text and use a strict CSP. A script injected into a checkout page can steal card details typed into the page ("Magecart" style attacks), which is one more reason to use provider-hosted fields in an iframe. See [web security](../01-cs-and-web-fundamentals/08-browser-storage-and-web-security-basics.md).
 8. **Bots and scalpers.** Edge bot detection, per-account limits for flash sales, sign-in required for limited items.
 9. **Personal data.** Addresses and order history are personal data. Encrypt at rest, restrict access, and never put them in URLs or logs.
 
@@ -866,7 +866,7 @@ Two rules for money:
 1. **Unknown is not failure.** A timeout means "we don't know". Find out before you tell the user it failed.
 2. **Retry with the same key.** Every retry to the provider uses the same idempotency key, so a retry cannot double-charge.
 
-See [reliability and resilience](../10-testing-security-production/09-reliability-and-resilience.md) for timeouts, retries and circuit breakers.
+See [Production Node.js](../07-nodejs-backend/14-production-nodejs.md) for timeouts, retries and circuit breakers.
 
 ---
 
@@ -879,7 +879,7 @@ See [reliability and resilience](../10-testing-security-production/09-reliabilit
 - **Logs** never contain card data, full addresses or tokens.
 - **Flash-sale dashboard:** waiting room size, admission rate, Redis stock counter, sold count, error rate.
 
-See [logging, monitoring and observability](../10-testing-security-production/08-logging-monitoring-and-observability.md).
+See [Production Node.js](../07-nodejs-backend/14-production-nodejs.md).
 
 ---
 

@@ -637,7 +637,7 @@ There is no perfect place. XSS is game over for most designs (an attacker runnin
 3. **Check `Origin` / `Sec-Fetch-Site`** headers on state-changing requests and reject unexpected origins.
 4. **Require a custom header or JSON content type** for APIs; cross-site HTML forms cannot set custom headers, and adding them from scripts triggers a CORS preflight.
 
-Angular's `HttpClient` has built-in support for the cookie-to-header pattern: it reads a cookie named `XSRF-TOKEN` and sends its value in the `X-XSRF-TOKEN` header on mutating requests to relative URLs. The server must set that cookie and check the header. Full coverage of CSRF, XSS and CORS is in [Web security: XSS, CSRF, CORS, CSP](../10-testing-security-production/05-web-security-xss-csrf-cors-csp.md).
+Angular's `HttpClient` has built-in support for the cookie-to-header pattern: it reads a cookie named `XSRF-TOKEN` and sends its value in the `X-XSRF-TOKEN` header on mutating requests to relative URLs. The server must set that cookie and check the header. Full coverage of CSRF, XSS and CORS is in [Web security: XSS, CSRF, CORS, CSP](../01-cs-and-web-fundamentals/08-browser-storage-and-web-security-basics.md).
 
 ### Setting auth cookies correctly
 
@@ -1395,7 +1395,7 @@ Use this for "How does authentication work in your Node API?" or "Sessions or JW
 - **Log security events** (logins, failures, permission denials, token reuse) without logging secrets, and alert on anomalies.
 - **Test authorization** with automated tests that try forbidden actions and other users' objects.
 
-The broader security checklist (secret management, dependency security, auth hardening) is in [Secure auth, secrets and dependencies](../10-testing-security-production/06-secure-auth-secrets-and-dependencies.md).
+The broader security checklist (secret management, dependency security, auth hardening) is in Authentication and authorization.
 
 ---
 

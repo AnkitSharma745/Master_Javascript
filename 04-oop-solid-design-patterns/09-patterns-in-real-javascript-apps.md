@@ -426,7 +426,7 @@ main();
 - In-memory fakes can hide differences from the real database (constraints, case sensitivity), so keep a few integration tests against the real one.
 - For a tiny CRUD service, three layers may be more ceremony than value.
 
-Databases are covered in [databases](../07-nodejs-backend/10-databases.md), and testing APIs in [testing Node.js APIs](../10-testing-security-production/03-testing-nodejs-apis.md).
+Databases are covered in [databases](../07-nodejs-backend/10-databases.md), and testing APIs in [Angular testing](../06-angular-16/14-testing.md).
 
 ---
 

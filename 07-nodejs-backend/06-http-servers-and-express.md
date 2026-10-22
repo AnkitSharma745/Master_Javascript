@@ -816,7 +816,7 @@ app.use(compression());       // gzip responses (often done by the reverse proxy
 | `cookie-parser` | Parses the `Cookie` header into `req.cookies` |
 | `express-rate-limit` | Limits requests per client (covered in [Production Node.js](14-production-nodejs.md)) |
 
-CORS and security headers are explained in depth in [Web security: XSS, CSRF, CORS, CSP](../10-testing-security-production/05-web-security-xss-csrf-cors-csp.md).
+CORS and security headers are explained in depth in [Web security: XSS, CSRF, CORS, CSP](../01-cs-and-web-fundamentals/08-browser-storage-and-web-security-basics.md).
 
 ### Middleware order matters
 
@@ -1391,7 +1391,7 @@ process.on("SIGTERM", () => {
 Notice two design choices:
 
 1. **Factories instead of global singletons.** `createProductService(repo)` receives its dependency. This is simple manual **dependency injection** (explained in [Dependency inversion and injection](../04-oop-solid-design-patterns/05-dependency-inversion-and-injection.md)). In tests you pass a fake repository.
-2. **`app.ts` does not call `listen()`.** Tests import `createApp()` and send requests with a library like `supertest` without opening a real port (see [Testing Node.js APIs](../10-testing-security-production/03-testing-nodejs-apis.md)). `server.ts` is the only file that deals with ports, timeouts and shutdown. A complete graceful shutdown is in [Production Node.js](14-production-nodejs.md#graceful-shutdown).
+2. **`app.ts` does not call `listen()`.** Tests import `createApp()` and send requests with a library like `supertest` without opening a real port (see [Angular testing](../06-angular-16/14-testing.md)). `server.ts` is the only file that deals with ports, timeouts and shutdown. A complete graceful shutdown is in [Production Node.js](14-production-nodejs.md#graceful-shutdown).
 
 ---
 

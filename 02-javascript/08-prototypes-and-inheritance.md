@@ -912,7 +912,7 @@ MDN warns that changing an object's `[[Prototype]]` is a very slow operation in 
 - **Polyfills** (core-js through Babel or the Angular CLI) patch built-in prototypes with standard methods for older browsers.
 - **Null-prototype objects** are used for caches and lookup tables (for example, results of `Object.groupBy`, and internal caches in libraries).
 - **Mixins** copy methods onto a class prototype (`Object.assign(Target.prototype, mixin)`) to share behavior without a deep hierarchy. See [Composition, inheritance and mixins](../04-oop-solid-design-patterns/02-composition-inheritance-and-mixins.md).
-- **Security**: prototype pollution vulnerabilities in deep-merge and query-string libraries come from writing to `__proto__` or `constructor.prototype`. See [Web security](../10-testing-security-production/05-web-security-xss-csrf-cors-csp.md).
+- **Security**: prototype pollution vulnerabilities in deep-merge and query-string libraries come from writing to `__proto__` or `constructor.prototype`. See [Web security](../01-cs-and-web-fundamentals/08-browser-storage-and-web-security-basics.md).
 
 ---
 
@@ -1446,7 +1446,7 @@ delete Object.prototype.isAdmin; // clean up
 - **How do you fix `unsafeMerge`?** — Skip `__proto__`, `constructor` and `prototype` keys, loop with `Object.keys` (own keys only), or use `structuredClone`/a vetted library; validate input first.
 - **Does `Object.freeze(Object.prototype)` help?** — It blocks pollution, and some hardened environments do it, but it can break libraries that patch prototypes (including polyfills), so test carefully.
 
-More in [Web security](../10-testing-security-production/05-web-security-xss-csrf-cors-csp.md) and [Secure auth, secrets and dependencies](../10-testing-security-production/06-secure-auth-secrets-and-dependencies.md).
+More in [Web security](../01-cs-and-web-fundamentals/08-browser-storage-and-web-security-basics.md) and [Authentication and authorization](../07-nodejs-backend/09-authentication-and-authorization.md).
 
 ---
 

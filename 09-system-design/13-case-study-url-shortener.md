@@ -680,7 +680,7 @@ Not needed. Stream processing gives at-least-once delivery, so a click can rarel
 7. **Privacy of analytics.** Store country, referrer domain and device category, not raw IPs or full referrer URLs. Only the link owner sees stats.
 8. **Authorization.** Only the owner (or their team) can edit, disable or see stats of a link. Check ownership on every management request.
 
-See [web security](../10-testing-security-production/05-web-security-xss-csrf-cors-csp.md) and the OWASP guidance on unvalidated redirects.
+See [web security](../01-cs-and-web-fundamentals/08-browser-storage-and-web-security-basics.md) and the OWASP guidance on unvalidated redirects.
 
 ---
 
@@ -709,7 +709,7 @@ See [scalability and core building blocks](02-scalability-and-core-building-bloc
 | Bad deploy of redirect service | Canary releases and automatic rollback on error-rate increase. Redirects are the most critical path. |
 | Code collision on insert | Unique constraint fails; generate a new code and retry (rare). |
 
-See [reliability and resilience](../10-testing-security-production/09-reliability-and-resilience.md).
+See [Production Node.js](../07-nodejs-backend/14-production-nodejs.md).
 
 ---
 
@@ -721,7 +721,7 @@ See [reliability and resilience](../10-testing-security-production/09-reliabilit
 - **Analytics pipeline:** events published, events dropped, stream lag, aggregate freshness.
 - **Synthetic checks:** a set of known short links is requested from several regions every minute. If they fail, page the on-call engineer — this catches problems before users report them.
 
-See [logging, monitoring and observability](../10-testing-security-production/08-logging-monitoring-and-observability.md).
+See [Production Node.js](../07-nodejs-backend/14-production-nodejs.md).
 
 ---
 

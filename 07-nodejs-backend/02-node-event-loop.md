@@ -845,7 +845,7 @@ When lag is high, find which function blocks:
 - **Flame graphs:** tools like Clinic.js (`clinic flame`) or `0x`.
 - **Logs:** log slow requests with timing; correlate lag spikes with endpoints.
 
-More in [Debugging and profiling](../10-testing-security-production/07-debugging-and-profiling.md).
+More in [Debugging and code review](../11-coding-interviews/06-debugging-and-code-review.md).
 
 ## Browser vs Node.js event loop
 

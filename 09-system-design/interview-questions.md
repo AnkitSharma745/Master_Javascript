@@ -493,7 +493,7 @@ The "independent failures" assumption is important. Two replicas in the same dat
 
 **Where this is used in real projects:** Setting SLOs, deciding which calls must be synchronous, and reviewing microservice designs that grew long call chains.
 
-Topics: [Availability, redundancy and failover](02-scalability-and-core-building-blocks.md#availability-redundancy-and-failover) · [Queues](02-scalability-and-core-building-blocks.md#queues-and-asynchronous-processing) · [Reliability and resilience](../10-testing-security-production/09-reliability-and-resilience.md)
+Topics: [Availability, redundancy and failover](02-scalability-and-core-building-blocks.md#availability-redundancy-and-failover) · [Queues](02-scalability-and-core-building-blocks.md#queues-and-asynchronous-processing) · [Production Node.js](../07-nodejs-backend/14-production-nodejs.md)
 
 ---
 
@@ -1217,7 +1217,7 @@ Compare with the URL shortener: there, a 7-character code is fine because short 
 
 **Where this is used in real projects:** File sharing, document tools, photo albums, invoice links sent by email.
 
-Topics: [File upload: security](14-case-study-file-upload-service.md#security) · [URL shortener: generating short codes](13-case-study-url-shortener.md#deep-dive-1-generating-short-codes) · [Blob storage](02-scalability-and-core-building-blocks.md#blob-storage) · [Web security](../10-testing-security-production/05-web-security-xss-csrf-cors-csp.md)
+Topics: [File upload: security](14-case-study-file-upload-service.md#security) · [URL shortener: generating short codes](13-case-study-url-shortener.md#deep-dive-1-generating-short-codes) · [Blob storage](02-scalability-and-core-building-blocks.md#blob-storage) · [Web security](../01-cs-and-web-fundamentals/08-browser-storage-and-web-security-basics.md)
 
 ---
 
@@ -1296,7 +1296,7 @@ flowchart LR
 
 **Where this is used in real projects:** Any product with users in the EU or with privacy-focused enterprise customers.
 
-Topics: [Multi-tenancy models](06-auth-architecture-and-multi-tenancy.md#multi-tenancy-models) · [Audit logs](06-auth-architecture-and-multi-tenancy.md#audit-logs) · [Queues](02-scalability-and-core-building-blocks.md#queues-and-asynchronous-processing) · [Logging and observability](../10-testing-security-production/08-logging-monitoring-and-observability.md)
+Topics: [Multi-tenancy models](06-auth-architecture-and-multi-tenancy.md#multi-tenancy-models) · [Audit logs](06-auth-architecture-and-multi-tenancy.md#audit-logs) · [Queues](02-scalability-and-core-building-blocks.md#queues-and-asynchronous-processing) · [Logging and observability](../07-nodejs-backend/14-production-nodejs.md)
 
 ---
 
@@ -1330,7 +1330,7 @@ Frontend metrics (real user monitoring) belong here too: Core Web Vitals, JavaSc
 
 **Where this is used in real projects:** On-call, incident response and the review of every new design.
 
-Topics: [Step 7: bottlenecks, failures and trade-offs](01-system-design-interview-approach.md#step-7-bottlenecks-failures-and-trade-offs) · [Measuring a cache](03-caching-strategies-and-invalidation.md#measuring-a-cache) · [Frontend error handling and observability](05-frontend-architecture-at-scale.md#error-handling-and-observability) · [Logging, monitoring and observability](../10-testing-security-production/08-logging-monitoring-and-observability.md)
+Topics: [Step 7: bottlenecks, failures and trade-offs](01-system-design-interview-approach.md#step-7-bottlenecks-failures-and-trade-offs) · [Measuring a cache](03-caching-strategies-and-invalidation.md#measuring-a-cache) · [Frontend error handling and observability](05-frontend-architecture-at-scale.md#error-handling-and-observability) · [Production Node.js](../07-nodejs-backend/14-production-nodejs.md)
 
 ---
 

@@ -975,7 +975,7 @@ The admin portal is a high-value target. One bug can leak all customers' data.
    ```
 
 2. **Authentication.** SSO through OIDC (authorization code flow) handled by the BFF. The browser holds only an `HttpOnly`, `Secure`, `SameSite=Lax` session cookie. See [auth architecture](06-auth-architecture-and-multi-tenancy.md).
-3. **CSRF.** Cookie sessions need CSRF protection on state-changing requests (SameSite cookies plus a CSRF token header). Angular's `HttpClient` has built-in XSRF token support. Details in [web security](../10-testing-security-production/05-web-security-xss-csrf-cors-csp.md).
+3. **CSRF.** Cookie sessions need CSRF protection on state-changing requests (SameSite cookies plus a CSRF token header). Angular's `HttpClient` has built-in XSRF token support. Details in [web security](../01-cs-and-web-fundamentals/08-browser-storage-and-web-security-basics.md).
 4. **XSS.** Angular escapes interpolated values by default. Never use `bypassSecurityTrustHtml` on user content. Add a strict Content Security Policy. See [Angular security](../06-angular-16/15-security.md).
 5. **Authorization on every endpoint**, including exports and bulk actions. Exports are a common hole: the list endpoint checks regions, but the export worker forgets to.
 6. **Impersonation** (the general design is in [admin impersonation with audit](06-auth-architecture-and-multi-tenancy.md#admin-impersonation-with-audit)). Platform staff must give a reason. The session is time-limited. A banner shows "You are acting as Priya Nair (Acme)". Every event stores both `actorId` and `impersonatorId`. Some actions (changing security settings, deleting the tenant) are blocked during impersonation.
@@ -1011,7 +1011,7 @@ This system is not traffic-heavy, but it must handle **big tenants** and **stead
 | Export job fails | "Export failed. Try again." | The job retries a few times with backoff, then goes to a dead-letter queue. |
 | Permission removed mid-session | Button disappears, or "You no longer have access". | 403 triggers a reload of `/api/me`. |
 
-The patterns (timeouts, retries, circuit breakers) are in [reliability and resilience](../10-testing-security-production/09-reliability-and-resilience.md).
+The patterns (timeouts, retries, circuit breakers) are in [Production Node.js](../07-nodejs-backend/14-production-nodejs.md).
 
 ---
 
@@ -1026,7 +1026,7 @@ You must be able to answer: "Is the portal slow for tenant Acme right now, and w
 - **The audit log is not the application log.** The audit log is a business record for customers and auditors, kept for years. Application logs are for engineers and are deleted after weeks.
 - **Alerts:** outbox backlog older than 5 minutes, p95 above target for 10 minutes, any failed cross-tenant test in production synthetic checks.
 
-More in [logging, monitoring and observability](../10-testing-security-production/08-logging-monitoring-and-observability.md).
+More in [Production Node.js](../07-nodejs-backend/14-production-nodejs.md).
 
 ---
 

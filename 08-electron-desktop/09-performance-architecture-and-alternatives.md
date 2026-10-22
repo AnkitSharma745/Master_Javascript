@@ -846,7 +846,7 @@ flowchart TD
     INT --> UNIT["Unit tests<br/>pure main-process logic, Angular components and services"]
 ```
 
-1. **Unit tests (many):** pure logic from main (validation, config merge, crash-loop guard, sync engine) and Angular components and services with a fake `window.orderDesk`. Run with Jest or Vitest (main) and the Angular test runner (renderer). See [Unit testing with Jest and Vitest](../10-testing-security-production/02-unit-testing-jest-and-vitest.md) and [Angular testing](../06-angular-16/14-testing.md).
+1. **Unit tests (many):** pure logic from main (validation, config merge, crash-loop guard, sync engine) and Angular components and services with a fake `window.orderDesk`. Run with Jest or Vitest (main) and the Angular test runner (renderer). See [Angular testing](../06-angular-16/14-testing.md) and [Angular testing](../06-angular-16/14-testing.md).
 2. **Integration tests (some):** call IPC handler functions directly with a fake `event`, against a real temporary SQLite file.
 3. **End-to-end tests (few):** start the real Electron app and click through key flows.
 
@@ -934,7 +934,7 @@ Practical notes:
 - Run E2E tests on **Windows CI runners** if Windows is your main platform.
 - **Spectron**, the old Electron testing framework, was **deprecated in 2022** and does not work with modern Electron. Use Playwright or WebdriverIO (with its Electron service) instead.
 
-End-to-end testing in general is covered in [Component and E2E testing with Playwright](../10-testing-security-production/04-component-and-e2e-testing-playwright.md).
+End-to-end testing in general is covered in [Angular testing](../06-angular-16/14-testing.md).
 
 ---
 

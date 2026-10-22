@@ -960,7 +960,7 @@ ng.profiler.timeChangeDetection()
 
 Use it to see the full picture: scripting, style calculation, layout and paint. Record while you reproduce the slow interaction, then look for **long tasks** (red corners) and expand the call tree to find your functions. Angular's change detection appears as calls to `tick` / `detectChanges` / your template functions (component template functions are named after the component, for example `OrdersTableComponent_Template`).
 
-Debugging and profiling in general is covered in [Debugging and profiling](../10-testing-security-production/07-debugging-and-profiling.md).
+Debugging and profiling in general is covered in [Debugging and code review](../11-coding-interviews/06-debugging-and-code-review.md).
 
 ## Performance checklist
 

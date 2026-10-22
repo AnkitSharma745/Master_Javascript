@@ -1382,7 +1382,7 @@ More rules:
 - **No secrets in URLs.** Tokens and API keys in query strings end up in logs, browser history and `Referer` headers. Use the `Authorization` header.
 - **Validate all input** (types, ranges, lengths, enums) and reject unknown fields. See [Validation and error handling](08-validation-and-error-handling.md).
 - **Do not leak internals** in errors (stack traces, SQL, hostnames).
-- **CORS**: allow only your own frontends. CORS is a browser rule, not an access control for your API. See [Web security: XSS, CSRF, CORS, CSP](../10-testing-security-production/05-web-security-xss-csrf-cors-csp.md).
+- **CORS**: allow only your own frontends. CORS is a browser rule, not an access control for your API. See [Web security: XSS, CSRF, CORS, CSP](../01-cs-and-web-fundamentals/08-browser-storage-and-web-security-basics.md).
 - **Log security events** (failed logins, permission denials) without logging passwords or tokens.
 
 ---

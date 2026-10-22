@@ -911,7 +911,7 @@ export function createCart() {
 
 **Where this is used in real projects:** legacy Node services with module-level state, Angular tests that share a service instance outside `TestBed`.
 
-Draws on: [Creational patterns: problems with singletons](06-creational-patterns.md#problems-with-singletons), [Dependency inversion and injection: DI for testability](05-dependency-inversion-and-injection.md#di-for-testability). Testing details: [Unit testing with Jest and Vitest](../10-testing-security-production/02-unit-testing-jest-and-vitest.md).
+Draws on: [Creational patterns: problems with singletons](06-creational-patterns.md#problems-with-singletons), [Dependency inversion and injection: DI for testability](05-dependency-inversion-and-injection.md#di-for-testability). Testing details: [Angular testing](../06-angular-16/14-testing.md).
 
 ### Q17. Security: where can OOP features and design patterns give a false sense of security?
 
@@ -1200,7 +1200,7 @@ classDiagram
 
 **Where this is used in real projects:** winston (logger plus transports), pino (with transports and child loggers, which work like context decorators).
 
-Draws on: [Structural patterns: Bridge](07-structural-patterns.md#bridge), [Structural patterns: Decorator](07-structural-patterns.md#decorator), [Creational patterns: a better way](06-creational-patterns.md#a-better-way-one-instance-passed-in). Observability: [Logging, monitoring and observability](../10-testing-security-production/08-logging-monitoring-and-observability.md).
+Draws on: [Structural patterns: Bridge](07-structural-patterns.md#bridge), [Structural patterns: Decorator](07-structural-patterns.md#decorator), [Creational patterns: a better way](06-creational-patterns.md#a-better-way-one-instance-passed-in). Observability: [Production Node.js](../07-nodejs-backend/14-production-nodejs.md).
 
 ### Q26. In an Electron app, where do the composition root, singletons and the Facade pattern live, and what is different from a web app?
 
@@ -1250,7 +1250,7 @@ Draws on: [Patterns in real JavaScript apps: Electron](09-patterns-in-real-javas
 
 **Where this is used in real projects:** large data tables, maps with many markers, game loops, reactive state libraries.
 
-Draws on: [OOP: the four pillars: closures](01-oop-four-pillars.md#way-2-closures-the-older-still-useful-way), [Structural patterns: Flyweight](07-structural-patterns.md#flyweight), [Structural patterns, Q21](07-structural-patterns.md#q21-do-wrappers-like-decorators-and-proxies-hurt-performance), [Creational patterns: object pool](06-creational-patterns.md#object-pool). Profiling: [Debugging and profiling](../10-testing-security-production/07-debugging-and-profiling.md).
+Draws on: [OOP: the four pillars: closures](01-oop-four-pillars.md#way-2-closures-the-older-still-useful-way), [Structural patterns: Flyweight](07-structural-patterns.md#flyweight), [Structural patterns, Q21](07-structural-patterns.md#q21-do-wrappers-like-decorators-and-proxies-hurt-performance), [Creational patterns: object pool](06-creational-patterns.md#object-pool). Profiling: [Debugging and code review](../11-coding-interviews/06-debugging-and-code-review.md).
 
 ### Q28. Rapid design round: for each situation, name the pattern or principle you would use and why, in one sentence.
 

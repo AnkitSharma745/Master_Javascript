@@ -757,7 +757,7 @@ Besides chat messages, the product has other notifications (mentions, "you were 
 3. **Authorize every action**, not just the connection: "is this user a member of cv_77?" for every send, read update and history request. Membership can change while the socket is open.
 4. **Revocation:** when a user is removed from a group or their account is disabled, the server closes affected subscriptions or the whole connection.
 5. **Validate and limit messages:** maximum size, rate limit per user (for example 10 messages per second), reject unknown frame types.
-6. **XSS:** message text is untrusted. Render as text, never as raw HTML. If you support Markdown, use a safe renderer with an allow-list. Link previews are fetched by the server with SSRF protection (block internal IP ranges). See [web security](../10-testing-security-production/05-web-security-xss-csrf-cors-csp.md).
+6. **XSS:** message text is untrusted. Render as text, never as raw HTML. If you support Markdown, use a safe renderer with an allow-list. Link previews are fetched by the server with SSRF protection (block internal IP ranges). See [web security](../01-cs-and-web-fundamentals/08-browser-storage-and-web-security-basics.md).
 7. **Attachments** go through the upload service with virus scanning and signed download URLs. See the [file upload case study](14-case-study-file-upload-service.md).
 8. **Encryption:** TLS (`wss://`) always. Encrypt data at rest. For end-to-end encryption, the server cannot read messages — see trade-offs.
 9. **Local data:** clear IndexedDB/SQLite on logout. On desktop, follow [Electron security](../08-electron-desktop/04-electron-security.md) — a chat app renders untrusted content all day.
@@ -792,7 +792,7 @@ See [scalability and core building blocks](02-scalability-and-core-building-bloc
 | Sync cursor too old | Server returns "resync required"; client does a fresh start. |
 | Clock skew | Irrelevant for order (server `seq`). Display times come from the server's `createdAt`. |
 
-See [reliability and resilience](../10-testing-security-production/09-reliability-and-resilience.md).
+See [Production Node.js](../07-nodejs-backend/14-production-nodejs.md).
 
 ---
 
@@ -806,7 +806,7 @@ See [reliability and resilience](../10-testing-security-production/09-reliabilit
 - **Per-message tracing** with the message ID and `clientMsgId`, sampled.
 - **Frontend:** time to first conversation render, WebSocket reconnect count per session, JavaScript errors.
 
-See [logging, monitoring and observability](../10-testing-security-production/08-logging-monitoring-and-observability.md).
+See [Production Node.js](../07-nodejs-backend/14-production-nodejs.md).
 
 ---
 
@@ -977,7 +977,7 @@ See [logging, monitoring and observability](../10-testing-security-production/08
 
 **Common mistakes:** only testing the happy path with one client.
 
-**Where this is used in real projects:** chaos testing and connection load testing are standard for real-time platforms. See [testing fundamentals](../10-testing-security-production/01-testing-fundamentals.md).
+**Where this is used in real projects:** chaos testing and connection load testing are standard for real-time platforms. See [Angular testing](../06-angular-16/14-testing.md).
 
 ### Q13. How does end-to-end encryption change the design?
 

@@ -1054,7 +1054,7 @@ window.addEventListener("message", (event) => handle(event.data));
 
 ### Protecting your own page from being framed
 
-To stop other sites from putting *your* page in an iframe (clickjacking), the server sends `Content-Security-Policy: frame-ancestors 'self'` (or the older `X-Frame-Options: DENY`). Details in [Web security](../10-testing-security-production/05-web-security-xss-csrf-cors-csp.md).
+To stop other sites from putting *your* page in an iframe (clickjacking), the server sends `Content-Security-Policy: frame-ancestors 'self'` (or the older `X-Frame-Options: DENY`). Details in [Web security](../01-cs-and-web-fundamentals/08-browser-storage-and-web-security-basics.md).
 
 ---
 
@@ -1116,7 +1116,7 @@ console.log(escapeHtml("Tom & Jerry"));
 // Tom &amp; Jerry
 ```
 
-Escaping for HTML text is **not** enough everywhere. Inside a URL (`href="javascript:..."`), inside a `<script>` block, or inside CSS, the rules are different. The safest rule: use framework bindings (Angular `{{ }}` and property bindings escape and sanitize for you), `textContent`, and `setAttribute` for plain values. For full XSS defense see [Web security](../10-testing-security-production/05-web-security-xss-csrf-cors-csp.md) and [Angular security](../06-angular-16/15-security.md).
+Escaping for HTML text is **not** enough everywhere. Inside a URL (`href="javascript:..."`), inside a `<script>` block, or inside CSS, the rules are different. The safest rule: use framework bindings (Angular `{{ }}` and property bindings escape and sanitize for you), `textContent`, and `setAttribute` for plain values. For full XSS defense see [Web security](../01-cs-and-web-fundamentals/08-browser-storage-and-web-security-basics.md) and [Angular security](../06-angular-16/15-security.md).
 
 ---
 

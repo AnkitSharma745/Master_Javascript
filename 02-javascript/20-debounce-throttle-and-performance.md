@@ -1113,7 +1113,7 @@ The Long Tasks API is supported in Chromium-based browsers. Chromium also has a 
 - `node --cpu-prof app.js` writes a CPU profile you can open in Chrome DevTools.
 - `node --inspect` and the DevTools Performance or Profiler tab.
 
-See [Debugging and profiling](../10-testing-security-production/07-debugging-and-profiling.md).
+See [Debugging and code review](../11-coding-interviews/06-debugging-and-code-review.md).
 
 ### Benchmarking pitfalls
 
@@ -1600,7 +1600,7 @@ function memoizeAsync(fn) {
 
 ### Q20. Should you rate-limit API calls on the client, the server, or both?
 
-**Short answer:** Both, for different reasons. Client-side debounce and throttle improve UX and reduce wasted load from honest users. But the client is not trusted: scripts and other clients can ignore it. The server must enforce real limits (per user, per IP, per API key) and return `429 Too Many Requests` with a `Retry-After` header. The client should then back off. See [Reliability and resilience](../10-testing-security-production/09-reliability-and-resilience.md).
+**Short answer:** Both, for different reasons. Client-side debounce and throttle improve UX and reduce wasted load from honest users. But the client is not trusted: scripts and other clients can ignore it. The server must enforce real limits (per user, per IP, per API key) and return `429 Too Many Requests` with a `Retry-After` header. The client should then back off. See [Production Node.js](../07-nodejs-backend/14-production-nodejs.md).
 
 ### Q21. What is layout thrashing?
 

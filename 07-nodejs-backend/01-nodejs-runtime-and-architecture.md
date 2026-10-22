@@ -741,7 +741,7 @@ node --env-file=.env server.js
 console.log(process.env.PORT, process.env.API_URL); // 4000 https://api.example.com
 ```
 
-A `.env` file is a local convenience. It is not a secrets manager. Never commit real secrets. See [Secure auth, secrets and dependencies](../10-testing-security-production/06-secure-auth-secrets-and-dependencies.md).
+A `.env` file is a local convenience. It is not a secrets manager. Never commit real secrets. See [Authentication and authorization](../07-nodejs-backend/09-authentication-and-authorization.md).
 
 **Permission model:**
 

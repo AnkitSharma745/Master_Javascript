@@ -605,7 +605,7 @@ Everything that is built into the frontend bundle is **public**. Anyone can open
 
 ### Build once, deploy many
 
-Build-time variables mean you need a separate build per environment (dev, staging, production). Many teams prefer **one build artifact** promoted through all environments, with configuration loaded at **runtime** (for example `fetch('/config.json')` before bootstrapping, or a config injected by the server). This guarantees that what you tested is exactly what you deploy. See [CI/CD and deployment](../10-testing-security-production/10-ci-cd-and-deployment.md).
+Build-time variables mean you need a separate build per environment (dev, staging, production). Many teams prefer **one build artifact** promoted through all environments, with configuration loaded at **runtime** (for example `fetch('/config.json')` before bootstrapping, or a config injected by the server). This guarantees that what you tested is exactly what you deploy. See [Production Node.js](../07-nodejs-backend/14-production-nodejs.md).
 
 ---
 

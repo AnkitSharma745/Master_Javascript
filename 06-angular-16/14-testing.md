@@ -2,7 +2,7 @@
 
 > In this document you will learn how to test an Angular 16 app: components, services, HTTP calls, pipes, directives, guards, interceptors, async code and NgRx, using TestBed, Jasmine and Karma (and Jest as an option). Interviewers use testing questions to see whether you write reliable code and whether you know the Angular testing tools beyond the generated spec file.
 
-**Before this:** [Testing fundamentals](../10-testing-security-production/01-testing-fundamentals.md) · [Unit testing with Jest and Vitest](../10-testing-security-production/02-unit-testing-jest-and-vitest.md) · [Dependency injection](05-dependency-injection.md) · **Interview questions:** [jump to the interview section](#interview-questions)
+**Before this:** Angular testing · Angular testing · [Dependency injection](05-dependency-injection.md) · **Interview questions:** [jump to the interview section](#interview-questions)
 
 ## Table of contents
 
@@ -34,7 +34,7 @@
 
 ## What to test in an Angular app
 
-General testing ideas (the test pyramid, unit vs integration vs e2e, test doubles) are in [Testing fundamentals](../10-testing-security-production/01-testing-fundamentals.md). Here is how they map to Angular.
+General testing ideas (the test pyramid, unit vs integration vs e2e, test doubles) are in Angular testing. Here is how they map to Angular.
 
 | Level | What it tests in Angular | Tools | How many |
 | --- | --- | --- | --- |
@@ -1029,7 +1029,7 @@ Angular projects used **Protractor** for e2e tests for years. It was deprecated 
 
 ### Playwright or Cypress
 
-Both run the real app in a real browser and are the usual choices today. The details, including the Playwright API, auto-waiting, fixtures and mocking the network, are in [Component and e2e testing with Playwright](../10-testing-security-production/04-component-and-e2e-testing-playwright.md).
+Both run the real app in a real browser and are the usual choices today. The details, including the Playwright API, auto-waiting, fixtures and mocking the network, are in Angular testing.
 
 A short Playwright example for an Angular app:
 

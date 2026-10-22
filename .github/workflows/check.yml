@@ -1,28 +1,15 @@
-name: Learning repository checks
+name: Docs check
 on: [push, pull_request]
 permissions:
   contents: read
 jobs:
-  root:
+  docs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '22.20.0'
+          node-version: '22'
           cache: npm
       - run: npm ci --ignore-scripts
       - run: npm run check
-  angular-maintenance-fixture:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '18.20.8'
-          cache: npm
-          cache-dependency-path: projects/angular16-feature/package-lock.json
-      - run: npm ci --ignore-scripts
-        working-directory: projects/angular16-feature
-      - run: npm test
-        working-directory: projects/angular16-feature

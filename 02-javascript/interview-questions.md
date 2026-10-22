@@ -1491,7 +1491,7 @@ Other problems in the review:
 
 **Where this is used in real projects:** settings and preference APIs, config loaders, query-string parsers (`qs`), lodash `merge` (old versions had this exact CVE).
 
-Topics: [Prototypes](08-prototypes-and-inheritance.md) · [Objects and copying](07-objects-and-copying.md) · [Map and Set](12-map-set-weakmap-weakset.md) · [Web security](../10-testing-security-production/05-web-security-xss-csrf-cors-csp.md)
+Topics: [Prototypes](08-prototypes-and-inheritance.md) · [Objects and copying](07-objects-and-copying.md) · [Map and Set](12-map-set-weakmap-weakset.md) · [Web security](../01-cs-and-web-fundamentals/08-browser-storage-and-web-security-basics.md)
 
 ---
 
@@ -1954,7 +1954,7 @@ function isTransient(err) {
 
 **Where this is used in real projects:** HTTP clients, payment and email providers, message consumers, Angular interceptors (RxJS `retry` with a `delay` function).
 
-Topics: [this](06-this-call-apply-bind.md) · [Async/await](18-async-await.md) · [Error handling](15-error-handling.md) · [Functions and FP](04-functions-and-functional-programming.md) · [Reliability and resilience](../10-testing-security-production/09-reliability-and-resilience.md)
+Topics: [this](06-this-call-apply-bind.md) · [Async/await](18-async-await.md) · [Error handling](15-error-handling.md) · [Functions and FP](04-functions-and-functional-programming.md) · [Production Node.js](../07-nodejs-backend/14-production-nodejs.md)
 
 ---
 

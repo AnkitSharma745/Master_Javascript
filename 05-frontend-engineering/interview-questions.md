@@ -930,7 +930,7 @@ export class CartService {
 
 ### Q14. Security review: product reviews may contain bold text and links. How do you render user-generated rich text safely?
 
-**Draws on:** [Escaping](./01-html-semantics-and-forms.md#escaping-and-character-entities) · [Iframe sandbox](./01-html-semantics-and-forms.md#iframes-and-the-sandbox-attribute) · [innerHTML](./03-dom-and-events.md#innerhtml-textcontent-and-innertext) · [JSX](./08-react-essentials.md#jsx) · [XSS and CSP](../10-testing-security-production/05-web-security-xss-csrf-cors-csp.md)
+**Draws on:** [Escaping](./01-html-semantics-and-forms.md#escaping-and-character-entities) · [Iframe sandbox](./01-html-semantics-and-forms.md#iframes-and-the-sandbox-attribute) · [innerHTML](./03-dom-and-events.md#innerhtml-textcontent-and-innertext) · [JSX](./08-react-essentials.md#jsx) · [XSS and CSP](../01-cs-and-web-fundamentals/08-browser-storage-and-web-security-basics.md)
 
 **What the interviewer is checking:** Defense in depth for XSS, and framework-specific knowledge.
 

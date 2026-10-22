@@ -677,7 +677,7 @@ Rules:
 - Validate inputs with an allow-list (like the regular expression above), even without a shell. A user could still pass an argument that the program interprets as an option (for example, a filename starting with `-`). Many programs accept `--` to mark the end of options.
 - Since Node.js 24, passing an `args` array to `spawn` or `execFile` together with `shell: true` prints a runtime deprecation warning (DEP0190), because those arguments are only joined with spaces, not escaped.
 
-More on command injection: [Production Node.js](14-production-nodejs.md) and [Web security](../10-testing-security-production/05-web-security-xss-csrf-cors-csp.md).
+More on command injection: [Production Node.js](14-production-nodejs.md) and [Web security](../01-cs-and-web-fundamentals/08-browser-storage-and-web-security-basics.md).
 
 ### Other good practices with child processes
 

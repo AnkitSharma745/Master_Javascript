@@ -1073,7 +1073,7 @@ Use Redis replication with automatic failover (Redis Sentinel, Redis Cluster, or
 - Serve **degraded responses** (for example, a static "popular products" list) if both the cache and the database are overloaded.
 - **Warm the cache** after a deploy or Redis restart by pre-loading the hottest keys.
 
-These resilience patterns are explained in [Reliability and resilience](../10-testing-security-production/09-reliability-and-resilience.md).
+These resilience patterns are explained in [Production Node.js](../07-nodejs-backend/14-production-nodejs.md).
 
 ### Hot keys
 

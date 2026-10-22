@@ -810,7 +810,7 @@ Prefetch idea: when the input gets focus, warm the connection (or fetch "popular
 - **Pipeline:** snapshot age, build duration, number of suggestions, number of blocked terms removed.
 - **A/B tests** for ranking changes, measured by click-through and by downstream search success (did the search lead to a click or a purchase?).
 
-See [logging, monitoring and observability](../10-testing-security-production/08-logging-monitoring-and-observability.md).
+See [Production Node.js](../07-nodejs-backend/14-production-nodejs.md).
 
 ---
 

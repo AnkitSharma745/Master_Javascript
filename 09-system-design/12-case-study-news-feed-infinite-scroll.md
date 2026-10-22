@@ -689,7 +689,7 @@ See [web performance and Core Web Vitals](../05-frontend-engineering/05-web-perf
 ## Security
 
 1. **Visibility rules at read time.** A post can be private, followers-only or blocked for a viewer. Fan-out writes IDs, but the **hydration step must check visibility** for this viewer (blocked users, deleted posts, privacy changes). Never trust that "it was in the timeline, so the viewer may see it".
-2. **XSS:** post text and link previews are user content. Render text safely; linkify with a safe library; sanitize any rich text. Link preview fetching happens on the server with SSRF protection. See [web security](../10-testing-security-production/05-web-security-xss-csrf-cors-csp.md).
+2. **XSS:** post text and link previews are user content. Render text safely; linkify with a safe library; sanitize any rich text. Link preview fetching happens on the server with SSRF protection. See [web security](../01-cs-and-web-fundamentals/08-browser-storage-and-web-security-basics.md).
 3. **Media safety:** uploaded images are re-encoded (this also strips metadata like GPS location), scanned and moderated before wide distribution.
 4. **Rate limits** on posting, liking and following to stop spam and fake engagement.
 5. **Private API responses:** feeds are personal. `Cache-Control: private, no-store` (or `private` with short max-age). Images can be public on the CDN only if the post is public; private media uses signed URLs.
@@ -726,7 +726,7 @@ See [scalability and core building blocks](02-scalability-and-core-building-bloc
 | Image fails to load | Show the placeholder with a retry; never collapse the layout. |
 | New posts check fails | Silently try again later; the feed keeps working. |
 
-See [reliability and resilience](../10-testing-security-production/09-reliability-and-resilience.md).
+See [Production Node.js](../07-nodejs-backend/14-production-nodejs.md).
 
 ---
 
@@ -738,7 +738,7 @@ See [reliability and resilience](../10-testing-security-production/09-reliabilit
 - **Product metrics:** scroll depth, time spent, posts seen per session, like rate, "new posts" pill click rate.
 - **Correctness:** duplicate posts shown per session (should be zero), deleted posts served after deletion.
 
-See [logging, monitoring and observability](../10-testing-security-production/08-logging-monitoring-and-observability.md).
+See [Production Node.js](../07-nodejs-backend/14-production-nodejs.md).
 
 ---
 

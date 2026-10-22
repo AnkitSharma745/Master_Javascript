@@ -1987,7 +1987,7 @@ console.log(logged.getToken()); // abc
 **Short spoken answer (30–60 seconds):**
 > I can use it to improve the user experience, for example to block an action early and show a friendly message, or to hide admin features. But it cannot *enforce* anything. The user controls the browser: they can open DevTools, change variables, or call the API directly with `curl`. So every permission must be checked again on the server for every request. On a Node.js server, a permission proxy around a service is a real control, because the user cannot change server code.
 
-**Common mistakes:** "we hide the delete button, so non-admins cannot delete". See [web security](../10-testing-security-production/05-web-security-xss-csrf-cors-csp.md) and [authentication and authorization](../07-nodejs-backend/09-authentication-and-authorization.md).
+**Common mistakes:** "we hide the delete button, so non-admins cannot delete". See [web security](../01-cs-and-web-fundamentals/08-browser-storage-and-web-security-basics.md) and [authentication and authorization](../07-nodejs-backend/09-authentication-and-authorization.md).
 
 ### Q17. What is the Composite pattern, and how is the DOM an example of it?
 

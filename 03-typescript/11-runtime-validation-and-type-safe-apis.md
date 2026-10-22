@@ -1145,7 +1145,7 @@ sequenceDiagram
 - **Be careful with `__proto__` and `constructor` keys** when merging untrusted objects into existing ones (prototype pollution). Parsing into a fresh object with a schema (which builds a new object with only known keys) avoids most of this.
 - **Validation is not authorization.** A valid `UpdateOrderDto` does not mean this user may update this order.
 
-More attacks and defenses are covered in [Web security: XSS, CSRF, CORS and CSP](../10-testing-security-production/05-web-security-xss-csrf-cors-csp.md) and the Node.js side in [Validation and error handling](../07-nodejs-backend/08-validation-and-error-handling.md).
+More attacks and defenses are covered in [Web security: XSS, CSRF, CORS and CSP](../01-cs-and-web-fundamentals/08-browser-storage-and-web-security-basics.md) and the Node.js side in [Validation and error handling](../07-nodejs-backend/08-validation-and-error-handling.md).
 
 **Performance**
 

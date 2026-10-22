@@ -37,6 +37,6 @@ Version assumption: **Node.js 22 and 24 LTS**.
 | 13 | [Background jobs and queues](13-background-jobs-and-queues.md) | BullMQ, RabbitMQ, Kafka, retries, idempotent consumers, webhooks |
 | 14 | [Production Node.js](14-production-nodejs.md) | Config, logging, health checks, Docker, security hardening, rate limiting, profiling |
 
-**Interview practice:** every topic ends with its own interview questions. For mixed questions across the whole subject, see [interview-questions.md](interview-questions.md). API testing is in [10 — Testing Node.js APIs](../10-testing-security-production/03-testing-nodejs-apis.md).
+**Interview practice:** every topic ends with its own interview questions. For mixed questions across the whole subject, see [interview-questions.md](interview-questions.md).
 
 **Next subject:** [08 — Electron and Desktop Development](../08-electron-desktop/README.md)

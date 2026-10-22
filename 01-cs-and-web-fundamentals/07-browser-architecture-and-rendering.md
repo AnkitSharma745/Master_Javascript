@@ -805,8 +805,6 @@ Other helpful tools:
 | **Performance monitor** | Live CPU usage, DOM node count, layouts per second, style recalculations per second |
 | Lighthouse | Render-blocking resources, main-thread work, long tasks |
 
-Debugging and profiling in depth: [Debugging and profiling](../10-testing-security-production/07-debugging-and-profiling.md).
-
 ---
 
 ## How to explain this in an interview

@@ -827,7 +827,7 @@ Automatic merging is only possible for some formats (plain text). For binary fil
 2. **Least-privilege presigned URLs:** one key, one method, one part, short expiry. Signed only after checking that the user owns the upload session.
 3. **Validate size and type on the server:** check declared size before signing, real size after upload (`HeadObject`), and real type from magic bytes during the scan. Enforce quotas with the real size.
 4. **Quarantine + scan** before sharing; archive limits against zip bombs; image dimension limits against pixel floods.
-5. **Never serve user files as active content on your main domain.** An uploaded `.html` or `.svg` file served inline from `app.example.com` can run JavaScript with your users' cookies (stored XSS). Serve user content from a **separate domain** (for example `usercontent.example-cdn.com`), with `Content-Disposition: attachment` for risky types, `X-Content-Type-Options: nosniff`, and a restrictive `Content-Security-Policy` (for example `sandbox`). See [web security](../10-testing-security-production/05-web-security-xss-csrf-cors-csp.md).
+5. **Never serve user files as active content on your main domain.** An uploaded `.html` or `.svg` file served inline from `app.example.com` can run JavaScript with your users' cookies (stored XSS). Serve user content from a **separate domain** (for example `usercontent.example-cdn.com`), with `Content-Disposition: attachment` for risky types, `X-Content-Type-Options: nosniff`, and a restrictive `Content-Security-Policy` (for example `sandbox`). See [web security](../01-cs-and-web-fundamentals/08-browser-storage-and-web-security-basics.md).
 6. **Access-checked downloads:** every download request checks permission, then returns a short-lived signed URL. Do not make buckets public.
 7. **Bucket CORS:** allow only your app origins and only the needed methods (`PUT`, `GET`) and headers; expose `ETag`.
 8. **Strip metadata** from images (EXIF GPS) before sharing derivatives; keep originals private.
@@ -866,7 +866,7 @@ See [scalability and core building blocks](02-scalability-and-core-building-bloc
 | Storage region outage | Uploads fail fast with a clear message; resume later (the session survives). |
 | Desktop app crash | State in SQLite; restart resumes from the last committed state. |
 
-See [reliability and resilience](../10-testing-security-production/09-reliability-and-resilience.md).
+See [Production Node.js](../07-nodejs-backend/14-production-nodejs.md).
 
 ---
 
@@ -880,7 +880,7 @@ See [reliability and resilience](../10-testing-security-production/09-reliabilit
 - **Desktop clients:** sync backlog per device, conflicts created, app version distribution, crash rate.
 - **Client logs** include the `uploadId` so support can trace one user's failed upload end to end.
 
-See [logging, monitoring and observability](../10-testing-security-production/08-logging-monitoring-and-observability.md).
+See [Production Node.js](../07-nodejs-backend/14-production-nodejs.md).
 
 ---
 
@@ -996,7 +996,7 @@ See [logging, monitoring and observability](../10-testing-security-production/08
 
 ### Q6. A user uploads an SVG with JavaScript inside. What can go wrong and how do you prevent it?
 
-**Short answer:** If the SVG (or an HTML file) is served inline from your main domain, the browser runs its script with your origin — stored XSS that can act as any user who opens it. Prevent it by serving user content from a **separate domain** with no cookies, sending `Content-Disposition: attachment` for active types, `X-Content-Type-Options: nosniff`, and a `Content-Security-Policy: sandbox` header; and by generating safe raster thumbnails instead of displaying the SVG itself. Never rely on the file extension. See [web security](../10-testing-security-production/05-web-security-xss-csrf-cors-csp.md).
+**Short answer:** If the SVG (or an HTML file) is served inline from your main domain, the browser runs its script with your origin — stored XSS that can act as any user who opens it. Prevent it by serving user content from a **separate domain** with no cookies, sending `Content-Disposition: attachment` for active types, `X-Content-Type-Options: nosniff`, and a `Content-Security-Policy: sandbox` header; and by generating safe raster thumbnails instead of displaying the SVG itself. Never rely on the file extension. See [web security](../01-cs-and-web-fundamentals/08-browser-storage-and-web-security-basics.md).
 
 ### Q7. What happens to uploads that never complete?
 
@@ -1058,7 +1058,7 @@ console.log(parts, last);
 
 ### Q12. How do you test an upload system?
 
-**Short answer:** Unit-test the pure logic (part planning, progress math, resume part lists, retry policy). Integration-test against a local S3-compatible server (for example MinIO) for create/sign/upload/complete/abort, including expired URLs and duplicate completes. Inject failures: drop the network mid-part, reload the page, kill the scan worker. Test security: a different user signing parts of my upload, oversized files, SVG with script, zip bombs, wrong magic bytes. End-to-end tests in real browsers for drag and drop, pause/resume and keyboard access. See [testing Node.js APIs](../10-testing-security-production/03-testing-nodejs-apis.md).
+**Short answer:** Unit-test the pure logic (part planning, progress math, resume part lists, retry policy). Integration-test against a local S3-compatible server (for example MinIO) for create/sign/upload/complete/abort, including expired URLs and duplicate completes. Inject failures: drop the network mid-part, reload the page, kill the scan worker. Test security: a different user signing parts of my upload, oversized files, SVG with script, zip bombs, wrong magic bytes. End-to-end tests in real browsers for drag and drop, pause/resume and keyboard access. See [Angular testing](../06-angular-16/14-testing.md).
 
 ---
 

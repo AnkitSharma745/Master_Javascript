@@ -1533,7 +1533,7 @@ describe('OrdersPageComponent', () => {
 
 **Where this is used in real projects:** Any team with CI and a test pyramid.
 
-Topics: [Testing: mocking dependencies](14-testing.md#mocking-dependencies) · [Testing: services with HttpClient](14-testing.md#testing-services-that-use-httpclient) · [DI: overriding providers in tests](05-dependency-injection.md#overriding-providers-in-tests) · [Testing fundamentals](../10-testing-security-production/01-testing-fundamentals.md)
+Topics: [Testing: mocking dependencies](14-testing.md#mocking-dependencies) · [Testing: services with HttpClient](14-testing.md#testing-services-that-use-httpclient) · [DI: overriding providers in tests](05-dependency-injection.md#overriding-providers-in-tests) · [Angular testing](../06-angular-16/14-testing.md)
 
 ---
 
@@ -1593,7 +1593,7 @@ Topics: [Fundamentals: Ivy, AOT and JIT](01-angular-fundamentals.md#how-angular-
 
 **Where this is used in real projects:** Daily debugging in any Angular team.
 
-Topics: [Change detection and signals](10-change-detection-and-signals.md) · [DI: lazy loading and separate instances](05-dependency-injection.md#lazy-loading-and-separate-instances) · [Routing: snapshot vs paramMap](06-routing-guards-and-lazy-loading.md#route-parameters-snapshot-vs-parammap) · [Debugging and profiling](../10-testing-security-production/07-debugging-and-profiling.md)
+Topics: [Change detection and signals](10-change-detection-and-signals.md) · [DI: lazy loading and separate instances](05-dependency-injection.md#lazy-loading-and-separate-instances) · [Routing: snapshot vs paramMap](06-routing-guards-and-lazy-loading.md#route-parameters-snapshot-vs-parammap) · [Debugging and code review](../11-coding-interviews/06-debugging-and-code-review.md)
 
 ---
 

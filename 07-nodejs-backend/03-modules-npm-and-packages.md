@@ -986,7 +986,7 @@ Defenses, in short:
 - **Prefer fewer, well-maintained dependencies.** Check download counts, maintainers and repository activity before adding a package.
 - **Publish with 2FA and trusted publishing**, and check provenance of critical packages.
 
-The full secure-dependency checklist is in [Secure auth, secrets and dependencies](../10-testing-security-production/06-secure-auth-secrets-and-dependencies.md).
+The full secure-dependency checklist is in [Authentication and authorization](../07-nodejs-backend/09-authentication-and-authorization.md).
 
 ## Common mistakes
 
@@ -1212,7 +1212,7 @@ main();
 **Short spoken answer (30–60 seconds):**
 > It's an attack on the packages I depend on instead of on my own code. Examples are typosquatting, where a package name looks like a popular one; malicious `postinstall` scripts that steal environment variables and tokens during install; hijacked maintainer accounts publishing a malicious version that my caret range picks up; and dependency confusion between private and public names. To reduce risk: commit the lockfile and use `npm ci` so new versions don't sneak in, review lockfile changes, run `npm audit` or a tool like Socket or Snyk in CI, disable install scripts where possible — pnpm blocks them by default — use scoped private packages with a configured registry, keep dependencies few, and publish my own packages with 2FA and trusted publishing with provenance.
 
-More detail: [Secure auth, secrets and dependencies](../10-testing-security-production/06-secure-auth-secrets-and-dependencies.md).
+More detail: [Authentication and authorization](../07-nodejs-backend/09-authentication-and-authorization.md).
 
 ### Q14. What happens with circular dependencies in Node.js?
 

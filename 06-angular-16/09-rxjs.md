@@ -2465,7 +2465,7 @@ Follow-up: **What happens with `lastValueFrom(this.form.valueChanges)`?** — It
 **Follow-up questions:**
 - **How can a POST be made safe to retry?** — Send an idempotency key (a unique ID per operation) that the server uses to detect duplicates.
 - **Where should retry logic live?** — For a specific call, in the service. For a global policy (for example, retry GETs on network errors), in an HTTP interceptor. Be careful not to retry twice in both places.
-- **What is jitter?** — A small random delay added to backoff, so many clients do not retry at exactly the same moment. Reliability patterns like this are covered in [Reliability and resilience](../10-testing-security-production/09-reliability-and-resilience.md).
+- **What is jitter?** — A small random delay added to backoff, so many clients do not retry at exactly the same moment. Reliability patterns like this are covered in [Production Node.js](../07-nodejs-backend/14-production-nodejs.md).
 
 **Common mistakes:** Infinite `retry()` without a count. Retrying instantly. Retrying 401 (the user needs to log in, not to retry).
 

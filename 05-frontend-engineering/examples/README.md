@@ -24,7 +24,7 @@ Small, self-contained HTML pages that show the ideas from the frontend documents
 
 ## What changed from the old demos
 
-These pages replace the older demos in `archive/09_DOM_Manipulation/DOM_Examples/` and `archive/10_Asynchronous_Javascript/Examples/`:
+These pages replace the older DOM and async demos from the original repository (still available in git history):
 
 - External image URLs were replaced with generated images, so the pages do not break when a third-party image disappears.
 - Every control is a real `<button>` or form field with a label, focus is visible, and dynamic messages use live regions.

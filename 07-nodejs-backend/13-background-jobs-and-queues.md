@@ -684,7 +684,7 @@ Rules for retries:
 - **Only retry idempotent operations**, or use idempotency keys.
 - **Retry at one layer.** If the HTTP client retries 3 times, the job retries 5 times and the queue redelivers 3 times, one failure can cause 45 calls.
 - **Respect `Retry-After`** from the server when present.
-- Combine with a **circuit breaker** when a dependency is fully down (see [Reliability and resilience](../10-testing-security-production/09-reliability-and-resilience.md)).
+- Combine with a **circuit breaker** when a dependency is fully down (see [Production Node.js](../07-nodejs-backend/14-production-nodejs.md)).
 
 ### Dead-letter queues
 

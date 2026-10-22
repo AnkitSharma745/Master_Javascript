@@ -801,7 +801,7 @@ https://shop.example.com/cart?step=2
 > I would cover the browser part briefly and go deep on what happens after the request leaves the browser. DNS pointing to a CDN or a load balancer. TLS termination at the edge or the load balancer and whether traffic is re-encrypted inside. L7 load balancing with health checks, connection reuse and keep-alive timeouts. The application: routing, authentication, validation, business logic, calls to Redis and the database with connection pools, and how I keep TTFB low with caching, query optimization and timeouts on downstream calls. Then the response: status codes, Cache-Control so the CDN can cache public content, compression, and security headers like HSTS and CSP. I would finish with observability: logs, metrics and traces with a request ID that follows the request through every hop.
 
 **Follow-up questions:**
-- **How does one request get traced across services?** — A trace ID is created at the edge (or the first service) and passed in headers like `traceparent` (W3C Trace Context) to every downstream call, so logs and spans can be joined. See [Logging, monitoring and observability](../10-testing-security-production/08-logging-monitoring-and-observability.md).
+- **How does one request get traced across services?** — A trace ID is created at the edge (or the first service) and passed in headers like `traceparent` (W3C Trace Context) to every downstream call, so logs and spans can be joined. See [Production Node.js](../07-nodejs-backend/14-production-nodejs.md).
 
 **Common mistakes:** Spending all the time on rendering in a backend interview, or ignoring rendering in a frontend interview.
 

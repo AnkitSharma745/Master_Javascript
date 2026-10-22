@@ -16,7 +16,7 @@ That's all you need to know. Each topic document has a table of contents at the 
 
 | # | Subject | What it covers | Mixed interview questions |
 | --- | --- | --- | --- |
-| 01 | [Core CS and Web Fundamentals](01-cs-and-web-fundamentals/README.md) | How code runs, data structures, OS, networking, HTTP/TLS, browsers, storage | [Questions](01-cs-and-web-fundamentals/interview-questions.md) |
+| 01 | [Core CS and Web Fundamentals](01-cs-and-web-fundamentals/README.md) | How code runs, data structures, networking, HTTP/TLS, browsers | — |
 | 02 | [JavaScript](02-javascript/README.md) | Scope, closures, `this`, prototypes, async, event loop, memory, modern features | [Questions](02-javascript/interview-questions.md) |
 | 03 | [TypeScript](03-typescript/README.md) | Type system, generics, advanced and utility types, tsconfig, runtime validation | [Questions](03-typescript/interview-questions.md) |
 | 04 | [OOP, SOLID and Design Patterns](04-oop-solid-design-patterns/README.md) | OOP pillars, SOLID, dependency injection, creational/structural/behavioral patterns | [Questions](04-oop-solid-design-patterns/interview-questions.md) |
@@ -25,7 +25,6 @@ That's all you need to know. Each topic document has a table of contents at the 
 | 07 | [Node.js and Backend](07-nodejs-backend/README.md) | Runtime, event loop, streams, Express, REST, auth, databases, caching, production | [Questions](07-nodejs-backend/interview-questions.md) |
 | 08 | [Electron and Desktop](08-electron-desktop/README.md) | Process model, IPC, security, packaging, auto-updates, crash recovery | [Questions](08-electron-desktop/interview-questions.md) |
 | 09 | [System Design](09-system-design/README.md) | Scalability, caching, APIs, real-time, frontend architecture, 8 case studies | [Questions](09-system-design/interview-questions.md) |
-| 10 | [Testing, Security and Production](10-testing-security-production/README.md) | Jest, Playwright, XSS/CSRF/CORS/CSP, debugging, observability, CI/CD | [Questions](10-testing-security-production/interview-questions.md) |
 | 11 | [Coding Interviews](11-coding-interviews/README.md) | Explaining answers, problem solving, output questions, polyfills, machine coding, behavioral | — |
 
 ## How each topic document works
@@ -41,7 +40,7 @@ That's all you need to know. Each topic document has a table of contents at the 
 Study these first, then fill in the rest:
 
 - **Frontend / Angular role:** JavaScript 03–06, 16–18 → TypeScript 01–05 → Angular 05, 09, 10, 02, 06, 08 → Frontend 03, 05 → System design 05, 11 → Coding interviews 03, 04, 05.
-- **Backend / Node.js role:** JavaScript 05, 16–18 → Node.js 01, 02, 05, 06, 07, 09, 10, 11 → System design 01–04, 13 → Security 05, 06.
+- **Backend / Node.js role:** JavaScript 05, 16–18 → Node.js 01, 02, 05, 06, 07, 09, 10, 11 → System design 01–04, 13.
 - **Desktop / Electron role:** JavaScript 16–18 → Node.js 01, 02 → all of Electron (start with 01, 03, 04) → Fundamentals 03.
 - **Every role:** Coding interviews 01 and 07.
 

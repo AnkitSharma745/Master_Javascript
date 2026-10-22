@@ -871,7 +871,7 @@ Do **not** use `uncaughtException` to "keep the server running" after unknown er
 
 ### Monitoring
 
-In production, connect global handlers to an error-tracking service (Sentry, Datadog, Azure Application Insights, Bugsnag). Upload **source maps** so minified stack traces show your original TypeScript file names and lines. See [Logging, monitoring and observability](../10-testing-security-production/08-logging-monitoring-and-observability.md).
+In production, connect global handlers to an error-tracking service (Sentry, Datadog, Azure Application Insights, Bugsnag). Upload **source maps** so minified stack traces show your original TypeScript file names and lines. See [Production Node.js](../07-nodejs-backend/14-production-nodejs.md).
 
 ---
 
@@ -981,7 +981,7 @@ const flaky = async () => {
 withRetry(flaky, { baseMs: 5 }).then((result) => console.log(result, "after", calls, "calls")); // ok after 3 calls
 ```
 
-Only retry **idempotent** operations (safe to repeat), or use idempotency keys for things like payments. More patterns (circuit breakers, timeouts) are in [Reliability and resilience](../10-testing-security-production/09-reliability-and-resilience.md).
+Only retry **idempotent** operations (safe to repeat), or use idempotency keys for things like payments. More patterns (circuit breakers, timeouts) are in [Production Node.js](../07-nodejs-backend/14-production-nodejs.md).
 
 ### 6. Exceptions vs result objects
 
@@ -1104,7 +1104,7 @@ Tips:
 
 - **Source maps** map minified production code back to your source files. Enable them in your build and upload them to your monitoring tool (but do not necessarily serve them publicly).
 - **Async stack traces:** V8 shows `at async functionName` frames across `await` boundaries, so `async/await` code has more useful stacks than old callback code.
-- DevTools can **pause on exceptions** (caught or uncaught), which is often faster than reading logs. See [Debugging and profiling](../10-testing-security-production/07-debugging-and-profiling.md).
+- DevTools can **pause on exceptions** (caught or uncaught), which is often faster than reading logs. See [Debugging and code review](../11-coding-interviews/06-debugging-and-code-review.md).
 
 ---
 
@@ -1363,7 +1363,7 @@ run();
 **Follow-up questions:**
 - **Why jitter?** — Without it, many clients that failed at the same time retry at the same time and overload the server again (a "thundering herd").
 - **What about a 429 with a `Retry-After` header?** — Respect it: wait that long instead of the computed backoff.
-- **What is a circuit breaker?** — After many failures, stop calling the service for a while and fail fast, then test again later. See [Reliability and resilience](../10-testing-security-production/09-reliability-and-resilience.md).
+- **What is a circuit breaker?** — After many failures, stop calling the service for a while and fail fast, then test again later. See [Production Node.js](../07-nodejs-backend/14-production-nodejs.md).
 
 ### Q14. What is `AggregateError`, and when do you get one?
 

@@ -842,7 +842,7 @@ Tools like **Sentry**, Datadog RUM, New Relic Browser, Bugsnag, Rollbar or an Op
 
 ### Correlation with the backend
 
-Send a trace header (the W3C `traceparent` header used by OpenTelemetry) with API requests. Then one user action can be followed from the click, through the API gateway and services, to the database. Observability in general is covered in [Logging, monitoring and observability](../10-testing-security-production/08-logging-monitoring-and-observability.md).
+Send a trace header (the W3C `traceparent` header used by OpenTelemetry) with API requests. Then one user action can be followed from the click, through the API gateway and services, to the database. Observability in general is covered in [Production Node.js](../07-nodejs-backend/14-production-nodejs.md).
 
 ### Rules for client telemetry
 
@@ -905,7 +905,7 @@ Frontend optimizations themselves are in [Web performance and Core Web Vitals](.
 
 ## CSP at scale
 
-**Content Security Policy (CSP)** is an HTTP header that tells the browser which scripts, styles, images and connections are allowed. It is a strong defense against XSS. The attack and the directives are explained in [Web security — XSS, CSRF, CORS, CSP](../10-testing-security-production/05-web-security-xss-csrf-cors-csp.md). Here are the problems that appear in big apps.
+**Content Security Policy (CSP)** is an HTTP header that tells the browser which scripts, styles, images and connections are allowed. It is a strong defense against XSS. The attack and the directives are explained in [Web security — XSS, CSRF, CORS, CSP](../01-cs-and-web-fundamentals/08-browser-storage-and-web-security-basics.md). Here are the problems that appear in big apps.
 
 ### The recommended policy style: strict CSP
 

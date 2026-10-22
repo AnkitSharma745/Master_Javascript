@@ -402,7 +402,7 @@ fetch('/api/orders', {
 | `WWW-Authenticate` | `Bearer realm="api"` | How to authenticate (with 401) |
 | `Strict-Transport-Security` | `max-age=31536000; includeSubDomains` | Use HTTPS only (see [HSTS](#hsts)) |
 
-Security headers such as `Content-Security-Policy`, `X-Content-Type-Options` and `X-Frame-Options` are covered in [Web security: XSS, CSRF, CORS, CSP](../10-testing-security-production/05-web-security-xss-csrf-cors-csp.md).
+Security headers such as `Content-Security-Policy`, `X-Content-Type-Options` and `X-Frame-Options` are covered in [Browser storage and web security basics](08-browser-storage-and-web-security-basics.md#xss).
 
 ---
 
@@ -536,7 +536,7 @@ Example: a user is logged in to `bank.com`. They click a link to `bank.com` from
 
 **Lifetime limit:** Chrome caps cookie lifetimes at 400 days, even if `Max-Age` or `Expires` asks for longer (following the updated cookie specification draft).
 
-Cookie storage limits, `document.cookie`, third-party cookies and where to store tokens are covered in [Browser storage and web security basics](08-browser-storage-and-web-security-basics.md). CSRF in depth is in [Web security: XSS, CSRF, CORS, CSP](../10-testing-security-production/05-web-security-xss-csrf-cors-csp.md).
+Cookie storage limits, `document.cookie`, third-party cookies and where to store tokens are covered in [Browser storage and web security basics](08-browser-storage-and-web-security-basics.md). CSRF is explained in [Browser storage and web security basics](08-browser-storage-and-web-security-basics.md#csrf).
 
 ### Cookies vs tokens in the Authorization header
 
@@ -744,7 +744,7 @@ Two key facts:
 - CORS is enforced **by the browser**, to protect **users**. It does not protect your server: `curl` or a Node script ignores CORS completely. Your API still needs authentication and authorization.
 - A CORS error in the console usually means the **server** is missing a header. You fix it on the server (or with a dev-server proxy), not in the frontend code.
 
-Origins and the same-origin policy are explained in [Browser storage and web security basics](08-browser-storage-and-web-security-basics.md#the-same-origin-policy). CORS in depth (preflight rules, credentials, common misconfigurations) is in [Web security: XSS, CSRF, CORS, CSP](../10-testing-security-production/05-web-security-xss-csrf-cors-csp.md).
+Origins and the same-origin policy are explained in [Browser storage and web security basics](08-browser-storage-and-web-security-basics.md#the-same-origin-policy). CORS preflight rules, credentials and common misconfigurations are in [CORS](08-browser-storage-and-web-security-basics.md#cors).
 
 ---
 

@@ -318,7 +318,7 @@ function toUserMessage(error: HttpErrorResponse): string {
 }
 ```
 
-Note: a CORS failure looks like status `0` in the browser. The browser hides the details from JavaScript for security. Look at the browser console and network tab. CORS is explained in [Web security: XSS, CSRF, CORS and CSP](../10-testing-security-production/05-web-security-xss-csrf-cors-csp.md).
+Note: a CORS failure looks like status `0` in the browser. The browser hides the details from JavaScript for security. Look at the browser console and network tab. CORS is explained in [Web security: XSS, CSRF, CORS and CSP](../01-cs-and-web-fundamentals/08-browser-storage-and-web-security-basics.md).
 
 ### catchError and retry
 
@@ -580,7 +580,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 };
 ```
 
-The `isOwnApi` check is a **security** rule. Keep the trailing slash in the check: without it, `https://api.myshop.com.evil.net` would also match `https://api.myshop.com`. An interceptor runs for **every** request, including calls to external services. Attaching your access token to them leaks it. Token storage and other auth security rules are in [Security](15-security.md) and [Secure auth, secrets and dependencies](../10-testing-security-production/06-secure-auth-secrets-and-dependencies.md).
+The `isOwnApi` check is a **security** rule. Keep the trailing slash in the check: without it, `https://api.myshop.com.evil.net` would also match `https://api.myshop.com`. An interceptor runs for **every** request, including calls to external services. Attaching your access token to them leaks it. Token storage and other auth security rules are in [Security](15-security.md) and [Authentication and authorization](../07-nodejs-backend/09-authentication-and-authorization.md).
 
 ### 2. Global error handling
 
@@ -707,7 +707,7 @@ export const loggingInterceptor: HttpInterceptorFn = (req, next) => {
 };
 ```
 
-In production you would send this to a monitoring service instead of the console, and add a correlation ID header (`X-Request-Id`) so frontend and backend logs can be matched. See [Logging, monitoring and observability](../10-testing-security-production/08-logging-monitoring-and-observability.md).
+In production you would send this to a monitoring service instead of the console, and add a correlation ID header (`X-Request-Id`) so frontend and backend logs can be matched. See [Production Node.js](../07-nodejs-backend/14-production-nodejs.md).
 
 ### 6. Retry for safe requests
 
@@ -911,7 +911,7 @@ cancelUpload(): void {
 
 ## XSRF protection
 
-**Cross-site request forgery (CSRF or XSRF)** is an attack where another website makes the user's browser send a request to your API, using the user's cookies. The attack and defenses are explained in depth in [Web security: XSS, CSRF, CORS and CSP](../10-testing-security-production/05-web-security-xss-csrf-cors-csp.md).
+**Cross-site request forgery (CSRF or XSRF)** is an attack where another website makes the user's browser send a request to your API, using the user's cookies. The attack and defenses are explained in depth in [Web security: XSS, CSRF, CORS and CSP](../01-cs-and-web-fundamentals/08-browser-storage-and-web-security-basics.md).
 
 Short reminder: Angular's `HttpClient` supports the **cookie-to-header** defense. The server sets an `XSRF-TOKEN` cookie. For mutating requests (not `GET`/`HEAD`) to **relative URLs**, Angular's built-in interceptor copies the cookie value into an `X-XSRF-TOKEN` header, and the server checks that they match. It is on by default with `HttpClientModule` and `provideHttpClient()`. It never adds the header to absolute URLs, so a cross-origin API needs its own setup.
 

@@ -722,7 +722,7 @@ What enterprise frontends usually log and monitor:
 - **Performance**: Core Web Vitals and slow API calls.
 - **Business events** (carefully, respecting privacy and consent).
 
-Never log passwords, tokens or personal data. More on this in [Logging, monitoring and observability](../10-testing-security-production/08-logging-monitoring-and-observability.md).
+Never log passwords, tokens or personal data. More on this in [Production Node.js](../07-nodejs-backend/14-production-nodejs.md).
 
 ## Authentication architecture
 

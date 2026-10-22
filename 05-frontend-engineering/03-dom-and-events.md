@@ -368,7 +368,7 @@ Rules:
 - Use `textContent` for text. It is the default choice.
 - Use `innerHTML` only with HTML you fully control (a static string in your code), or with HTML cleaned by a well-tested sanitizer such as DOMPurify.
 - `innerHTML += "..."` re-parses **all** the existing content, destroys existing nodes (their listeners and input values are lost), and creates new ones. Use `append` or `insertAdjacentHTML` instead.
-- In Angular, use `{{ }}` interpolation for text. Angular's `[innerHTML]` binding sanitizes values automatically. See [Angular security](../06-angular-16/15-security.md) and [Web security](../10-testing-security-production/05-web-security-xss-csrf-cors-csp.md).
+- In Angular, use `{{ }}` interpolation for text. Angular's `[innerHTML]` binding sanitizes values automatically. See [Angular security](../06-angular-16/15-security.md) and [Web security](../01-cs-and-web-fundamentals/08-browser-storage-and-web-security-basics.md).
 
 ---
 

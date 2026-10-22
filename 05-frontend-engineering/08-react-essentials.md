@@ -134,7 +134,7 @@ const comment = '<img src=x onerror="alert(1)">';
 <p dangerouslySetInnerHTML={{ __html: comment }} />
 ```
 
-Also be careful with URLs from users: `<a href={userUrl}>` with a `javascript:` URL is dangerous. See [Web security: XSS, CSRF, CORS, CSP](../10-testing-security-production/05-web-security-xss-csrf-cors-csp.md).
+Also be careful with URLs from users: `<a href={userUrl}>` with a `javascript:` URL is dangerous. See [Web security: XSS, CSRF, CORS, CSP](../01-cs-and-web-fundamentals/08-browser-storage-and-web-security-basics.md).
 
 ---
 

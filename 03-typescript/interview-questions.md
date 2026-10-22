@@ -728,7 +728,7 @@ export const CLOCK = new InjectionToken<Clock>("CLOCK");
 
 ### Q10. Security: why does this "public" user still leak the password hash?
 
-Draws on: [Excess property checks](02-interfaces-and-type-aliases.md#excess-property-checks), [Pick and Omit](08-utility-types.md#pick-and-omit), [Runtime validation](11-runtime-validation-and-type-safe-apis.md#unknown-keys-strip-strict-loose), [Web security](../10-testing-security-production/05-web-security-xss-csrf-cors-csp.md).
+Draws on: [Excess property checks](02-interfaces-and-type-aliases.md#excess-property-checks), [Pick and Omit](08-utility-types.md#pick-and-omit), [Runtime validation](11-runtime-validation-and-type-safe-apis.md#unknown-keys-strip-strict-loose), [Web security](../01-cs-and-web-fundamentals/08-browser-storage-and-web-security-basics.md).
 
 ```ts
 interface User { id: string; email: string; passwordHash: string }
@@ -1155,7 +1155,7 @@ order.total is not a function
 
 ### Q21. How do you test that your types are correct, not only your code?
 
-Draws on: [How to test your own utility types](08-utility-types.md#how-to-test-your-own-utility-types), [Conditional types](07-conditional-types-and-infer.md), [Unit testing with Jest and Vitest](../10-testing-security-production/02-unit-testing-jest-and-vitest.md).
+Draws on: [How to test your own utility types](08-utility-types.md#how-to-test-your-own-utility-types), [Conditional types](07-conditional-types-and-infer.md), [Angular testing](../06-angular-16/14-testing.md).
 
 **What the interviewer is checking:** Knowing that complex types are code too, and the practical tools to test them.
 

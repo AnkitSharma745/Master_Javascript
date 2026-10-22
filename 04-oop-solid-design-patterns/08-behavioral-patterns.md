@@ -2165,7 +2165,7 @@ This "onion" order is how Koa middleware works, and it is the same order Angular
 > Events decouple code, but they also hide the flow. When something happens, you can't just follow a function call to see what runs next, so debugging becomes "who listens to this?". Ordering can surprise you, errors in one listener can be swallowed or can break others, forgotten listeners leak memory, and loops appear when a listener emits an event that triggers itself. Across services you also get lost or duplicated messages. To keep it maintainable, I use typed event names and payloads, keep a list of events and their consumers, log events with correlation IDs, make handlers idempotent, define clear error handling, and use direct calls when there is exactly one consumer that needs a result. Events are for "this happened"; method calls are for "do this and tell me the result".
 
 **Follow-up questions:**
-- **How do you trace an event across services?** — Pass a correlation or trace ID with every event and use distributed tracing (for example OpenTelemetry). See [logging, monitoring and observability](../10-testing-security-production/08-logging-monitoring-and-observability.md).
+- **How do you trace an event across services?** — Pass a correlation or trace ID with every event and use distributed tracing (for example OpenTelemetry). See [Production Node.js](../07-nodejs-backend/14-production-nodejs.md).
 
 ---
 

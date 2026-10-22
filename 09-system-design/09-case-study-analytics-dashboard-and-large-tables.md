@@ -878,7 +878,7 @@ See [scalability and core building blocks](02-scalability-and-core-building-bloc
 | Filter change while old requests are running | `switchMap` cancels old requests. Old responses can never overwrite newer state. |
 | Query too expensive | Rejected quickly with a clear message: "This query covers too much data. Narrow the date range." |
 
-General patterns: [reliability and resilience](../10-testing-security-production/09-reliability-and-resilience.md).
+General patterns: [Production Node.js](../07-nodejs-backend/14-production-nodejs.md).
 
 ---
 
@@ -891,7 +891,7 @@ General patterns: [reliability and resilience](../10-testing-security-production
 - **Exports:** queue length, job duration, failure rate, file sizes.
 - **Correctness checks:** a daily job compares rollup totals with raw event totals for a sample of tenants and days. Any difference means the aggregator has a bug.
 
-See [logging, monitoring and observability](../10-testing-security-production/08-logging-monitoring-and-observability.md).
+See [Production Node.js](../07-nodejs-backend/14-production-nodejs.md).
 
 ---
 

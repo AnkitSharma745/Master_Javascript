@@ -987,7 +987,7 @@ Two key numbers for disaster recovery:
 
 ### Graceful degradation
 
-When a non-critical part fails, keep the core working. If the recommendations service is down, show the product page without recommendations. If search is slow, show cached popular items. Patterns: timeouts, fallbacks, circuit breakers and bulkheads — see [Reliability and resilience](../10-testing-security-production/09-reliability-and-resilience.md).
+When a non-critical part fails, keep the core working. If the recommendations service is down, show the product page without recommendations. If search is slow, show cached popular items. Patterns: timeouts, fallbacks, circuit breakers and bulkheads — see [Production Node.js](../07-nodejs-backend/14-production-nodejs.md).
 
 ---
 

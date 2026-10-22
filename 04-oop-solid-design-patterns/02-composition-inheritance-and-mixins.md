@@ -1811,7 +1811,7 @@ console.log(await reliableSender.send("OTP 4821"));
 **Explanation:** `withRetry` does not extend anything. It wraps any object with the same `send` interface (the Decorator pattern) and forwards calls to it. The same wrapper works for an SMS sender, an email sender or an HTTP client.
 
 **Follow-up questions:**
-- **What would you add for production?** — Exponential backoff with jitter between attempts, retrying only errors that are safe to retry (timeouts, 503), and making sure the operation is idempotent so a retry cannot charge a card twice. See [Reliability and resilience](../10-testing-security-production/09-reliability-and-resilience.md).
+- **What would you add for production?** — Exponential backoff with jitter between attempts, retrying only errors that are safe to retry (timeouts, 503), and making sure the operation is idempotent so a retry cannot charge a card twice. See [Production Node.js](../07-nodejs-backend/14-production-nodejs.md).
 
 ### Q16. How does composition make testing easier?
 

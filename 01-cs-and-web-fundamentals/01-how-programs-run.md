@@ -286,7 +286,7 @@ Practical rules:
 - Avoid adding or deleting properties on objects in hot code. `delete obj.prop` can push an object into a slower "dictionary" mode.
 - Keep functions **monomorphic** when it matters: give them the same types every time.
 
-But do not micro-optimize everyday code. Write clear code first. Measure with a profiler (see [Debugging and profiling](../10-testing-security-production/07-debugging-and-profiling.md)) before you change code for speed.
+But do not micro-optimize everyday code. Write clear code first. Measure with a profiler (see [Debugging and code review](../11-coding-interviews/06-debugging-and-code-review.md)) before you change code for speed.
 
 ```mermaid
 flowchart TD

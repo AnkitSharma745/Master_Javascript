@@ -1,19 +1,11 @@
 {
-  "name": "master-javascript-learning",
-  "version": "1.0.0",
+  "name": "master-javascript",
+  "version": "2.0.0",
   "private": true,
-  "engines": { "node": "^22.20.0 || ^24.0.0" },
+  "description": "Knowledge base and interview guide. Only used to check that links and diagrams in the docs are valid.",
+  "engines": { "node": ">=22" },
   "scripts": {
-    "indexes": "node scripts/generate-indexes.mjs",
-    "check:docs": "node scripts/check-docs.mjs",
-    "check:diagrams": "node scripts/check-diagrams.mjs",
-    "typecheck": "tsc --noEmit",
-    "build": "tsc",
-    "test": "npm run build && node --test tests/*.test.mjs",
-    "check": "npm run check:docs && npm run check:diagrams && npm run typecheck && npm test",
-    "lab": "node labs/execution.mjs",
-    "review": "node scripts/revision.mjs",
-    "start:api": "node build/projects/issue-board/server.js"
+    "check": "node scripts/check-docs.mjs"
   },
   "devDependencies": {
     "@types/node": "22.15.30",

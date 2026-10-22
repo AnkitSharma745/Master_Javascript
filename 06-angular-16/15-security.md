@@ -2,7 +2,7 @@
 
 > In this document you will learn what Angular does for you automatically to prevent attacks (especially XSS), where those protections end, and what you must still do yourself: safe use of `DomSanitizer`, Content Security Policy, XSRF protection, token handling and server-side authorization. Security questions in Angular interviews test whether you know the framework's guarantees and, more importantly, their limits.
 
-**Before this:** [Browser storage and web security basics](../01-cs-and-web-fundamentals/08-browser-storage-and-web-security-basics.md) · [Web security: XSS, CSRF, CORS, CSP](../10-testing-security-production/05-web-security-xss-csrf-cors-csp.md) · [Components and templates](02-components-and-templates.md) · **Interview questions:** [jump to the interview section](#interview-questions)
+**Before this:** [Browser storage and web security basics](../01-cs-and-web-fundamentals/08-browser-storage-and-web-security-basics.md) · [Web security: XSS, CSRF, CORS, CSP](../01-cs-and-web-fundamentals/08-browser-storage-and-web-security-basics.md) · [Components and templates](02-components-and-templates.md) · **Interview questions:** [jump to the interview section](#interview-questions)
 
 ## Table of contents
 
@@ -45,7 +45,7 @@ Angular helps a lot with point 2, as long as you do not turn its protections off
 
 ## XSS in one page
 
-The attacks are explained in depth in [Web security: XSS, CSRF, CORS, CSP](../10-testing-security-production/05-web-security-xss-csrf-cors-csp.md). Here is a short reminder.
+The attacks are explained in depth in [Web security: XSS, CSRF, CORS, CSP](../01-cs-and-web-fundamentals/08-browser-storage-and-web-security-basics.md). Here is a short reminder.
 
 **Cross-site scripting (XSS)** happens when an attacker manages to run their own JavaScript inside your page. Then the script runs with your app's permissions: it can read data on the page, call your API as the user, steal tokens from `localStorage`, or show a fake login form.
 
@@ -404,7 +404,7 @@ The Angular CLI 16 also added CSP support for the inline styles and critical CSS
 
 ### What CSRF is
 
-**Cross-site request forgery (CSRF or XSRF)** tricks a logged-in user's browser into sending a request to your API from another site. It works when your API authenticates with **cookies**, because the browser attaches cookies automatically. Details: [Web security: XSS, CSRF, CORS, CSP](../10-testing-security-production/05-web-security-xss-csrf-cors-csp.md).
+**Cross-site request forgery (CSRF or XSRF)** tricks a logged-in user's browser into sending a request to your API from another site. It works when your API authenticates with **cookies**, because the browser attaches cookies automatically. Details: [Web security: XSS, CSRF, CORS, CSP](../01-cs-and-web-fundamentals/08-browser-storage-and-web-security-basics.md).
 
 ### What Angular does
 
@@ -482,7 +482,7 @@ Also, do not put secret information in route data or in lazy bundles thinking th
 
 ## Token storage choices
 
-If your app uses tokens (for example from OAuth 2.0 / OpenID Connect), where you keep them is a trade-off. Full discussion: [Secure auth, secrets and dependencies](../10-testing-security-production/06-secure-auth-secrets-and-dependencies.md).
+If your app uses tokens (for example from OAuth 2.0 / OpenID Connect), where you keep them is a trade-off. Full discussion: [Authentication and authorization](../07-nodejs-backend/09-authentication-and-authorization.md).
 
 | Option | XSS impact | CSRF impact | Notes |
 | --- | --- | --- | --- |
@@ -548,7 +548,7 @@ Angular still sanitizes bindings during server rendering, so the template XSS pr
 
 ## Dependencies and keeping Angular updated
 
-Your app includes hundreds of npm packages. A vulnerable or malicious package can break all your other defenses. See [Secure auth, secrets and dependencies](../10-testing-security-production/06-secure-auth-secrets-and-dependencies.md).
+Your app includes hundreds of npm packages. A vulnerable or malicious package can break all your other defenses. See [Authentication and authorization](../07-nodejs-backend/09-authentication-and-authorization.md).
 
 - Run `npm audit` (or a tool like Snyk, Dependabot or Renovate) in CI, and fix high-severity issues.
 - Commit `package-lock.json` and use `npm ci` in CI for reproducible installs.
