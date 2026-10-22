@@ -650,7 +650,7 @@ Key facts:
 
 Up to Node.js 26, Node.js released a new **major** version every six months:
 
-- **Even** versions (18, 20, 22, 24, 26) are released in April. In October they become **LTS** (long-term support) and get about 30 months of support in total.
+- **Even** versions (18, 20, 22, 24, 26) are released in April or May. In October they become **LTS** (long-term support) and get about 30 months of support in total.
 - **Odd** versions (21, 23, 25) are released in October and are supported for only about 6 months. They never become LTS.
 
 An LTS line goes through two stages:
@@ -665,11 +665,11 @@ An LTS line goes through two stages:
 | Version | Codename | Status (October 2026) | End of life |
 | --- | --- | --- | --- |
 | Node.js 22 | Jod | Maintenance LTS | April 2027 |
-| Node.js 24 | Krypton | Active LTS (moves to Maintenance on 20 October 2026) | April 2028 |
-| Node.js 26 | — | Current (planned to become Active LTS on 28 October 2026) | April 2029 |
+| Node.js 24 | Krypton | Maintenance LTS (since 20 October 2026; it was Active LTS before) | April 2028 |
+| Node.js 26 | — | Current (becomes Active LTS on 28 October 2026) | April 2029 |
 | Node.js 25 | — | End of life | June 2026 |
 
-Node.js 20 reached end of life in 2026, so do not start new projects on it.
+Node.js 20 reached end of life on 30 April 2026, so do not start new projects on it. For a few days at the end of October 2026 there is no Active LTS line at all: 24 has moved to Maintenance and 26 has not yet been promoted. For a new project, choose Node.js 24 now and plan the move to 26 once it is LTS.
 
 ### The new yearly schedule
 
@@ -775,7 +775,7 @@ console.log(greet({ name: 'Asha', age: 30 })); // Hello, Asha
 Node.js simply **removes** the type annotations and runs the result. Important limits:
 
 - It does **not** type-check. You still run `tsc --noEmit` in CI.
-- It supports only "erasable" syntax. Features that generate JavaScript code, like `enum` and `namespace` with values, fail with a syntax error unless you use the separate `--experimental-transform-types` flag.
+- It supports only "erasable" syntax. Features that generate JavaScript code, like `enum` and `namespace` with values, fail with a syntax error. Node.js 22 to 25 had an `--experimental-transform-types` flag for them, but Node.js 26 removed it. Use a tool such as `tsx` (or compile with `tsc`) if you need these features.
 - It does not read `tsconfig.json` (no path aliases, no target down-leveling).
 - Imports must use the real file extension (`import { x } from './util.ts'`), and type-only imports should use `import type`.
 
@@ -1027,7 +1027,7 @@ app.get('/report', async (req, res) => {
 ### Q13. What does LTS mean, and which Node.js version would you use for a new project?
 
 **Short spoken answer (30–60 seconds):**
-> LTS means long-term support. Up to Node.js 26, even-numbered versions become LTS in October and get about 30 months of fixes: first Active LTS, then Maintenance LTS with only critical and security fixes. Odd versions live only six months. For a new production project I'd pick the newest Active LTS. In October 2026 that is Node.js 24, with Node.js 26 becoming LTS at the end of the month, while 22 is in maintenance until April 2027. Node.js has also announced that from version 27 there will be one major release per year and every release will become LTS.
+> LTS means long-term support. Up to Node.js 26, even-numbered versions become LTS in October and get about 30 months of fixes: first Active LTS, then Maintenance LTS with only critical and security fixes. Odd versions live only six months. For a new production project I'd pick the newest LTS line. In late October 2026 that means Node.js 24, which just moved to Maintenance LTS, or Node.js 26, which becomes Active LTS on 28 October. Node.js 22 is in maintenance until April 2027. Node.js has also announced that from version 27 there will be one major release per year and every release will become LTS.
 
 **Follow-up questions:**
 - **How do you make sure everyone uses the same version?** — `.nvmrc` or Volta config, `engines` in `package.json` (with `engine-strict` if you want npm to enforce it), the same version in the Docker base image and CI.
@@ -1087,7 +1087,7 @@ timer.unref(); // this timer alone will not keep the process alive
 - Node.js is great for I/O-bound work (APIs, real-time, streaming, tooling) and bad at CPU-heavy work on the main thread. Use worker threads, job queues or separate services for that.
 - Node.js differs from the browser: no DOM, full OS access, `process`/`Buffer`, CommonJS + ESM, libuv event loop. Many Web APIs (`fetch`, `URL`, `AbortController`) exist in both.
 - Environment variables are always strings. Unhandled rejections crash the process since Node.js 15. Prefer `process.exitCode` over `process.exit()`.
-- Use LTS versions in production. In October 2026: Node.js 24 Active LTS, 22 Maintenance LTS, 26 becoming LTS. From Node.js 27, one major release per year.
+- Use LTS versions in production. In late October 2026: Node.js 22 and 24 are in Maintenance LTS, and 26 becomes Active LTS on 28 October. From Node.js 27, one major release per year.
 - Modern built-ins (`fetch`, `node:test`, `--watch`, `--env-file`, `--permission`, type stripping, `require(esm)`) remove many old dependencies.
 
 ## References

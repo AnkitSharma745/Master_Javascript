@@ -216,7 +216,7 @@ The `http.Server` has settings that protect you against slow or never-ending cli
 | --- | --- | --- |
 | `server.headersTimeout` | 60 seconds (or `requestTimeout` if smaller) | Max time to receive all request headers |
 | `server.requestTimeout` | 300 seconds (since Node 18) | Max time to receive the whole request |
-| `server.keepAliveTimeout` | a few seconds | How long an idle keep-alive connection stays open |
+| `server.keepAliveTimeout` | 5 seconds | How long an idle keep-alive connection stays open |
 | `maxHeaderSize` option | 16 KiB | Max total size of request headers |
 | `server.maxRequestsPerSocket` | 0 (no limit) | Max requests on one keep-alive connection |
 
@@ -469,7 +469,7 @@ When is plain `http` still a good choice?
 | Route path syntax | `*`, `?` and regex-like strings | Named wildcards (`/*splat`), optional parts in braces (`{.:ext}`), no regex characters in strings |
 | `req.body` without a parser | `{}` | `undefined` |
 | `req.query` | Writable property | Read-only getter; default query parser is `"simple"` |
-| Status | Maintenance (security and important fixes only) since April 2025 | Active |
+| Status | Still supported, but new features go to Express 5; plan to upgrade | Active (5.3 is the latest release in October 2026) |
 
 This document uses **Express 5** and points out where Express 4 behaves differently, because many existing projects still run Express 4.
 
@@ -1391,7 +1391,7 @@ process.on("SIGTERM", () => {
 Notice two design choices:
 
 1. **Factories instead of global singletons.** `createProductService(repo)` receives its dependency. This is simple manual **dependency injection** (explained in [Dependency inversion and injection](../04-oop-solid-design-patterns/05-dependency-inversion-and-injection.md)). In tests you pass a fake repository.
-2. **`app.ts` does not call `listen()`.** Tests import `createApp()` and send requests with a library like `supertest` without opening a real port (see [Testing Node.js APIs](../10-testing-security-production/03-testing-nodejs-apis.md)). `server.ts` is the only file that deals with ports, timeouts and shutdown. A more complete graceful shutdown is in [Validation and error handling](08-validation-and-error-handling.md#graceful-shutdown).
+2. **`app.ts` does not call `listen()`.** Tests import `createApp()` and send requests with a library like `supertest` without opening a real port (see [Testing Node.js APIs](../10-testing-security-production/03-testing-nodejs-apis.md)). `server.ts` is the only file that deals with ports, timeouts and shutdown. A complete graceful shutdown is in [Production Node.js](14-production-nodejs.md#graceful-shutdown).
 
 ---
 
@@ -2092,7 +2092,7 @@ app.post("/api/users", validateBody(registerSchema), async (req, res) => {
 
 **Common mistakes:** Forgetting middleware packages that rely on writing `req.query`.
 
-**Where this is used in real projects:** Many companies are doing this migration now because Express 4 is in maintenance mode.
+**Where this is used in real projects:** Many companies are doing this migration now because Express 5 is the default release and new features only go there.
 
 ---
 

@@ -1046,62 +1046,25 @@ The steps:
 3. Close other resources: database pools, Redis, message consumers.
 4. Exit. If it takes too long, **force exit** after a deadline.
 
-```mermaid
-sequenceDiagram
-  participant K as Kubernetes
-  participant N as Node.js process
-  participant S as HTTP server
-  participant DB as DB pool
-  K->>N: SIGTERM
-  N->>S: server.close - stop accepting new connections
-  Note over S: in-flight requests finish,<br/>idle keep-alive sockets close
-  S-->>N: close callback
-  N->>DB: pool.end
-  DB-->>N: closed
-  N->>N: event loop empty, process exits 0
-  Note over K,N: if still running after the grace period,<br/>Kubernetes sends SIGKILL
-```
-
 ```js
-const http = require('node:http');
-
-const server = http.createServer(app);
-server.listen(3000);
-
+// The shape of a shutdown handler (the full, tested version is in Production Node.js)
 let shuttingDown = false;
 
-async function shutdown(signal) {
-  if (shuttingDown) return; // ignore a second signal
+process.on('SIGTERM', () => {
+  if (shuttingDown) return;            // a second signal can arrive
   shuttingDown = true;
-  console.log(`${signal} received, shutting down`);
 
-  // Safety net: force exit if cleanup hangs
-  const forceExit = setTimeout(() => {
-    console.error('forced exit after timeout');
-    process.exit(1);
-  }, 10_000);
-  forceExit.unref(); // this timer alone should not keep the process alive
+  const forceExit = setTimeout(() => process.exit(1), 10_000);
+  forceExit.unref();                   // this timer alone must not keep the process alive
 
-  server.close(async (err) => {
-    console.log('http server closed');
-    await db.close();             // close pools, consumers, etc.
-    process.exitCode = err ? 1 : 0; // exit naturally when the loop is empty
+  server.close(async () => {           // stop accepting new connections, wait for in-flight requests
+    await db.close();                  // then close pools, Redis, queue consumers
+    process.exitCode = 0;              // exit naturally when the event loop is empty
   });
-}
-
-process.on('SIGTERM', () => shutdown('SIGTERM'));
-process.on('SIGINT', () => shutdown('SIGINT'));
+});
 ```
 
-I tested this pattern by sending `SIGTERM` while a 300 ms request was in progress. The output was: `SIGTERM received` → the in-flight request still got its `ok` response → `http server closed` → `db pool closed` → exit code 0.
-
-Details that matter:
-
-- `server.close()` waits for active connections. Since Node.js 19, it also closes **idle** keep-alive connections. `server.closeAllConnections()` forcefully closes everything if needed.
-- The force-exit timeout must be **shorter** than the platform's grace period (Kubernetes default: 30 seconds).
-- During shutdown, make the readiness health check fail so the load balancer stops sending new traffic.
-
-More production details (health checks, readiness, Docker) are in [Production Node.js](14-production-nodejs.md).
+The full production version is explained in one place: [Production Node.js: Graceful shutdown](14-production-nodejs.md#graceful-shutdown). It covers readiness checks, the Kubernetes readiness race, `server.close()` behavior since Node.js 19, `closeAllConnections()`, closing queue workers, and a tested example.
 
 ## Timers in Node.js
 
@@ -1428,7 +1391,7 @@ stream.on('data', (chunk) => { text += chunk; });
 **Short spoken answer (30–60 seconds):**
 > I listen for `SIGTERM`, which Docker and Kubernetes send before stopping a container, and `SIGINT` for Ctrl+C. When it arrives, I first stop accepting new connections with `server.close()` and make the readiness check fail so the load balancer stops routing to me. In-flight requests finish; since Node 19, `server.close` also closes idle keep-alive connections. When the server's close callback fires, I close the database pool, Redis and queue consumers, and let the process exit naturally. I also start an unref'ed force-exit timer, shorter than Kubernetes' grace period, so a stuck connection can't make the pod hang until `SIGKILL`.
 
-**Code:** see [Graceful shutdown](#graceful-shutdown).
+**Code:** see [Graceful shutdown](#graceful-shutdown) for the short shape, and [Production Node.js: Graceful shutdown](14-production-nodejs.md#graceful-shutdown) for the full tested version.
 
 **Follow-up questions:**
 - **Why might your SIGTERM handler never run in Docker?** — If the container starts with `npm start` or a shell form `CMD`, the shell may be PID 1 and not forward signals. Use `CMD ["node", "server.js"]` or `--init`/`tini`.

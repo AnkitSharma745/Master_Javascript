@@ -1095,7 +1095,7 @@ productsRouter.patch("/:id", validateBody(updateProductSchema), async (req, res)
 
 ### ETags also power caching
 
-The same ETag supports **conditional GET**: the client sends `If-None-Match: "v7"`. If nothing changed, the server answers `304 Not Modified` with no body. That saves bandwidth. Express sets weak ETags on `res.send` responses automatically. Details in [Caching](11-caching.md).
+The same ETag supports **conditional GET**: the client sends `If-None-Match: "v7"`. If nothing changed, the server answers `304 Not Modified` with no body. That saves bandwidth. Express sets weak ETags on `res.send` responses automatically. Details in [Caching: ETag and 304 Not Modified](11-caching.md#etag-and-304-not-modified).
 
 ### Alternatives
 
@@ -1398,7 +1398,7 @@ Cache-Control: no-store                     (never store — sensitive data)
 ETag: "v7"                                  (allows 304 Not Modified revalidation)
 ```
 
-Rules of thumb: public catalog data can be cached briefly; personal data should be `private` or `no-store`; mutation endpoints (`POST`, `PATCH`) are not cached. If a response changes based on a request header (like `Accept-Language` or `Authorization`), send `Vary` with that header name. Server-side caching (Redis, cache-aside, invalidation) is in [Caching](11-caching.md), and caching strategy across layers in [Caching strategies and invalidation](../09-system-design/03-caching-strategies-and-invalidation.md).
+Rules of thumb: public catalog data can be cached briefly; personal data should be `private` or `no-store`; mutation endpoints (`POST`, `PATCH`) are not cached. If a response changes based on a request header (like `Accept-Language` or `Authorization`), send `Vary` with that header name. All `Cache-Control` directives with Express code are explained in [Caching: HTTP caching from Express](11-caching.md#http-caching-from-express). Server-side caching (Redis, cache-aside, invalidation) is in the same document, and caching strategy across layers in [Caching strategies and invalidation](../09-system-design/03-caching-strategies-and-invalidation.md).
 
 ---
 
@@ -1670,3 +1670,379 @@ Use this when asked "How do you design a good REST API?" or "Design the API for 
 - **Use HTTP features** (caching headers, conditional requests, `Location`, `Retry-After`) instead of inventing your own.
 
 ---
+
+## Interview questions
+
+### Q1. What is REST, and what makes an API RESTful?
+
+**What the interviewer is checking:** Whether you know REST is an architectural style with constraints, not just "JSON over HTTP".
+
+**Short spoken answer (30–60 seconds):**
+> "REST is an architectural style from Roy Fielding's dissertation. A RESTful API exposes resources — things like orders or users — at URLs, and clients act on them with the standard HTTP methods. The main constraints are client–server separation, statelessness — each request carries everything needed, like the token — cacheable responses, a uniform interface with standard methods, status codes and media types, and a layered system, so proxies and CDNs can sit in between. In practice most good APIs are at Richardson level 2: proper resources, methods and status codes. Full hypermedia, level 3, is rare."
+
+**Detailed explanation:** The value of REST comes from reusing HTTP's semantics. Because `GET` is safe and cacheable, CDNs can cache it. Because `PUT` and `DELETE` are idempotent, clients and proxies can retry them. Because status codes are standard, monitoring and client libraries understand failures without reading the body.
+
+**Follow-up questions:**
+- **Is an API that uses `POST /api` for everything RESTful?** — No. That is RPC over HTTP (Richardson level 0). It works, but loses caching, method semantics and standard tooling.
+- **Is REST tied to JSON?** — No. REST is about resources and representations. JSON is just the most common representation.
+- **What is the uniform interface?** — Resources identified by URIs, manipulation through representations, self-descriptive messages (methods, status codes, media types), and hypermedia links.
+
+**Common mistakes:** Saying "REST means JSON"; not knowing what stateless means; claiming every HTTP API is REST.
+
+**Where this is used in real projects:** Almost every public and frontend-facing API.
+
+### Q2. What does "stateless" mean? Does it forbid sessions and databases?
+
+**What the interviewer is checking:** A common misunderstanding.
+
+**Short spoken answer:**
+> "Stateless means the server does not keep conversation state between requests in its own memory. Each request contains everything needed to process it, for example the access token and all parameters. It does not mean there is no database — resource state is stored in databases, that is normal. Even server-side sessions are fine if the session data is in a shared store like Redis and the request carries the session ID in a cookie, because then any server instance can handle any request. What breaks statelessness is something like 'step 2 only works on the same server instance that handled step 1'. Statelessness is what makes horizontal scaling and load balancing simple."
+
+**Follow-up questions:**
+- **Are sticky sessions stateless?** — No. They tie a client to one instance; if it dies, the state is lost. Use a shared store instead.
+- **Does JWT make an API stateless?** — It removes the session lookup, but stateless REST was possible before JWT. JWTs have their own trade-offs (revocation). See [Authentication and authorization](09-authentication-and-authorization.md).
+
+**Common mistakes:** "Stateless means we can't use cookies or a database."
+
+**Where this is used in real projects:** Autoscaling groups, Kubernetes deployments, serverless functions — all rely on stateless request handling.
+
+### Q3. Which HTTP methods are safe and which are idempotent? Why does it matter?
+
+**What the interviewer is checking:** Precise definitions and their practical impact on retries.
+
+**Short spoken answer (30–60 seconds):**
+> "Safe means the method doesn't change server state — GET, HEAD and OPTIONS. Idempotent means doing it once or ten times leaves the server in the same state — all safe methods plus PUT and DELETE. POST is not idempotent, and PATCH isn't guaranteed to be; it depends on whether the patch sets values or increments them. This matters because networks fail. When a request times out, the client doesn't know if it was processed. For idempotent methods, it can simply retry. For POST, a retry can create a duplicate order or a double charge, so we add idempotency keys."
+
+**Code or diagram:**
+
+```text
+DELETE /orders/42  -> 204   (order deleted)
+DELETE /orders/42  -> 404   (already gone)  -> response differs, server STATE is the same: idempotent
+POST   /orders     -> 201 ord_1
+POST   /orders     -> 201 ord_2                -> two orders: NOT idempotent
+```
+
+**Follow-up questions:**
+- **Is `DELETE` still idempotent if the second call returns 404?** — Yes. Idempotency is about the effect on server state, not the response. (Some APIs return 204 both times for friendlier retries; both are valid.)
+- **Can a GET have side effects?** — It must not change resource state. Logging and metrics are fine. Never do `GET /orders/42/delete` — crawlers and link prefetchers will call it.
+- **How do you make PATCH idempotent?** — Send absolute values (`"stock": 8`) instead of relative operations (`"increment": 2`), or use If-Match.
+
+**Common mistakes:** Confusing safe and idempotent; saying PATCH is always idempotent; saying DELETE is not idempotent because of the 404.
+
+**Where this is used in real projects:** HTTP clients and proxies retry idempotent requests automatically; payment APIs require idempotency keys on POST.
+
+### Q4. What is the difference between PUT and PATCH?
+
+**What the interviewer is checking:** Semantics and consequences for clients.
+
+**Short spoken answer:**
+> "PUT replaces the whole resource with what I send. If I leave a field out, it is cleared or reset. Because it says 'make it exactly this', PUT is idempotent. PATCH changes only the fields I send and leaves the rest alone, which is what most edit forms want. PATCH isn't guaranteed to be idempotent, because a patch could be an operation like 'add 10'. There are two standard patch formats: JSON Merge Patch, which is a partial object where null means delete, and JSON Patch, which is a list of operations. Most APIs use merge-patch style."
+
+**Code:**
+
+```js
+// Current: { name: "Lamp", priceCents: 2000, color: "white" }
+// PUT   { name: "Lamp", priceCents: 2500 }  -> { name: "Lamp", priceCents: 2500 }   color removed
+// PATCH { priceCents: 2500 }                -> { name: "Lamp", priceCents: 2500, color: "white" }
+```
+
+**Follow-up questions:**
+- **When would you use PUT?** — When the client owns the full document: user settings, uploading a file to a known path, idempotent upserts.
+- **How do you remove a field with merge patch?** — Send it as `null`.
+- **What is the risk of PUT with concurrent edits?** — Lost updates, because the client overwrites fields it did not mean to change. Use If-Match.
+
+**Common mistakes:** Implementing PUT like PATCH (ignoring missing fields) without documenting it.
+
+**Where this is used in real projects:** Profile edit forms (PATCH), configuration documents (PUT).
+
+### Q5. When should POST create a resource and when should PUT?
+
+**Short answer:** Use `POST /collection` when the **server** assigns the ID; return `201` with a `Location` header. Use `PUT /collection/{id}` when the **client** knows or chooses the ID (for example a slug, a file path or a client-generated UUID); PUT is naturally idempotent, so retries are safe, and it returns `201` if it created the resource or `200`/`204` if it replaced it.
+
+### Q6. What is the difference between 401 and 403?
+
+**What the interviewer is checking:** Authentication vs authorization in HTTP terms.
+
+**Short spoken answer:**
+> "401 Unauthorized actually means 'unauthenticated' — the server doesn't know who you are, because the token is missing, invalid or expired. The client should log in or refresh its token, and the response should include a `WWW-Authenticate` header. 403 Forbidden means the server knows who you are, but you are not allowed to do this — logging in again won't help. For example, a normal user calling an admin endpoint gets 403. And for private resources I often return 404 instead of 403, so I don't reveal that the resource exists."
+
+**Follow-up questions:**
+- **What should the frontend do on each?** — On 401, try a token refresh once, then redirect to login. On 403, show "You don't have permission" and do not retry.
+- **Why the confusing name "Unauthorized"?** — Historical naming in the HTTP spec. Semantically it is about authentication.
+
+**Common mistakes:** Returning 403 for expired tokens (breaks automatic refresh logic in clients).
+
+**Where this is used in real projects:** Angular HTTP interceptors usually branch on exactly these two codes.
+
+### Q7. When do you use 400 vs 422, and 409 vs 412?
+
+**Short answer:**
+- **400 Bad Request:** the request is malformed — invalid JSON, wrong types, missing required fields that make it unparseable.
+- **422 Unprocessable Content:** well-formed, but semantically invalid — negative quantity, end date before start date. Many teams use 400 for all validation; choose one and document it.
+- **409 Conflict:** conflicts with the resource's current **state** — duplicate email, cancelling a shipped order.
+- **412 Precondition Failed:** a conditional header failed — `If-Match` ETag does not match the current version.
+
+### Q8. How do you design error responses for an API?
+
+**What the interviewer is checking:** Consistency, client usability, security.
+
+**Short spoken answer (30–60 seconds):**
+> "I use one format for every error, and I use the standard RFC 9457 Problem Details, served as `application/problem+json`. It has a `type` URI that identifies the kind of error — clients branch on that — a stable `title`, the `status`, a `detail` for this specific occurrence and optionally an `instance`. I add extensions, like an `errors` array with JSON pointers for validation errors so the frontend can highlight the fields, and a request ID so support can find the log. The HTTP status code always matches. For 5xx errors I return a generic message and never stack traces or SQL — details go only to the logs."
+
+**Code:** see [Error format with RFC 9457 Problem Details](#error-format-with-rfc-9457-problem-details).
+
+**Follow-up questions:**
+- **Why not just `{ "error": "message" }`?** — Clients cannot reliably branch on free text, and messages change or get translated. A stable `type` (or code) is machine-readable.
+- **Should error messages be localized?** — Clients can map `type`/codes to localized text. `detail` is for developers or can be localized with `Accept-Language`.
+- **What replaced RFC 7807?** — RFC 9457 (2023) obsoletes it; the format is compatible.
+
+**Common mistakes:** Different shapes per endpoint; 200 with error bodies; leaking internals.
+
+**Where this is used in real projects:** Frontend error interceptors, SDKs, API gateways — all benefit from one predictable format.
+
+### Q9. Compare offset pagination and cursor pagination.
+
+**What the interviewer is checking:** Performance and consistency reasoning, plus implementation knowledge.
+
+**Short spoken answer (30–60 seconds):**
+> "Offset pagination uses `limit` and `offset`. It is simple and lets users jump to page 7, but the database has to read and skip all the offset rows, so deep pages get slow, and if rows are inserted or deleted while someone pages, they see duplicates or miss rows. Cursor pagination — also called keyset pagination — returns an opaque cursor that encodes the sort values of the last row. The next query says 'WHERE (created_at, id) < (cursor values) ORDER BY created_at DESC, id DESC LIMIT n'. With a matching index it is equally fast on every page and stable under inserts. The trade-offs are no random page jumps, a fixed sort order with a unique tie-breaker, and more implementation work. I use offsets for small admin tables and cursors for feeds, history and big datasets."
+
+**Code:** see [Cursor pagination](#cursor-pagination-keyset-pagination).
+
+**Follow-up questions:**
+- **Why add `id` to the sort?** — The sort must be unique. With only `created_at`, rows with equal timestamps can be skipped or repeated across pages.
+- **Why fetch `limit + 1` rows?** — To know if a next page exists without a separate count query.
+- **Why make the cursor opaque (base64)?** — So clients do not build or depend on its structure, and you can change it later. It is not security — validate it like any input.
+- **How do you show "total results"?** — Optional `includeTotal`, estimates, or just `hasMore`; `COUNT(*)` on big tables is expensive.
+
+**Common mistakes:** Cursor without a tie-breaker; no maximum `limit`; using offset for infinite scroll.
+
+**Where this is used in real projects:** Social feeds, order history, audit logs, exports, public APIs (Stripe, Slack and GitHub use cursor-style pagination on many endpoints).
+
+### Q10. Users report seeing the same item twice while scrolling an infinite list. What is happening?
+
+**What the interviewer is checking:** Debugging skill connecting UI symptoms to API design.
+
+**Answer:** The list most likely uses **offset pagination** on data that changes. Example (reproduced with SQLite, newest first, page size 2): page 1 returned `o5, o4`; then a new item `o6` was inserted at the top; page 2 (`OFFSET 2`) returned `o4, o3`. Every row moved down by one, so `o4` appeared again. Deletes cause the opposite: a skipped item.
+
+**Fixes:**
+1. Switch to cursor pagination with a unique sort key (best).
+2. As a quick frontend patch, de-duplicate by ID — but missed items still happen.
+3. Make sure the sort is deterministic (add `id` as a tie-breaker) — non-deterministic ordering causes the same symptom even without inserts.
+
+### Q11. How do you version an API, and what counts as a breaking change?
+
+**What the interviewer is checking:** API evolution and empathy for client developers.
+
+**Short spoken answer (30–60 seconds):**
+> "First I try not to need versions: I make changes additive — new endpoints, new optional fields, new response fields — and I tell clients to ignore unknown fields. Breaking changes are things like removing or renaming a field, changing a type, making an optional field required, changing defaults or status codes. When I must break something, I usually use a major version in the path, like `/v1` and `/v2`, because it's explicit and easy to route and cache. Header-based versioning keeps URLs clean but is harder to test. Both versions share the same services; only the HTTP mapping differs. Then I deprecate the old version with a timeline, Deprecation and Sunset headers, monitor who still uses it, and finally return 410 Gone."
+
+**Follow-up questions:**
+- **Is adding an enum value breaking?** — It can be, if clients use exhaustive switches. Document that new values may appear and that clients must handle unknown values.
+- **How does Stripe do it?** — Date-based versions pinned per account, with a compatibility layer that transforms responses for older versions.
+- **How long do you support an old version?** — Depends on clients; mobile apps need long windows (months to years). Measure actual usage.
+
+**Common mistakes:** Versioning for every small change; no deprecation plan; changing behavior silently in place.
+
+**Where this is used in real projects:** Any API consumed by mobile apps or external partners.
+
+### Q12. A mobile client's `POST /payments` timed out. How do you prevent a double charge when it retries?
+
+**What the interviewer is checking:** Idempotency design — a classic senior question.
+
+**Short spoken answer (30–60 seconds):**
+> "A timeout doesn't tell the client whether the payment happened, so the API must make retries safe. I'd require an `Idempotency-Key` header — a UUID the client generates once per payment attempt and reuses for retries. On the server, I atomically create a record for that key, scoped to the user, with a hash of the request — for example with Redis `SET NX` or an insert with a unique constraint. If the key is new, I process the payment and store the response. If the same key comes again and the first request finished, I return the stored response without charging again. If it's still running, I return 409; if the body differs, 422. Ideally the key is stored in the same database transaction as the payment so they can't get out of sync, and keys expire after a day or so."
+
+**Code or diagram:** see [Idempotency keys for safe retries](#idempotency-keys-for-safe-retries).
+
+**Follow-up questions:**
+- **Why scope keys to the user?** — Otherwise one user could replay another user's response or collide with their key.
+- **What if the server crashes after charging but before storing the response?** — With a separate store, the key stays "in progress" until it expires, and you must reconcile with the payment provider (many providers accept your idempotency key too). Storing the key in the same transaction as the business write avoids this gap.
+- **Does the client generate a new key on retry?** — No. Same operation, same key. New key only for a new intended payment.
+- **Why also a unique constraint on order payments?** — Defense in depth: even a client bug that sends different keys cannot pay one order twice.
+
+**Common mistakes:** Non-atomic check-then-insert; global (unscoped) keys; generating the key inside the retry loop.
+
+**Where this is used in real projects:** Payments (Stripe, Adyen, PayPal), order creation, money transfers, any "create" from mobile clients.
+
+### Q13. Two admins edit the same product at the same time. How do you prevent lost updates?
+
+**What the interviewer is checking:** Concurrency control in APIs.
+
+**Short spoken answer:**
+> "I use optimistic concurrency. Each product has a version number, which the API exposes as an ETag. When a client updates, it sends `If-Match` with the ETag it saw. The server runs `UPDATE ... SET ..., version = version + 1 WHERE id = $1 AND version = $2`. If no row was updated, someone else changed the product in between, so I return 412 Precondition Failed and the client reloads and reapplies the change. If the client sends no `If-Match` on an endpoint that requires it, I return 428. The key point is that the version check happens inside the UPDATE, atomically — not as a separate read followed by a write."
+
+**Follow-up questions:**
+- **Why not lock the row while the admin edits?** — Users think for minutes; holding database locks that long blocks everyone and locks leak when users close the tab. Pessimistic locks are for short server-side transactions.
+- **Weak or strong ETag for If-Match?** — Strong. Weak ETags never match in If-Match comparisons.
+- **What about a version field in the body instead?** — Works the same way; ETags are the HTTP-standard way and also enable conditional GETs.
+
+**Common mistakes:** Reading the version, comparing in JavaScript, then writing (race condition).
+
+**Where this is used in real projects:** Admin panels, collaborative editing of records, inventory, CMS content.
+
+### Q14. How would you design an endpoint that generates a large report taking several minutes?
+
+**What the interviewer is checking:** Async API patterns.
+
+**Short spoken answer:**
+> "I wouldn't keep the HTTP request open — proxies time out and connections are wasted. `POST /v1/reports` validates the request, creates an operation record, puts a job on a queue and returns 202 Accepted with a `Location` header pointing to `/v1/operations/{id}`, plus `Retry-After`. Workers process the job and update the status: queued, running, succeeded or failed. The client polls the operation; when it's done, the response links to the result, for example a download URL to object storage. I make the POST idempotent, rate-limit polling, and optionally send a webhook or push notification when it finishes."
+
+**Follow-up questions:**
+- **Polling vs webhooks vs WebSockets?** — Polling is simplest and works everywhere; webhooks suit server-to-server integrations; SSE/WebSockets give instant updates to browsers.
+- **Where do you store the file?** — Object storage (S3 or similar) with a short-lived pre-signed URL, not in the database or on the API server's disk.
+
+**Common mistakes:** Doing the work inside the request; returning 200 before work is done without a way to check status.
+
+**Where this is used in real projects:** Exports, imports, video/image processing, bulk emails, provisioning.
+
+### Q15. How do you model an action like "cancel an order" in REST?
+
+**Short answer:** Three options: (1) `PATCH /orders/42 {"status":"cancelled"}` — simple, but hides rules and side effects inside a generic update; (2) a noun resource, `POST /orders/42/cancellations` with a reason — models the cancellation as data with history; (3) a controller-style action, `POST /orders/42/cancel` — pragmatic and very common (Stripe, GitHub). I prefer an explicit action endpoint when the transition has business rules (not after shipping), side effects (refund, stock release) or separate permissions. Make it idempotent: cancelling an already-cancelled order returns `200` with the order; cancelling a shipped one returns `409`.
+
+### Q16. Design the URIs for users, their orders, and the items in an order.
+
+**Short answer:**
+
+```text
+GET  /users/{userId}
+GET  /users/{userId}/orders        (orders of a user — scoping a collection)
+GET  /orders/{orderId}             (an order has its own global ID: no need to nest it)
+GET  /orders/{orderId}/items       (items belong to an order)
+GET  /me/orders                    (convenient alias for the logged-in user)
+```
+
+Keep nesting to one level. Avoid `/users/7/orders/42/items/3`. Once a resource has a global ID, give it a top-level path. Use plural nouns and kebab-case.
+
+### Q17. Review this API design.
+
+```text
+GET  /api/getAllOrders
+POST /api/order/create
+POST /api/order/delete?id=42
+GET  /api/orders?page=500000
+PUT  /api/orders/42      body: { "status": "shipped" }
+GET  /api/orders/42      -> 200 { "success": false, "message": "not found" }
+POST /api/payments       (no retry protection)
+```
+
+**What the interviewer is checking:** Ability to spot design smells quickly and propose fixes.
+
+**Answer:**
+1. Verbs in URLs and inconsistent singular/plural → `GET /orders`, `POST /orders`, `DELETE /orders/42`.
+2. Deleting via `POST` with a query parameter → `DELETE /orders/42` (idempotent, clear).
+3. Deep offset (`page=500000`) → slow; use cursor pagination and cap `limit`.
+4. `PUT` with a partial body → either it wipes other fields (true PUT) or it is really a PATCH. And shipping is a state transition with rules and permissions → `POST /orders/42/ship` (admin only), `409` if not paid.
+5. `200` with an error body → `404` with a problem-details body.
+6. No idempotency on payments → require `Idempotency-Key`.
+7. No version prefix → add `/v1` before external clients depend on it.
+8. Also ask: how is authorization done per order? Is there rate limiting? Are errors consistent?
+
+### Q18. How do you implement sorting and filtering safely?
+
+**Short answer:** Accept a documented syntax like `?sort=-createdAt,totalCents&status=paid`. **Map every sortable/filterable field through an allowlist** to real column names — SQL parameters (`$1`) cannot replace identifiers like column names, so building `ORDER BY ${req.query.sort}` is SQL injection. Values go into parameterized queries. Always append a unique tie-breaker (`id`) for stable ordering, cap list sizes, and make sure common filter/sort combinations have indexes.
+
+```ts
+const SORTABLE = { createdAt: "created_at", totalCents: "total_cents" } as const;
+// "-createdAt" -> "created_at DESC, id DESC"; unknown fields -> 400
+```
+
+### Q19. What is HATEOAS? Would you use it?
+
+**Short answer:** Hypermedia As The Engine Of Application State: responses include links to related resources and to the actions currently allowed (for example a `cancel` link only while the order is cancellable). Clients follow links instead of hard-coding URLs and rules. Benefits: the server owns workflow rules, URLs can change, the API is discoverable. Costs: larger payloads, extra complexity, and most clients still hard-code URLs from the docs. I usually include `self` and pagination links, and sometimes action links that the UI can use to show or hide buttons, but not full hypermedia.
+
+### Q20. What is OpenAPI and how do you use it in a team?
+
+**What the interviewer is checking:** API documentation and contract practices.
+
+**Short spoken answer:**
+> "OpenAPI is the standard machine-readable description of a REST API — endpoints, parameters, request and response schemas, auth schemes — in YAML or JSON. Version 3.1 aligns with JSON Schema. We keep the spec in the repo and review it like code. From it we generate interactive docs with Swagger UI or Redoc, TypeScript types for the Angular frontend, and sometimes request validation and mock servers. Either we design the spec first so frontend and backend can work in parallel, or we generate it from code, for example from NestJS decorators or Zod schemas. In both cases we add a CI check so the spec and the implementation can't drift apart."
+
+**Follow-up questions:**
+- **Swagger vs OpenAPI?** — Swagger was the original name; the spec was renamed OpenAPI in 2016. "Swagger" now refers to the SmartBear tools (Swagger UI, Swagger Editor).
+- **How do you catch breaking changes?** — Diff the spec in CI with an OpenAPI diff tool and fail the build on breaking changes to published versions.
+
+**Common mistakes:** Treating docs as an afterthought that drifts from reality.
+
+**Where this is used in real projects:** Frontend–backend contracts, partner integrations, SDK generation, API gateways.
+
+### Q21. REST, GraphQL or gRPC — when would you choose each?
+
+**What the interviewer is checking:** Senior trade-off thinking.
+
+**Short spoken answer (30–60 seconds):**
+> "REST is my default for public APIs and most frontend APIs: simple, cacheable with standard HTTP, works everywhere, and great tooling. GraphQL fits when many different clients need different shapes of deeply related data — a complex dashboard or mobile and web apps with different needs — because the client asks for exactly the fields it wants in one round trip. The costs are harder caching, query cost control and N+1 problems on the server. gRPC fits internal service-to-service communication: strongly typed contracts from proto files, compact binary messages over HTTP/2 and streaming. It's not natively callable from browsers, so I rarely expose it publicly. Many systems combine them — gRPC inside, REST or GraphQL at the edge."
+
+**Follow-up questions:**
+- **How do you solve over-fetching in REST without GraphQL?** — Field selection (`?fields=`), expansion (`?expand=`), or a backend-for-frontend endpoint shaped for a specific screen.
+- **How do you protect a GraphQL API from expensive queries?** — Depth and complexity limits, persisted queries, timeouts, DataLoader batching.
+
+**Common mistakes:** "GraphQL replaces REST", or choosing gRPC for a browser-facing API without a gateway.
+
+**Where this is used in real projects:** See [API styles and real-time communication](../09-system-design/04-api-styles-and-real-time-communication.md).
+
+### Q22. How do you protect a public API from abuse and overload?
+
+**Short answer:** Layered limits: rate limiting per API key/user/IP (token bucket or sliding window, stored in Redis when you run many instances) returning `429` with `Retry-After`; quota headers so clients can slow down; caps on `limit`, body size, batch size and expansion depth; request timeouts; authentication for anything expensive; caching of public GETs at a CDN; and monitoring with alerts on unusual traffic. Also make expensive operations asynchronous (`202`) so one client cannot hold many connections.
+
+### Q23. What is BOLA (IDOR) and how do you prevent it?
+
+**What the interviewer is checking:** The most common API security flaw.
+
+**Short spoken answer:**
+> "BOLA — Broken Object Level Authorization, also called IDOR — is number one in the OWASP API Security Top 10. It happens when the API checks that the user is logged in but not that the specific object belongs to them. So user A calls `GET /orders/43`, changes the ID to 44 and reads user B's order. Using UUIDs makes guessing harder but doesn't fix it. The fix is to check access for every object on every request — for example scoping the query, `WHERE id = $1 AND customer_id = $2`, or checking ownership or permissions in the service layer — and returning 404 so we don't reveal that the object exists. I also add automated tests that try to access other users' objects."
+
+**Follow-up questions:**
+- **Where should the check live?** — In the service or data-access layer, so every route and job that reads the object gets it; not only in a frontend or a single route.
+- **How about multi-tenant apps?** — Every query is scoped by `tenant_id`; Postgres row-level security can enforce it as a second line of defense.
+
+**Common mistakes:** Relying on hidden or random IDs; checking only in the UI.
+
+**Where this is used in real projects:** Every API with user-owned data. See [Authentication and authorization](09-authentication-and-authorization.md).
+
+### Q24. Should `DELETE` return 404 when the resource is already gone?
+
+**Short answer:** Both styles are valid. Returning `404` on the second call is accurate and still idempotent, because the server state (resource absent) is the same. Returning `204` every time makes client retries simpler, because a retry after a timeout does not look like an error. Choose one, document it, and keep it consistent. If deletes are soft deletes, `GET` afterwards should return `404` (or `410 Gone` if you want to say it existed).
+
+### Q25. How do you design a bulk create endpoint?
+
+**Short answer:** `POST /v1/products/batch` with an `items` array, a maximum batch size, and a clear policy: **atomic** (one transaction; `201` or `422` listing failing indexes) or **partial success** (`200` with a per-item result array containing status, created ID or problem details, plus a summary). Make it retry-safe with an idempotency key or client-supplied natural keys and upsert semantics. For very large imports, accept a file upload, return `202`, and process it in a background job.
+
+---
+
+## Summary
+
+- REST exposes **resources** at URLs and uses standard HTTP methods, status codes and headers; requests are **stateless**.
+- Use **plural nouns**, kebab-case, shallow nesting; verbs belong in the method, except for explicit action endpoints like `/orders/{id}/cancel`.
+- **Safe:** GET, HEAD, OPTIONS. **Idempotent:** those plus PUT and DELETE. POST is not idempotent; PATCH is not guaranteed.
+- Pick precise status codes: `201` + `Location`, `202`, `204`, `400`/`422`, `401` vs `403`, `404`, `409` vs `412`, `429` + `Retry-After`. Never `200` for errors.
+- Use one error format everywhere: **RFC 9457 Problem Details** (`application/problem+json`), with field errors and a request ID, and no internals.
+- **Cursor pagination** is fast and stable for large or changing data; offset is simple but slow deep and inconsistent under writes. Always cap `limit` and use a unique tie-breaker.
+- Allowlist sort and filter fields; column names can never come straight from user input.
+- Prefer **additive changes**; version (usually `/v1`) only for breaking changes, and deprecate with `Deprecation`/`Sunset` headers.
+- **Idempotency keys** make POST retries safe: atomic create-if-absent, scoped per user, request hash, stored response.
+- **ETag + If-Match** (`412`, `428`) with an atomic `WHERE version = $n` update prevents lost updates.
+- Long work → `202 Accepted` + an operation resource to poll; bulk work → batch endpoints with limits and a clear atomicity policy.
+- Document with **OpenAPI**, authorize **every object** (BOLA), and choose GraphQL or gRPC when their strengths fit better.
+
+---
+
+## References
+
+- Roy Fielding, *Architectural Styles and the Design of Network-based Software Architectures* (Chapter 5, REST) — https://ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm
+- RFC 9110: HTTP Semantics (methods, status codes, conditional requests) — https://www.rfc-editor.org/rfc/rfc9110.html
+- RFC 9457: Problem Details for HTTP APIs — https://www.rfc-editor.org/rfc/rfc9457.html
+- RFC 5789: PATCH Method for HTTP — https://www.rfc-editor.org/rfc/rfc5789.html
+- RFC 7396: JSON Merge Patch — https://www.rfc-editor.org/rfc/rfc7396.html
+- RFC 6902: JSON Patch — https://www.rfc-editor.org/rfc/rfc6902.html
+- RFC 6585: Additional HTTP Status Codes (428, 429) — https://www.rfc-editor.org/rfc/rfc6585.html
+- RFC 8288: Web Linking (`Link` header) — https://www.rfc-editor.org/rfc/rfc8288.html
+- RFC 9745: The Deprecation HTTP Response Header Field — https://www.rfc-editor.org/rfc/rfc9745.html
+- RFC 8594: The Sunset HTTP Header Field — https://www.rfc-editor.org/rfc/rfc8594.html
+- IETF draft: The Idempotency-Key HTTP Header Field — https://datatracker.ietf.org/doc/draft-ietf-httpapi-idempotency-key-header/
+- IETF draft: RateLimit header fields for HTTP — https://datatracker.ietf.org/doc/draft-ietf-httpapi-ratelimit-headers/
+- OpenAPI Specification — https://spec.openapis.org/oas/latest.html
+- OWASP API Security Top 10 (2023) — https://owasp.org/API-Security/editions/2023/en/0x11-t10/
+- MDN: HTTP response status codes — https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+- MDN: ETag — https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/ETag
+- Stripe API: idempotent requests (a well-known production implementation) — https://docs.stripe.com/api/idempotent_requests

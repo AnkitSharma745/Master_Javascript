@@ -460,7 +460,7 @@ console.log(Object.keys(pricing));   // [ 'formatPrice', 'TAX' ]
 For years, `require()` of an ES module threw `ERR_REQUIRE_ESM`. This was a big pain when popular packages became ESM-only. Modern Node.js fixes most of it:
 
 - Added in Node.js 22.0 behind a flag.
-- **Enabled by default** in Node.js 22.12 (and 20.19). Older 22.x releases printed an experimental warning.
+- **Enabled by default** in Node.js 22.12 (and 20.19). The experimental warning was removed in 22.13 (and 23.5, 20.19).
 - Marked **stable** in Node.js 25.4.
 
 ```js
