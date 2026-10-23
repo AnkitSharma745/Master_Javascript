@@ -626,6 +626,8 @@ console.log(subarraySum([1, -1, 0], 0));  // 3
 
 **Complexity:** O(n) time, O(n) space. It works with negative numbers, unlike the sliding window.
 
+**Go deeper:** the full prefix-sum family (longest subarray, divisibility, 2D) is in [DSA: Prefix sums and intervals, P5](../12-dsa/04-prefix-sums-and-intervals.md#p5-subarray-sum-equals-k-medium).
+
 ---
 
 ## Pattern 5: Binary search
@@ -1089,6 +1091,8 @@ console.log(permutations([1, 2, 3, 4]).length); // 24
 
 **Complexity:** n! permutations, each copied in O(n): O(n · n!) time.
 
+**Go deeper:** other ways to build subsets (include/exclude, bitmask), the swap version of permutations, and duplicate handling are in [DSA: Backtracking](../12-dsa/11-backtracking.md#p1-subsets-medium).
+
 ### Common backtracking mistakes
 
 ```js
@@ -1450,6 +1454,8 @@ function kthLargest(nums, k) {
 console.log(kthLargest([3, 2, 1, 5, 6, 4], 2)); // 5
 ```
 
+**Go deeper:** the O(n) bucket-sort version is in [DSA: Arrays and hashing, P6](../12-dsa/01-arrays-and-hashing.md#p6-top-k-frequent-elements-medium), and tie-breaking (top k frequent words) is in [DSA: Heaps and top-k, P5](../12-dsa/09-heaps-and-top-k.md#p5-top-k-frequent-elements-and-top-k-frequent-words-medium).
+
 ---
 
 ## Pattern 13: Sorting-based approaches
@@ -1520,6 +1526,8 @@ console.log(minMeetingRooms([[1, 5], [5, 10]]));            // 1 (back to back)
 ```
 
 O(n log n) time for sorting, O(n) space.
+
+**Go deeper:** the sweep-line version is in [DSA: Prefix sums and intervals, P11](../12-dsa/04-prefix-sums-and-intervals.md#p11-meeting-rooms-ii-medium) and the heap version in [DSA: Heaps and top-k, P9](../12-dsa/09-heaps-and-top-k.md#p9-meeting-rooms-ii-medium).
 
 ### Sorting in JavaScript
 

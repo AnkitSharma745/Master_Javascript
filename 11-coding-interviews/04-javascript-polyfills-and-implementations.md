@@ -2931,6 +2931,8 @@ console.log(lru.order()); // [ 4, 3 ]
 - **How would you add a time-to-live (TTL)?** — Store `expiresAt` with each value. In `get`, if it has expired, delete it and return "not found". Optionally clean up old entries now and then.
 - **LRU vs LFU?** — LRU removes the item not used for the longest time. LFU (least **frequently** used) removes the item used the fewest times. LRU is simpler and works well when recent items are likely to be used again.
 
+**Go deeper:** the linked-list side of this design, with sentinel nodes and more follow-ups (TTL, LFU), is in [DSA: Linked lists, P11](../12-dsa/07-linked-lists.md#p11-lru-cache-medium).
+
 ### A tiny Observable
 
 **What it should do:** a minimal version of the RxJS `Observable` that Angular uses everywhere. RxJS itself is covered in [RxJS](../06-angular-16/09-rxjs.md).

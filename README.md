@@ -25,7 +25,9 @@ That's all you need to know. Each topic document has a table of contents at the 
 | 07 | [Node.js and Backend](07-nodejs-backend/README.md) | Runtime, event loop, streams, Express, REST, auth, databases, caching, production | [Questions](07-nodejs-backend/interview-questions.md) |
 | 08 | [Electron and Desktop](08-electron-desktop/README.md) | Process model, IPC, security, packaging, auto-updates, crash recovery | [Questions](08-electron-desktop/interview-questions.md) |
 | 09 | [System Design](09-system-design/README.md) | Scalability, caching, APIs, real-time, frontend architecture, 8 case studies | [Questions](09-system-design/interview-questions.md) |
+| 10 | [C# and .NET Backend](10-csharp-dotnet-backend/README.md) | C# type system, async/await, LINQ, ASP.NET Core, DI, EF Core, auth, production | [Questions](10-csharp-dotnet-backend/interview-questions.md) |
 | 11 | [Coding Interviews](11-coding-interviews/README.md) | Explaining answers, problem solving, output questions, polyfills, machine coding, behavioral | — |
+| 12 | [Data Structures and Algorithms](12-dsa/README.md) | 14 patterns and 189 classic problems in JavaScript, with dry runs and spoken explanations | [Pattern practice](12-dsa/interview-questions.md) |
 
 ## How each topic document works
 
@@ -53,10 +55,11 @@ Study these first, then fill in the rest:
 | Angular | 16 (newer-version differences are clearly marked) |
 | Node.js | 22 and 24 LTS |
 | Electron | Current stable releases, with secure defaults |
+| C# / .NET | C# 14 on .NET 10 LTS (.NET 8 differences marked) |
 | React | 18 and 19 (frontend chapter only) |
 
 Sources and version notes are listed in [REFERENCES.md](REFERENCES.md). What changed in this repository, and why, is in [AUDIT.md](AUDIT.md).
 
 ## What comes next
 
-A dedicated **data structures and algorithms (DSA)** section is planned after this one. For now, [problem solving and complexity](11-coding-interviews/02-problem-solving-and-complexity.md) covers the main coding-round patterns.
+For coding rounds, go to [12 — Data Structures and Algorithms](12-dsa/README.md): 14 patterns with 189 classic problems.

@@ -16,6 +16,6 @@ This section is about the interview itself: how to explain answers clearly, how 
 | 6 | [Debugging and code review](06-debugging-and-code-review.md) | Find-the-bug exercises across JS/Angular/Node/Electron and how to review code |
 | 7 | [Project discussion and behavioral questions](07-project-discussion-and-behavioral.md) | Presenting your project, architecture deep dives, STAR answers |
 
-**Next:** [12 — Data Structures and Algorithms](../12-dsa/README.md) builds on document 2 with 14 patterns and about 180 problems.
+**Next:** [12 — Data Structures and Algorithms](../12-dsa/README.md) builds on document 2 with 14 patterns and 189 problems.
 
 **Back to:** [repository home](../README.md)

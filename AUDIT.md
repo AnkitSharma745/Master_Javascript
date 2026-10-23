@@ -130,10 +130,12 @@ The owner made three scope decisions while the work was in progress:
 | 07 Node.js and backend | 14 | 278 | yes (25 mixed + 58 rapid) |
 | 08 Electron and desktop | 9 | 174 | yes (24 mixed + 55 rapid) |
 | 09 System design (6 concepts + 8 case studies) | 14 | 202 | yes (26 mixed + 53 rapid) |
+| 10 C# and .NET backend (added after the rebuild) | 14 | 243 | yes (25 mixed + 60 rapid) |
 | 11 Coding interviews | 7 | 201 (including 105 mixed output questions) | — |
-| **Total** | **120** | **about 2,350** | **8 banks** |
+| 12 Data structures and algorithms (added after the rebuild) | 14 | 189 problems + about 115 pattern questions | yes (40 "which pattern?" items) |
+| **Total** | **148** | **about 2,900** | **10 banks** |
 
-In total there are about 1.5 million words and 510 Mermaid diagrams.
+In total there are about 1.9 million words and 600 Mermaid diagrams. Slot 10 was reused for the C# and .NET subject after the original subject 10 was dropped (see section 6).
 
 ## 8. Validation performed
 
@@ -155,4 +157,5 @@ In total there are about 1.5 million words and 510 Mermaid diagrams.
 - **Not executed:** packages that were not installed locally (Express, NgRx, the Angular router, React, Electron itself, Redis, RabbitMQ, Kafka, Prisma, Zod in some places) and browser-only APIs. This code was written from the official documentation and reviewed, but not run. The documents say which examples were not run.
 - **Length:** most documents are longer than first planned (8,000–17,000 words), because of the many examples and interview answers. Each has a table of contents and a two-minute summary at the end.
 - **Dropped topics (by the owner's choice):** dedicated chapters on Jest/Vitest/Playwright, CI/CD, observability and resilience patterns. The essentials appear inside Angular 14 (testing), Node.js 14 (production) and CS 08 (web security).
-- **Next phase:** a dedicated data structures and algorithms (DSA) section, which the owner will specify.
+- **.NET examples not run:** code that needs NuGet packages (EF Core, Serilog, Polly, xUnit, FluentValidation and others) was written from official docs and is marked "not run here". Plain C# and ASP.NET Core examples were run on the .NET 10 SDK.
+- **DSA:** every one of the 189 solutions runs with Node.js and was compared against brute-force versions on random inputs. Problem statements are written in our own words and reference the similar LeetCode problem by name.
