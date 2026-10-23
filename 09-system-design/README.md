@@ -32,4 +32,4 @@ System design interviews ask you to design a whole application and explain your 
 
 **Interview practice:** every document ends with its own interview questions. For mixed questions across the whole subject, see [interview-questions.md](interview-questions.md).
 
-**Next subject:** [11 — Coding Problems and Technical Interviews](../11-coding-interviews/README.md)
+**Next subject:** [10 — C# and .NET Backend](../10-csharp-dotnet-backend/README.md)
