@@ -28,6 +28,7 @@ That's all you need to know. Each topic document has a table of contents at the 
 | 10 | [C# and .NET Backend](10-csharp-dotnet-backend/README.md) | C# type system, async/await, LINQ, ASP.NET Core, DI, EF Core, auth, production | [Questions](10-csharp-dotnet-backend/interview-questions.md) |
 | 11 | [Coding Interviews](11-coding-interviews/README.md) | Explaining answers, problem solving, output questions, polyfills, machine coding, behavioral | — |
 | 12 | [Data Structures and Algorithms](12-dsa/README.md) | 14 patterns and 189 classic problems in JavaScript, with dry runs and spoken explanations | [Pattern practice](12-dsa/interview-questions.md) |
+| 13 | [React Interview Preparation](13-react/README.md) | React 18/19, hooks, rendering, Redux Toolkit, axios, TanStack Query, Router, forms, testing, Next.js | [Questions](13-react/interview-questions.md) |
 
 ## How each topic document works
 

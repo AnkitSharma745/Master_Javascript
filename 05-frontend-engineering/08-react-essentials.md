@@ -4,6 +4,8 @@
 
 **Before this:** [Closures](../02-javascript/05-closures.md) · [Components and state management](./06-components-and-state-management.md) · [DOM and events](./03-dom-and-events.md) · **Interview questions:** [jump to the interview section](#interview-questions)
 
+> **Preparing for a React interview?** This chapter is a short overview. The full interview-focused subject, with hooks in depth, Redux Toolkit, axios, TanStack Query, React Router, forms, performance, testing and Next.js, is [13 — React Interview Preparation](../13-react/README.md).
+
 ## Table of contents
 
 1. [What React is and the core mental model](#what-react-is-and-the-core-mental-model)

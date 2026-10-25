@@ -133,7 +133,8 @@ The owner made three scope decisions while the work was in progress:
 | 10 C# and .NET backend (added after the rebuild) | 14 | 243 | yes (25 mixed + 60 rapid) |
 | 11 Coding interviews | 7 | 201 (including 105 mixed output questions) | — |
 | 12 Data structures and algorithms (added after the rebuild) | 14 | 189 problems + about 115 pattern questions | yes (40 "which pattern?" items) |
-| **Total** | **148** | **about 2,900** | **10 banks** |
+| 13 React interview preparation (added after the rebuild) | 11 | 335 | yes (27 mixed + 8 machine-coding prompts + 60 rapid) |
+| **Total** | **159** | **about 3,250** | **11 banks** |
 
 In total there are about 1.9 million words and 600 Mermaid diagrams. Slot 10 was reused for the C# and .NET subject after the original subject 10 was dropped (see section 6).
 
