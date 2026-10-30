@@ -134,7 +134,9 @@ The owner made three scope decisions while the work was in progress:
 | 11 Coding interviews | 7 | 201 (including 105 mixed output questions) | — |
 | 12 Data structures and algorithms (added after the rebuild) | 14 | 189 problems + about 115 pattern questions | yes (40 "which pattern?" items) |
 | 13 React interview preparation (added after the rebuild) | 11 | 335 | yes (27 mixed + 8 machine-coding prompts + 60 rapid) |
-| **Total** | **159** | **about 3,250** | **11 banks** |
+| 14 Low-level design (added after the rebuild) | 13 | 145 + a presentation plan per problem | — |
+| 15 AI for developers (added after the rebuild) | 7 | 159 (doc 07 is a mixed bank) | yes (inside doc 07) |
+| **Total** | **180** (including the Git doc in 11) | **about 3,580** | **12 banks** |
 
 In total there are about 1.9 million words and 600 Mermaid diagrams. Slot 10 was reused for the C# and .NET subject after the original subject 10 was dropped (see section 6).
 

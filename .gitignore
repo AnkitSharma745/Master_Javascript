@@ -3,7 +3,6 @@ build/
 dist/
 .cache/
 coverage/
-.env
-.env.*
 !.env.example
 revision/
+config.bat
